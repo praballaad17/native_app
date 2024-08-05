@@ -1,5 +1,13 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "jsx": "react-native",
+    "baseUrl": "./",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
+  },
   "extends": "expo/tsconfig.base",
   "include": [
     "**/*.ts",
