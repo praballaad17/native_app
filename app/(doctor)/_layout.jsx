@@ -20,6 +20,13 @@ const DocLayout = () => {
               headerShown: false,
           }}
           />
+
+        <Stack.Screen 
+          name="photo-upload"
+          options={{
+              headerShown: false,
+          }}
+          />
         
       </Stack>
 
