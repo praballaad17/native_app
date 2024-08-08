@@ -25,7 +25,7 @@ export default function Index() {
               containerStyles="w-full mt-7" />
             <CustomButton 
               title="Doctor"
-              handlePress={() => {}} 
+              handlePress={() =>  router.push('/welcome')} 
               containerStyles="w-full mt-7" />
             <CustomButton 
               title="Executive"

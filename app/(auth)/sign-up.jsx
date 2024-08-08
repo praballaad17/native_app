@@ -57,10 +57,10 @@ const SignUp = () => {
             <Text className="text-lg font-pregular">
               Already User!
             </Text>
-            <Link className='text-secondary font-psemibold text-lg' href="/sign-up"> Log In</Link>
+            <Link className='text-secondary font-psemibold text-lg' href="/sign-in"> Log In</Link>
           </View>
         </View>
-      </ScrollView>
+      </ScrollView> 
     </SafeAreaView>
     </GestureHandlerRootView>
   )
