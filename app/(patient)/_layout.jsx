@@ -1,38 +1,44 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Stack } from 'expo-router'
-import { StatusBar } from 'expo-status-bar'
+import { View, Text } from "react-native";
+import React from "react";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 const PatientLayout = () => {
   return (
     <>
       <Stack>
-        <Stack.Screen 
-          name="paient-details"
+        <Stack.Screen
+          name="patient-details"
           options={{
-              headerShown: false,
+            headerShown: false,
           }}
-          />
+        />
 
-        {/* <Stack.Screen 
-          name="welcome"
+        <Stack.Screen
+          name="subscription"
           options={{
-              headerShown: false,
+            headerShown: false,
           }}
-          />
+        />
 
-        <Stack.Screen 
-          name="photo-upload"
+        <Stack.Screen
+          name="appointment"
           options={{
-              headerShown: false,
+            headerShown: false,
           }}
-          /> */}
-        
+        />
+
+        <Stack.Screen
+          name="patient-consultations"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
-      <StatusBar backgroundColor='#161622' style='light' />
+      <StatusBar backgroundColor="#161622" style="light" />
     </>
-  )
-}
+  );
+};
 
-export default PatientLayout
+export default PatientLayout;

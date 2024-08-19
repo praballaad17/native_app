@@ -3,7 +3,6 @@ import { Stack, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 
 export default function RootLayout() {
-
   SplashScreen.preventAutoHideAsync();
 
   const [fontsLoaded, error] = useFonts({
@@ -17,30 +16,46 @@ export default function RootLayout() {
     "Poppins-SemiBold": require("../assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Thin": require("../assets/fonts/Poppins-Thin.ttf"),
   });
-  
+
   useEffect(() => {
     if (error) throw error;
-  
+
     if (fontsLoaded) {
       SplashScreen.hideAsync();
     }
   }, [fontsLoaded, error]);
-  
+
   if (!fontsLoaded && !error) {
     return null;
   }
 
   return (
     <Stack>
-      <Stack.Screen name="index" options={{
-        headerShown: false,
-      }} />
-       <Stack.Screen name="(auth)" options={{
-        headerShown: false,
-      }} />
-      <Stack.Screen name="(tabs)" options={{
-        headerShown: false,
-      }} />
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="(auth)"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="(patient-tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
       {/* <Stack.Screen name="/search/[query]" options={{
         headerShown: false,
       }} /> */}
