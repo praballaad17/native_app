@@ -13,33 +13,39 @@ export default function profile() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const primaryTabs = [
     {
-      name: "My consultations",
+      name: "My apointments",
       icon: <FontAwesome name="stethoscope" size={24} color="black" />,
+      url: "/apointments",
     },
     {
       name: "My Lab Tests",
       icon: <Fontisto name="test-tube" size={24} color="black" />,
+      url: "/apointments",
     },
     {
       name: "Membership Plan",
       icon: <Fontisto name="test-tube" size={24} color="black" />,
+      url: "/apointments",
     },
     {
       name: "Manage payments methods",
       icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
+      url: "/apointments",
     },
     {
       name: "Pill Reminder",
       icon: <FontAwesome5 name="pills" size={24} color="black" />,
+      url: "/apointments",
     },
     {
       name: "Refer and earn",
       icon: <FontAwesome name="share" size={24} color="black" />,
+      url: "/apointments",
     },
   ];
   const secondaryTabs = ["Need help?", "Settings", "About us"];
 
-  const submit = () => {
+  const logout = () => {
     //
   };
   return (
@@ -49,9 +55,8 @@ export default function profile() {
           <View className="w-full justify-center h-100 px-4 my-6 bg-gray-50">
             {primaryTabs.map((item, index) => (
               <TouchableOpacity
-                onPress={() => router.push("/patient-consultations")}
+                onPress={() => router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
-                key={index}
               >
                 <View className="flex flex-row">
                   {item.icon}
@@ -67,7 +72,6 @@ export default function profile() {
               <TouchableOpacity
                 onPress={() => router.push("/patient-consultations")}
                 className="w-full flex flex-row justify-between my-3"
-                key={idx}
               >
                 <View className="flex flex-row">
                   <FontAwesome name="stethoscope" size={24} color="black" />
@@ -78,7 +82,7 @@ export default function profile() {
             ))}
             <CustomButton
               title={"Sign out"}
-              handlePress={submit}
+              handlePress={logout}
               containerStyles="mt-4 bg-white border border-slate-300  min-h-[42px]"
               textStyles="text-orange-600 text-sm"
               isLoading={isSubmitting}

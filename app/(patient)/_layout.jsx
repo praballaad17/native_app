@@ -34,6 +34,13 @@ const PatientLayout = () => {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="consultation-details"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="light" />

@@ -44,7 +44,7 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen
-        name="(tabs)"
+        name="(doctor-tabs)"
         options={{
           headerShown: false,
         }}

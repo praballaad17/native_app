@@ -14,7 +14,7 @@ export default function Index() {
   //   Alert.alert(`You pressed ${buttonName}`);
   // };
   useEffect(() => {
-    setUser("patient");
+    setUser("doctor");
   }, []);
 
   if (!user) {
@@ -23,6 +23,10 @@ export default function Index() {
 
   if (user === "patient") {
     return <Redirect href="/patient-home" />;
+  }
+
+  if (user === "doctor") {
+    return <Redirect href="/doctor-home" />;
   }
 
   return <Redirect href="/home" />;

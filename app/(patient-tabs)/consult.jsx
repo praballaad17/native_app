@@ -4,10 +4,8 @@ import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useNavigation } from "@react-navigation/native";
 
 const Consult = () => {
-  const navigation = useNavigation();
   const areas = [
     "Cardiologist (Heart)",
     "Neurologist (Nervous System, Brain, Spinal Cord)",
@@ -26,8 +24,6 @@ const Consult = () => {
     "Pediatrician (Infants, Children, Adolescents)",
   ];
   const handlePress = (doctorID) => {
-    //
-    //navigation.navigate("appointment", { param: doctorID });
     router.push({
       pathname: "/appointment",
       params: {
