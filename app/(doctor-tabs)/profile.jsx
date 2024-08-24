@@ -57,6 +57,7 @@ export default function profile() {
               <TouchableOpacity
                 onPress={() => router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
+                key={index}
               >
                 <View className="flex flex-row">
                   {item.icon}
@@ -72,6 +73,7 @@ export default function profile() {
               <TouchableOpacity
                 onPress={() => router.push("/patient-consultations")}
                 className="w-full flex flex-row justify-between my-3"
+                key={idx}
               >
                 <View className="flex flex-row">
                   <FontAwesome name="stethoscope" size={24} color="black" />

@@ -14,7 +14,8 @@ export default function Index() {
   //   Alert.alert(`You pressed ${buttonName}`);
   // };
   useEffect(() => {
-    setUser("doctor");
+    setUser("patient");
+    // setUser("doctor");
   }, []);
 
   if (!user) {
