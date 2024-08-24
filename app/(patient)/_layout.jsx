@@ -62,6 +62,13 @@ const PatientLayout = () => {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="view-prescription"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="light" />

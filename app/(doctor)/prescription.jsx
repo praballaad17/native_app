@@ -6,6 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
 import CustomDropdownSelect from "../../components/CustomDropDownSelect";
+import DosageTab from "../../components/DosageTab";
 
 const Prescription = () => {
   const params = useLocalSearchParams();
@@ -71,7 +72,8 @@ const Prescription = () => {
             />
             <Text className="font-bold">Medication:</Text>
             {medicines.map((item, idx) => (
-              <>
+              <View className="bg-white p-4 my-2">
+                <Text>Medecine: </Text>
                 <TextInput
                   key={idx}
                   className="border border-gray-400 px-2"
@@ -79,12 +81,20 @@ const Prescription = () => {
                   value={item.name}
                   onChangeText={(text) => handleInputChange(text, idx, "name")}
                 />
-
+                <DosageTab />
                 <CustomDropdownSelect
                   options={dropdownOptions}
                   onSelect={handleSelect}
                 />
-              </>
+                <View className="items-center flex flex-row">
+                  <Text className="font-psemibold">Duration: </Text>
+                  <TextInput
+                    className="border border-slate-300 my-2 px-3"
+                    keyboardType="numeric"
+                  />
+                  <Text className="ml-2 font-psemibold">Days</Text>
+                </View>
+              </View>
             ))}
             <CustomButton
               title={"Add Medecine"}
