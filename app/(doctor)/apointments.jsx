@@ -58,7 +58,7 @@ const Apointments = () => {
           <View className="w-full justify-center h-100 px-4 my-6 ">
             <Text className="text-xl font-psemibold py-2">Apointments</Text>
             {appointmentData.map((item, idx) => (
-              <TouchableOpacity className="my-1 py-1 bg-gray-50" key={idx}>
+              <View className="my-1 py-1 bg-gray-50" key={idx}>
                 <Text>
                   <Text className="font-bold">Paitent Name: </Text>
                   {item.patient}
@@ -72,7 +72,7 @@ const Apointments = () => {
                   {item.slot}
                 </Text>
                 <Button title="Send OTP" onPress={() => sendOTP(item)} />
-              </TouchableOpacity>
+              </View>
             ))}
           </View>
 

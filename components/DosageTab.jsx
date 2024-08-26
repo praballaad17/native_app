@@ -2,13 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"; // Use any icon library you like
 
-const DosageTab = () => {
-  const [selectedMeals, setSelectedMeals] = useState({
-    breakfast: false,
-    lunch: false,
-    dinner: false,
-  });
-
+const DosageTab = ({ selectedMeals, setSelectedMeals }) => {
   const handleSelectMeal = (meal) => {
     setSelectedMeals((prevMeals) => ({
       ...prevMeals,

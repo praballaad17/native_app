@@ -7,6 +7,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
 import CustomDropdownSelect from "../../components/CustomDropDownSelect";
 import DosageTab from "../../components/DosageTab";
+import FoodToggleButton from "../../components/FoodToggleButton";
 
 const Prescription = () => {
   const params = useLocalSearchParams();
@@ -22,6 +23,12 @@ const Prescription = () => {
   const [review, setReview] = useState();
   const [isAdding, setIsLoading] = useState(false);
   const [Option, setSelectedOption] = useState(null);
+  const [isBeforeFood, setIsBeforeFood] = useState(true);
+  const [selectedMeals, setSelectedMeals] = useState({
+    breakfast: false,
+    lunch: false,
+    dinner: false,
+  });
 
   const handleInputChange = (text, idx, field) => {
     const updatedMedicines = medicines.map((item, index) =>
@@ -33,7 +40,6 @@ const Prescription = () => {
   };
 
   const addMedecine = () => {
-    //
     setMedicines([
       ...medicines,
       {
@@ -45,16 +51,18 @@ const Prescription = () => {
     ]);
   };
 
-  const dropdownOptions = [
-    { label: "Select Any Option", value: "select" },
-    { label: "Option 1", value: "option1" },
-    { label: "Option 2", value: "option2" },
-    { label: "Option 3", value: "option3" },
-    { label: "Option 4", value: "option4" },
-  ];
+  const removeMedecine = (index) => {
+    const newMedicines = medicines;
+    console.log(index, newMedicines.length);
 
-  const handleSelect = (option) => {
-    setSelectedOption(option);
+    if (index >= 0 && index < newMedicines.length) {
+      // Remove the object at the specified index
+      newMedicines.splice(index, 1);
+    } else {
+      console.log("Index out of bounds");
+    }
+
+    setMedicines([...newMedicines]);
   };
 
   return (
@@ -81,11 +89,11 @@ const Prescription = () => {
                   value={item.name}
                   onChangeText={(text) => handleInputChange(text, idx, "name")}
                 />
-                <DosageTab />
-                <CustomDropdownSelect
-                  options={dropdownOptions}
-                  onSelect={handleSelect}
+                <DosageTab
+                  selectedMeals={selectedMeals}
+                  setSelectedMeals={setSelectedMeals}
                 />
+
                 <View className="items-center flex flex-row">
                   <Text className="font-psemibold">Duration: </Text>
                   <TextInput
@@ -94,6 +102,17 @@ const Prescription = () => {
                   />
                   <Text className="ml-2 font-psemibold">Days</Text>
                 </View>
+                <FoodToggleButton
+                  isBeforeFood={isBeforeFood}
+                  setIsBeforeFood={setIsBeforeFood}
+                />
+                <CustomButton
+                  title={"Remove"}
+                  handlePress={() => removeMedecine(idx)}
+                  containerStyles="mt-7 min-h-[40px] bg-white border border-secondary"
+                  textStyles="text-secondary"
+                  isLoading={isAdding}
+                />
               </View>
             ))}
             <CustomButton

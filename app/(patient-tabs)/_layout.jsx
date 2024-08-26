@@ -3,60 +3,68 @@ import React from "react";
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-
-const TabIcno = (icon, color, focused) => {
-  return (
-    <View>
-      <Image source={icon} />
-    </View>
-  );
-};
+import { StatusBar } from "expo-status-bar";
 
 const PatientTabLayout = () => {
   return (
-    <Tabs>
-      <Tabs.Screen
-        name="patient-home"
-        options={{
-          title: "Home",
-          headerShown: false,
-          tabBarLabel: "Home",
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons name="home" size={24} color={color} focused={focused} />
-          ),
-        }}
-      />
+    <>
+      <Tabs>
+        <Tabs.Screen
+          name="patient-home"
+          options={{
+            title: "Home",
+            headerShown: false,
+            tabBarLabel: "Home",
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name="home" size={24} color={color} focused={focused} />
+            ),
+          }}
+        />
 
-      <Tabs.Screen
-        name="consult"
-        options={{
-          headerShown: false,
-          tabBarLabel: "Consult",
-          tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="user-doctor" size={24} color="black" />
-          ),
-        }}
-      />
+        <Tabs.Screen
+          name="consult"
+          options={{
+            headerShown: false,
+            tabBarLabel: "Consult",
+            tabBarIcon: ({ color, focused }) => (
+              <FontAwesome6
+                name="user-doctor"
+                size={24}
+                color={color}
+                focused={focused}
+              />
+            ),
+          }}
+        />
 
-      <Tabs.Screen
-        name="documents"
-        options={{
-          tabBarLabel: "Documents",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="documents" size={24} color="black" />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="profile"
-        options={{
-          tabBarLabel: "Profile",
-          tabBarIcon: ({ color }) => (
-            <Ionicons name="home" size={24} color={color} />
-          ),
-        }}
-      />
-    </Tabs>
+        <Tabs.Screen
+          name="documents"
+          options={{
+            headerShown: false,
+            tabBarLabel: "Documents",
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons
+                name="documents"
+                size={24}
+                color={color}
+                focused={focused}
+              />
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            headerShown: false,
+            tabBarLabel: "Profile",
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons name="home" size={24} color={color} focused={focused} />
+            ),
+          }}
+        />
+      </Tabs>
+      <StatusBar backgroundColor="#161622" style="light" />
+    </>
   );
 };
 

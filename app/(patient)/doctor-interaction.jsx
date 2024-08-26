@@ -28,15 +28,9 @@ const DoctorInteraction = () => {
         <ScrollView>
           <View className="w-full justify-center h-100 px-4 my-6">
             <Text className="text-2xl text-primary font-pbold">
-              Your Medical Records
+              Allowed Doctor's Access
             </Text>
-            <CustomButton
-              title={"Upload New Document"}
-              handlePress={() => router.push("/")}
-              containerStyles="my-2 min-h-[40px] bg-white border border-secondary"
-              textStyles="text-secondary"
-              isLoading={isSubmitting}
-            />
+
             <View>
               {doctorsData.map((item, index) => (
                 <View className="bg-white p-3 my-2" key={index}>
