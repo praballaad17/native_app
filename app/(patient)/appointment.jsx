@@ -15,6 +15,8 @@ const Appointment = () => {
   const [availableSlots, setAvailableSlots] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  console.log("test", params.doctorId);
+
   useEffect(() => {
     // Example data fetched from the server
     const fetchedSlots = ["08:00", "09:00", "10:30", "13:00", "15:00", "15:30"];

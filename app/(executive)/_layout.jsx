@@ -1,28 +1,40 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 
-const AuthLayout = () => {
+const ExecutiveLayout = () => {
   return (
     <>
       <Stack>
         <Stack.Screen
-          name="sign-in"
+          name="resume-upload"
           options={{
             headerShown: false,
           }}
         />
 
         <Stack.Screen
-          name="sign-up"
+          name="upload-pdf"
           options={{
             headerShown: false,
           }}
         />
 
         <Stack.Screen
-          name="role"
+          name="upload-profile"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="approval-pending"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="patient-profile-form"
           options={{
             headerShown: false,
           }}
@@ -34,4 +46,4 @@ const AuthLayout = () => {
   );
 };
 
-export default AuthLayout;
+export default ExecutiveLayout;

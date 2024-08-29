@@ -1,11 +1,6 @@
-import { Redirect, Link, router } from "expo-router";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Text, View, Pressable } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "../components/CustomButton";
-import { StatusBar } from "expo-status-bar";
+import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
+import { USERS } from "../constants";
 
 export default function Index() {
   const [user, setUser] = useState(null);
@@ -14,21 +9,23 @@ export default function Index() {
   //   Alert.alert(`You pressed ${buttonName}`);
   // };
   useEffect(() => {
-    setUser("patient");
+    // setUser(USERS.PATIENT);
     // setUser("doctor");
+    setUser(USERS.EXECUTIVE);
   }, []);
 
   if (!user) {
     return <Redirect href="/role" />;
   }
 
-  if (user === "patient") {
+  console.log(user);
+
+  if (user === USERS.PATIENT) {
     return <Redirect href="/patient-home" />;
-  }
-
-  if (user === "doctor") {
+  } else if (user === USERS.DOCTOR) {
     return <Redirect href="/doctor-home" />;
+  } else if (user === USERS.EXECUTIVE) {
+    return <Redirect href="/executive-home" />;
   }
-
-  return <Redirect href="/home" />;
+  return <Redirect href="/role" />;
 }

@@ -10,9 +10,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import Table from "../../components/Table";
+import { useLocalSearchParams } from "expo-router";
 
-const ViewPrescription = ({ prescriptionId }) => {
-  console.log(prescriptionId);
+const ViewPrescription = () => {
+  const params = useLocalSearchParams();
+  console.log("patient", params);
   const headers = ["Medication", "Dosage", "Route", "Duration"];
 
   const data = [

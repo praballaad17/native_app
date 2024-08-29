@@ -6,8 +6,9 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-const CustomDropdownSelect = ({ options, onSelect }) => {
+const CustomDropdownSelect = ({ options, onSelect, placeholder }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState(null);
 
@@ -26,10 +27,15 @@ const CustomDropdownSelect = ({ options, onSelect }) => {
   return (
     <View style={styles.container}>
       {/* Display the selected value */}
-      <TouchableOpacity style={styles.dropdown} onPress={toggleDropdown}>
+      <TouchableOpacity
+        className="flex-row justify-between"
+        style={styles.dropdown}
+        onPress={toggleDropdown}
+      >
         <Text style={styles.dropdownText}>
-          {selectedValue ? selectedValue.label : "Select an option"}
+          {selectedValue ? selectedValue.label : placeholder}
         </Text>
+        <FontAwesome name="angle-down" size={24} color="black" />
       </TouchableOpacity>
 
       {/* Render the dropdown options when visible */}

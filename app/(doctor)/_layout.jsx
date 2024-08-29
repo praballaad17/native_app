@@ -40,6 +40,12 @@ const DocLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="get-varified-notification"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="light" />

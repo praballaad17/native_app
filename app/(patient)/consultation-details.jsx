@@ -11,8 +11,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { router } from "expo-router";
 import CustomButton from "../../components/CustomButton";
+import { useLocalSearchParams } from "expo-router";
 
-const CunsultationDetails = ({ consultationId }) => {
+const CunsultationDetails = () => {
+  const params = useLocalSearchParams();
+  console.log("patient", params);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const consultations = [

@@ -5,7 +5,6 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
-import CustomDropdownSelect from "../../components/CustomDropDownSelect";
 import DosageTab from "../../components/DosageTab";
 import FoodToggleButton from "../../components/FoodToggleButton";
 

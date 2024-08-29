@@ -57,12 +57,38 @@ export default function RootLayout() {
         }}
       />
 
-      {/* <Stack.Screen
+      <Stack.Screen
+        name="(executive-tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="(executive)"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="(doctor)"
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Stack.Screen
+        name="(patient)"
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
         name="(common)"
         options={{
           headerShown: false,
         }}
-      /> */}
+      />
       {/* <Stack.Screen name="/search/[query]" options={{
         headerShown: false,
       }} /> */}
