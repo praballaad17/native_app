@@ -4,6 +4,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
+import { router } from "expo-router";
 
 const UploadPrescription = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -31,7 +32,7 @@ const UploadPrescription = () => {
             </Text>
             <CustomButton
               title={"Upload Your Presciptions"}
-              handlePress={() => router.push("/")}
+              handlePress={() => router.push("/prescription-form")}
               containerStyles="my-2 min-h-[40px] bg-white border border-secondary"
               textStyles="text-secondary"
               isLoading={isSubmitting}

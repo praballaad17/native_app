@@ -4,18 +4,21 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
+import { router } from "expo-router";
 
 const UploadMedical = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const records = [
     {
       name: "report 1",
+      patient: "Patient 1",
       url: "",
       date: "24-08-2024",
       uploadedBy: "doctor",
     },
     {
       name: "report 2",
+      patient: "Patient 2",
       url: "",
       date: "24-08-2024",
       uploadedBy: "doctor",
@@ -31,7 +34,7 @@ const UploadMedical = () => {
             </Text>
             <CustomButton
               title={"Upload New Document"}
-              handlePress={() => router.push("/")}
+              handlePress={() => router.push("/medical-data-form")}
               containerStyles="my-2 min-h-[40px] bg-white border border-secondary"
               textStyles="text-secondary"
               isLoading={isSubmitting}
@@ -39,6 +42,7 @@ const UploadMedical = () => {
             <View>
               {records.map((item, index) => (
                 <View className="bg-white p-3 my-2" key={index}>
+                  <Text>{item.patient}</Text>
                   <Text>{item.name}</Text>
                   <Text>{item.date}</Text>
                   <Text>{item.uploadedBy}</Text>

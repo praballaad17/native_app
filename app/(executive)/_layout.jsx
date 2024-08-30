@@ -39,6 +39,19 @@ const ExecutiveLayout = () => {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="medical-data-form"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="prescription-form"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="light" />
