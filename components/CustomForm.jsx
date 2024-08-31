@@ -8,6 +8,7 @@ import {
   ScrollView,
   Image,
   FlatList,
+  Alert,
 } from "react-native";
 import CustomButton from "./CustomButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -143,7 +144,7 @@ const CustomForm = ({ fields, onSubmit }) => {
                     <Image
                       key={item}
                       source={{ uri: item }}
-                      style={styles.imagePreview}
+                      style={{ width: 300, height: 400 }}
                     />
                   )}
                   keyExtractor={(item) => item}

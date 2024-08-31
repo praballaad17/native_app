@@ -33,16 +33,10 @@ const PrescriptionForm = () => {
     Alert.alert("Form Submitted", JSON.stringify(formData, null, 2));
   };
   return (
-    <GestureHandlerRootView>
-      <SafeAreaView className="h-full">
-        <ScrollView>
-          <View className="w-full justify-center h-100 px-4 my-6">
-            <Text>Prescription Form</Text>
-            <CustomForm fields={fields} onSubmit={handleFormSubmit} />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </GestureHandlerRootView>
+    <View className="h-full w-full justify-center h-100 py-4 px-2 my-6">
+      <Text className="font-pbold text-2xl my-2">Prescription Form</Text>
+      <CustomForm fields={fields} onSubmit={handleFormSubmit} />
+    </View>
   );
 };
 
