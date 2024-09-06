@@ -13,9 +13,9 @@ export default function profile() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const primaryTabs = [
     {
-      name: "My apointments",
+      name: "Payouts",
       icon: <FontAwesome name="stethoscope" size={24} color="black" />,
-      url: "/apointments",
+      url: "/payouts",
     },
     {
       name: "My Lab Tests",
@@ -53,7 +53,7 @@ export default function profile() {
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="w-full justify-center h-100 px-4 my-6 bg-gray-50">
-            {primaryTabs.map((item, index) => (
+            {primaryTabs.map((item, index) => ( 
               <TouchableOpacity
                 onPress={() => router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
