@@ -23,35 +23,30 @@ const PatientProfileForm = ({ onSubmit }) => {
     { label: "other", value: "other" },
   ];
 
-  const handleSubmit = () => {
-    console.log("otp is send");
-    sendOTP("item");
-   
-
-    const patientData = {
-      name,
-      age,
-      contact,
-      isActive: true, // Default patient is active when created
-    };
-    // onSubmit(patientData);
-  };
 
   const handleSelect = (option) => {
     setSelectedOption(option);
   };
 
-  const sendOTP = (item) => {
+  const sendOTP = () => {
     console.log("send otp is send");
     setIsVisible(true);
-    // setSelectedPatient(item);
   };
 
-  const verify = () => {
+  const verifyAndSend = () => {
     //
     if (otp === "1234" || otp === 1234) {
       setIsVisible(false);
       // handlePress();
+      setOtp(0);
+      setError("");
+      // const patientData = {
+    //   name,
+    //   age,
+    //   contact,
+    //   isActive: true, // Default patient is active when created
+    // };
+    // onSubmit(patientData);
     } else {
       setError("OTP is not correct, re-enter");
     }
@@ -99,10 +94,10 @@ const PatientProfileForm = ({ onSubmit }) => {
               />
 
               <CustomButton
-                title="Submitt"
+                title="Submittt"
                 containerStyles="mt-4 border-slate-300  min-h-[42px]"
                 textStyles=" text-sm"
-                onPress={handleSubmit}
+                handlePress={sendOTP}
               />
 
 <Modal
@@ -140,7 +135,7 @@ const PatientProfileForm = ({ onSubmit }) => {
                   autoFocus={true}
                   value={otp}
                   onChangeText={setOtp}
-                  onSubmitEditing={verify}
+                  onSubmitEditing={verifyAndSend}
                   placeholder="Enter OTP"
                 />
                 {error.length !== 0 && (
@@ -150,7 +145,7 @@ const PatientProfileForm = ({ onSubmit }) => {
                   <Button
                     className=" bg-secondary-100"
                     title="Verify"
-                    onPress={verify}
+                    onPress={verifyAndSend}
                   />
                   <Button
                     className="px-4 mx-2"
