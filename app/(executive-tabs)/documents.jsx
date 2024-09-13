@@ -42,22 +42,6 @@ export default function explore() {
                 />
               </View>
             </View>
-
-            <Text className="text-2xl my-4">Doctor's Interaction</Text>
-            <View style={styles.container}>
-              <View style={styles.row}>
-                <Text className="text-lg font-bold" style={styles.text}>
-                  allowed doctor access
-                </Text>
-                <CustomButton
-                  title={"Proceed"}
-                  handlePress={() => router.push("/doctor-interaction")}
-                  containerStyles="px-4 min-h-[40px] bg-white border border-secondary"
-                  textStyles="text-secondary"
-                  isLoading={isSubmitting}
-                />
-              </View>
-            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
