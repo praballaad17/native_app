@@ -1,5 +1,5 @@
 import icons from "./icons";
-import images from "./Images";
+import images from "./images";
 
 const USERS = {
   DOCTOR: "doctor",

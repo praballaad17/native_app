@@ -8,6 +8,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
+import ToggleSwitch from "../../components/ToggleSwich";
 
 export default function profile() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,19 +19,9 @@ export default function profile() {
       url: "/payouts",
     },
     {
-      name: "My Lab Tests",
-      icon: <Fontisto name="test-tube" size={24} color="black" />,
-      url: "/apointments",
-    },
-    {
       name: "Membership Plan",
       icon: <Fontisto name="test-tube" size={24} color="black" />,
-      url: "/apointments",
-    },
-    {
-      name: "Manage payments methods",
-      icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
-      url: "/apointments",
+      url: "/select-membership",
     },
     {
       name: "Pill Reminder",
@@ -93,11 +84,16 @@ export default function profile() {
                 style={styles.editButton}
                 onPress={handleEditProfile}
               >
-                <FontAwesome name="edit" size={20} color="blue" />
+                <FontAwesome name="edit" size={20} color="#FF9C01" />
                 <Text style={styles.editText}>Edit Profile</Text>
               </TouchableOpacity>
             </View>
           </View>
+
+          <View className="bg-white rounded-lg mx-4 px-4">
+            <ToggleSwitch title="Patient Mode" />
+          </View>
+
           <View className="w-full justify-center h-100 px-4 my-4 bg-gray-50">
             {primaryTabs.map((item, index) => (
               <TouchableOpacity
@@ -182,7 +178,7 @@ const styles = StyleSheet.create({
   },
   editText: {
     fontSize: 16,
-    color: "blue",
+    color: "#FF9C01",
     marginLeft: 5,
   },
 });
