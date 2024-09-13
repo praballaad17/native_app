@@ -52,8 +52,10 @@ const ExecutiveLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen name="view-patient-profile" />
+
         <Stack.Screen
-          name="view-patient-profile"
+          name="payouts"
           options={{
             headerShown: false,
           }}

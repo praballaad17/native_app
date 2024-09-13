@@ -13,9 +13,9 @@ export default function profile() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const primaryTabs = [
     {
-      name: "My apointments",
+      name: "Payouts",
       icon: <FontAwesome name="stethoscope" size={24} color="black" />,
-      url: "/apointments",
+      url: "/payouts",
     },
     {
       name: "My Lab Tests",

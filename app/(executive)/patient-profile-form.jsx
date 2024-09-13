@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, StyleSheet } from "react-native";
+import { View, TextInput, Button, Text, StyleSheet, Modal } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -12,6 +12,9 @@ const PatientProfileForm = ({ onSubmit }) => {
   const [contact, setContact] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
   const [selectedValue, setSelectedValue] = useState();
+  const [isvisible, setIsVisible] = useState(false);
+  const [otp, setOtp] = useState(0);
+  const [error, setError] = useState("");
 
   const dropdownOptions = [
     { label: "select", value: "select" },
@@ -20,18 +23,33 @@ const PatientProfileForm = ({ onSubmit }) => {
     { label: "other", value: "other" },
   ];
 
-  const handleSubmit = () => {
-    const patientData = {
-      name,
-      age,
-      contact,
-      isActive: true, // Default patient is active when created
-    };
-    onSubmit(patientData);
-  };
 
   const handleSelect = (option) => {
     setSelectedOption(option);
+  };
+
+  const sendOTP = () => {
+    console.log("send otp is send");
+    setIsVisible(true);
+  };
+
+  const verifyAndSend = () => {
+    //
+    if (otp === "1234" || otp === 1234) {
+      setIsVisible(false);
+      // handlePress();
+      setOtp(0);
+      setError("");
+      // const patientData = {
+    //   name,
+    //   age,
+    //   contact,
+    //   isActive: true, // Default patient is active when created
+    // };
+    // onSubmit(patientData);
+    } else {
+      setError("OTP is not correct, re-enter");
+    }
   };
 
   return (
@@ -76,11 +94,68 @@ const PatientProfileForm = ({ onSubmit }) => {
               />
 
               <CustomButton
-                title="Submit"
+                title="Submittt"
                 containerStyles="mt-4 border-slate-300  min-h-[42px]"
                 textStyles=" text-sm"
-                onPress={handleSubmit}
+                handlePress={sendOTP}
               />
+
+<Modal
+            className="bg-gray-100"
+            animationType="slide"
+            transparent={true}
+            visible={isvisible}
+            onRequestClose={() => {
+              setIsVisible(false);
+            }}
+          >
+            <View
+              // className="bg-white"
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View
+                className="bg-gray-200"
+                style={{
+                  padding: 20,
+                  borderRadius: 10,
+                }}
+              >
+                <Text>
+                  Enter the OTP, recieved on Patient's registered mobile number.
+                </Text>
+                <TextInput
+                  className="border border-slate-300 my-2 px-3"
+                  keyboardType="numeric"
+                  maxLength={6}
+                  autoCorrect={false}
+                  autoFocus={true}
+                  value={otp}
+                  onChangeText={setOtp}
+                  onSubmitEditing={verifyAndSend}
+                  placeholder="Enter OTP"
+                />
+                {error.length !== 0 && (
+                  <Text className="text-red-600 ">{error}</Text>
+                )}
+                <View className="flex-row justify-around">
+                  <Button
+                    className=" bg-secondary-100"
+                    title="Verify"
+                    onPress={verifyAndSend}
+                  />
+                  <Button
+                    className="px-4 mx-2"
+                    title="close"
+                    onPress={() => setIsVisible(false)}
+                  />
+                </View>
+              </View>
+            </View>
+          </Modal>
             </View>
           </View>
         </ScrollView>
