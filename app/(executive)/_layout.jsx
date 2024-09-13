@@ -52,6 +52,12 @@ const ExecutiveLayout = () => {
             headerShown: false,
           }}
         />
+        <Stack.Screen
+          name="view-patient-profile"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
 
       <StatusBar backgroundColor="#161622" style="light" />

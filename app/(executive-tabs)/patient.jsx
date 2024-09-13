@@ -51,9 +51,12 @@ const PatientTab = () => {
 
   // Function to render each patient in the list
   const renderPatientItem = ({ item }) => (
-    <View style={styles.patientItem}>
+    <TouchableOpacity
+      onPress={() => router.push("/view-patient-profile")}
+      style={styles.patientItem}
+    >
       <Text style={styles.patientName}>{item.name}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

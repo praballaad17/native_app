@@ -25,8 +25,12 @@ const PrescriptionForm = () => {
       placeholder: "Select the date for Medical Record",
       type: "date",
     },
-    { label: "Profile Picture", key: "profilePicture", type: "image" }, // Image field
-    { label: "Upload Resume", key: "resume", type: "pdf" }, // PDF field
+    {
+      label: "Select Prescription Images",
+      key: "prescriptionPicture",
+      type: "image",
+    },
+    { label: "Upload Resume", key: "resume", type: "pdf" },
   ];
 
   const handleFormSubmit = (formData) => {

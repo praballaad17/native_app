@@ -9,11 +9,14 @@ import {
   Image,
   FlatList,
   Alert,
+  Button,
 } from "react-native";
 import CustomButton from "./CustomButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
+import PDFViewer from "./PDFViewer";
+import { router } from "expo-router";
 
 // CustomForm Component
 const CustomForm = ({ fields, onSubmit }) => {
@@ -48,22 +51,26 @@ const CustomForm = ({ fields, onSubmit }) => {
 
       if (result.canceled === false) {
         handleInputChange(fieldKey, result.assets[0].uri);
-        Alert.alert(
-          "Success",
-          "Resume Uploaded Successfully!",
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            { text: "OK", onPress: () => router.push("/upload-profile") },
-          ],
-          { cancelable: false }
-        );
-      } else {
-        Alert.alert("Cancelled", "File selection was cancelled.");
       }
+
+      //   if (result.canceled === false) {
+      //     handleInputChange(fieldKey, result.assets[0].uri);
+      //     Alert.alert(
+      //       "Success",
+      //       "Resume Uploaded Successfully!",
+      //       [
+      //         {
+      //           text: "Cancel",
+      //           onPress: () => console.log("Cancel Pressed"),
+      //           style: "cancel",
+      //         },
+      //         { text: "OK", onPress: () => console.log("pdf uploaded") },
+      //       ],
+      //       { cancelable: false }
+      //     );
+      //   } else {
+      //     Alert.alert("Cancelled", "File selection was cancelled.");
+      //   }
     } catch (error) {
       console.error("Error picking document:", error);
     }
@@ -78,16 +85,12 @@ const CustomForm = ({ fields, onSubmit }) => {
       quality: 1,
     });
 
-    // console.log(result);
-
     if (result.canceled === false) {
-      console.log(result.assets.length);
       const images = [];
       result.assets.map((item) => {
         images.push(item.uri);
       });
 
-      console.log(images);
       handleInputChange(fieldKey, images); // Store the image URI
     }
   };
@@ -144,6 +147,7 @@ const CustomForm = ({ fields, onSubmit }) => {
                     <Image
                       key={item}
                       source={{ uri: item }}
+                      className="mx-2"
                       style={{ width: 300, height: 400 }}
                     />
                   )}
@@ -159,9 +163,22 @@ const CustomForm = ({ fields, onSubmit }) => {
                   <Text style={styles.buttonText}>Select PDF</Text>
                 </TouchableOpacity>
                 {formData[key] ? (
-                  <Text style={styles.pdfText}>
-                    Selected PDF: {formData[key]}
-                  </Text>
+                  <View>
+                    <Text style={styles.pdfText}>
+                      Selected PDF: {formData[key]}
+                    </Text>
+                    <Button
+                      title="View"
+                      onPress={() =>
+                        router.push({
+                          pathname: "/pdf-view",
+                          params: {
+                            pdfurl: formData[key],
+                          },
+                        })
+                      }
+                    />
+                  </View>
                 ) : null}
               </>
             ) : (
