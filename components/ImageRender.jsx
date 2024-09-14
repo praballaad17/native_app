@@ -1,38 +1,7 @@
 import { View, Text, StyleSheet, Image, Alert } from "react-native";
 import React, { forwardRef, useImperativeHandle } from "react";
 
-const ImageUpload = ({ file, error, setFile, setError }) => {
-  // Function to pick an image from the device's media library
-  const pickImage = async () => {
-    let res;
-    try {
-      res = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    } catch (error) {
-      console.log("error");
-    }
-
-    if (res?.status !== "granted") {
-      // If permission is denied, show an alert
-      Alert.alert(
-        "Permission Denied",
-        `Sorry, we need camera 
-                 roll permission to upload images.`
-      );
-    } else {
-      // Launch the image library and get
-      // the selected image
-      const result = await ImagePicker.launchImageLibraryAsync();
-      if (!result.cancelled) {
-        // If an image is selected (not cancelled),
-        // update the file state variable
-        setFile(result.assets[0].uri);
-
-        // Clear any previous errors
-        setError(null);
-      }
-    }
-  };
-
+const ImageRender = ({ file, error, setFile, setError }) => {
   return (
     <View className="w-full">
       {/* Conditionally render the image or error message */}
@@ -77,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ImageUpload;
+export default ImageRender;

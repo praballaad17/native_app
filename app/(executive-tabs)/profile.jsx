@@ -1,5 +1,12 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+  Animated,
+} from "react-native";
+import React, { useState, useRef } from "react";
 import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,9 +16,24 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
 import ToggleSwitch from "../../components/ToggleSwich";
+import { images } from "../../constants";
+import BottomSheetModal from "../../components/BottomModal";
 
 export default function profile() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [patient, setPatient] = useState({
+    name: "John Doe",
+    age: 35,
+    gender: "Male",
+    contact: "+1 234 567 8901",
+    address: "123, Baker Street, London",
+    profileImage: "",
+  });
+
+  const overlayOpacity = useRef(new Animated.Value(0)).current; // Initial opacity of 0
+  const bottomSheetTranslateY = useRef(new Animated.Value(300)).current; // Initial translateY position offscreen
+
   const primaryTabs = [
     {
       name: "Payouts",
@@ -36,15 +58,6 @@ export default function profile() {
   ];
   const secondaryTabs = ["Need help?", "Settings", "About us"];
 
-  const patient = {
-    name: "John Doe",
-    age: 35,
-    gender: "Male",
-    contact: "+1 234 567 8901",
-    address: "123, Baker Street, London",
-    profileImage: "https://via.placeholder.com/100", // Replace with actual image or from your assets
-  };
-
   const logout = () => {
     //
   };
@@ -58,17 +71,61 @@ export default function profile() {
     });
   };
 
+  const openModal = () => {
+    setVisible(true);
+
+    // Animate the overlay and bottom sheet appearance
+    Animated.timing(overlayOpacity, {
+      toValue: 1, // Fully visible
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+
+    Animated.spring(bottomSheetTranslateY, {
+      toValue: 0, // Move the bottom sheet to its original position
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const closeModal = () => {
+    Animated.timing(overlayOpacity, {
+      toValue: 0, // Fully hidden
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setVisible(false); // Hide modal after animation
+    });
+
+    Animated.spring(bottomSheetTranslateY, {
+      toValue: 300, // Move bottom sheet down offscreen
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const updateProfileImage = (url) => {
+    setPatient({
+      ...patient,
+      profileImage: url,
+    });
+  };
+
+  console.log(patient);
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="mt-2" style={styles.container}>
             {/* Left - Patient Image */}
-            <TouchableOpacity onPress={() => router.push("/")}>
-              <Image
-                source={{ uri: patient.profileImage }}
-                style={styles.profileImage}
-              />
+            <TouchableOpacity onPress={openModal}>
+              {patient.profileImage && patient.profileImage.length ? (
+                <Image
+                  source={{ uri: patient.profileImage }}
+                  style={styles.profileImage}
+                />
+              ) : (
+                <Image source={images.profile} style={styles.profileImage} />
+              )}
             </TouchableOpacity>
 
             {/* Right - Profile Information */}
@@ -132,6 +189,12 @@ export default function profile() {
               isLoading={isSubmitting}
             />
           </View>
+
+          <BottomSheetModal
+            closeModal={closeModal}
+            visible={visible}
+            updateProfileImage={updateProfileImage}
+          />
         </ScrollView>
       </SafeAreaView>
     </GestureHandlerRootView>

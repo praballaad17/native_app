@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
-import ImageUpload from "../../components/ImagePicker";
+import ImageRender from "../../components/ImageRender";
 import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 
@@ -56,7 +56,7 @@ const UploadProfile = () => {
               partner, lets do just last step !
             </Text>
 
-            <ImageUpload file={file} error={error} />
+            <ImageRender file={file} error={error} />
 
             <CustomButton
               title={"Select"}

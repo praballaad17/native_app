@@ -8,9 +8,14 @@ import {
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-const CustomDropdownSelect = ({ options, onSelect, placeholder }) => {
+const CustomDropdownSelect = ({
+  options,
+  onSelect,
+  placeholder,
+  selectedValue,
+  setSelectedValue,
+}) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(null);
 
   // Toggle the visibility of the dropdown
   const toggleDropdown = () => {

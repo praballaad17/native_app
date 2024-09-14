@@ -5,24 +5,6 @@ import * as DocumentPicker from "expo-document-picker";
 const UploadPdf = () => {
   const [pdfUri, setPdfUri] = useState(null);
 
-  const pickDocument = async () => {
-    try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: "application/pdf",
-      });
-
-      console.log(result);
-
-      if (result.canceled === false) {
-        setPdfUri(result.assets[0].uri);
-      } else {
-        Alert.alert("Cancelled", "File selection was cancelled.");
-      }
-    } catch (error) {
-      console.error("Error picking document:", error);
-    }
-  };
-
   console.log(pdfUri);
 
   return (

@@ -7,7 +7,7 @@ import CustomButton from "../../components/CustomButton";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import ImageUpload from "../../components/ImagePicker";
+import ImageRender from "../../components/ImageRender";
 
 const PhotoUpload = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -55,7 +55,7 @@ const PhotoUpload = () => {
           <View className="w-full justify-center h-100 px-4 my-6">
             <Text>PhotoUpload</Text>
 
-            <ImageUpload error={error} file={file} />
+            <ImageRender error={error} file={file} />
 
             <CustomButton
               title={"Select"}
