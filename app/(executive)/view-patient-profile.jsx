@@ -9,8 +9,10 @@ import {
   ScrollView,
   Button,
 } from "react-native";
+import { useLocalSearchParams } from "expo-router";
 
 const ViewPatientProfile = ({ patientId }) => {
+  const params = useLocalSearchParams();
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -56,6 +58,8 @@ const ViewPatientProfile = ({ patientId }) => {
       </View>
     );
   }
+
+  console.log(params);
 
   return (
     <View style={styles.container}>

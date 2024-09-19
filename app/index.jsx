@@ -10,8 +10,8 @@ export default function Index() {
   // };
   useEffect(() => {
     // setUser(USERS.PATIENT);
-    // setUser("doctor");
-    setUser(USERS.EXECUTIVE);
+    setUser(USERS.DOCTOR);
+    // setUser(USERS.EXECUTIVE);
   }, []);
 
   if (!user) {
