@@ -55,6 +55,13 @@ const ExecutiveLayout = () => {
         <Stack.Screen name="view-patient-profile" />
 
         <Stack.Screen
+          name="executive-resume-form"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
           name="payouts"
           options={{
             headerShown: false,

@@ -96,6 +96,8 @@ const PatientTab = () => {
           patientId: selectedPatient,
         },
       });
+      setOtp(0);
+      setError("");
     } else {
       setError("OTP is not correct, re-enter");
     }
@@ -165,6 +167,7 @@ const PatientTab = () => {
         visible={isvisible}
         onRequestClose={() => {
           setIsVisible(false);
+          setOtp(0);
         }}
       >
         <View
@@ -208,7 +211,11 @@ const PatientTab = () => {
               <Button
                 className="px-4 mx-2"
                 title="close"
-                onPress={() => setIsVisible(false)}
+                onPress={() => {
+                  setIsVisible(false);
+                  setOtp(0);
+                  setError("");
+                }}
               />
             </View>
           </View>

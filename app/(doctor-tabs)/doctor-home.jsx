@@ -1,13 +1,23 @@
 import { View, Text } from "react-native";
 import React from "react";
 import GetVarifiedNotification from "../(doctor)/get-varified-notification";
+import NavigationHeader from "../../components/NavigationHeader";
+import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const home = () => {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="test-3xl text-green">Hello doctor home!</Text>
-      <GetVarifiedNotification />
-    </View>
+    <GestureHandlerRootView>
+      <SafeAreaView className="h-full">
+        <ScrollView>
+          <View className="w-full justify-center h-100 px-4 my-6">
+            <NavigationHeader />
+            <GetVarifiedNotification />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 

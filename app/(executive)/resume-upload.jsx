@@ -54,6 +54,12 @@ const ResumeUpload = () => {
               handlePress={pickDocument}
               containerStyles="w-full mt-7"
             />
+            <Text className="text-2xl font-pbold mt-5">OR</Text>
+            <CustomButton
+              title="Fill Form"
+              handlePress={() => router.push("/executive-resume-form")}
+              containerStyles="w-full mt-7"
+            />
           </View>
         </ScrollView>
       </SafeAreaView>
