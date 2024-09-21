@@ -21,23 +21,23 @@ const ResumeForm = () => {
     currentEducation: {
       institute: "",
       grade: "",
-      from: new Date(),
-      till: new Date(),
+      From: new Date(),
+      Till: new Date(),
     },
     education: [],
     currentExperience: {
       company: "",
       jobDetail: "",
-      from: new Date(),
-      till: new Date(),
+      From: new Date(),
+      Till: new Date(),
       isCurrent: false,
     },
     experience: [],
     showDatePicker: {
-      educationFrom: false,
-      educationTill: false,
-      experienceFrom: false,
-      experienceTill: false,
+      EducationFrom: false,
+      EducationTill: false,
+      ExperienceFrom: false,
+      ExperienceTill: false,
     },
   });
 
@@ -76,16 +76,16 @@ const ResumeForm = () => {
   };
 
   const addEducation = () => {
-    const { institute, grade, from, till } = formData.currentEducation;
-    if (institute && grade && from && till) {
+    const { institute, grade, From, Till } = formData.currentEducation;
+    if (institute && grade && From && Till) {
       setFormData({
         ...formData,
-        education: [...formData.education, { institute, grade, from, till }],
+        education: [...formData.education, { institute, grade, From, Till }],
         currentEducation: {
           institute: "",
           grade: "",
-          from: new Date(),
-          till: new Date(),
+          From: new Date(),
+          Till: new Date(),
         },
       });
     }
@@ -99,20 +99,20 @@ const ResumeForm = () => {
   };
 
   const addExperience = () => {
-    const { company, jobDetail, from, till, isCurrent } =
+    const { company, jobDetail, From, Till, isCurrent } =
       formData.currentExperience;
-    if (company && jobDetail && from && (till || isCurrent)) {
+    if (company && jobDetail && From && (Till || isCurrent)) {
       setFormData({
         ...formData,
         experience: [
           ...formData.experience,
-          { company, jobDetail, from, till, isCurrent },
+          { company, jobDetail, From, Till, isCurrent },
         ],
         currentExperience: {
           company: "",
           jobDetail: "",
-          from: new Date(),
-          till: new Date(),
+          From: new Date(),
+          Till: new Date(),
           isCurrent: false,
         },
       });
@@ -138,11 +138,12 @@ const ResumeForm = () => {
   };
 
   const onDateChange = (event, selectedDate, section, field) => {
-    const currentDate = selectedDate || formData[section][field];
+    const currentSection = "current" + section;
+    const currentDate = selectedDate || formData[currentSection][field];
     setFormData({
       ...formData,
-      [section]: {
-        ...formData[section],
+      [currentSection]: {
+        ...formData[currentSection],
         [field]: currentDate,
       },
       showDatePicker: {
@@ -233,29 +234,29 @@ const ResumeForm = () => {
       />
       <Button
         title="From Date"
-        onPress={() => showDatePicker("education", "From")}
+        onPress={() => showDatePicker("Education", "From")}
       />
-      {formData.showDatePicker.educationFrom && (
+      {formData.showDatePicker.EducationFrom && (
         <DateTimePicker
-          value={formData.currentEducation.from}
+          value={formData.currentEducation.From}
           mode="date"
           display="default"
           onChange={(e, selectedDate) =>
-            onDateChange(e, selectedDate, "currentEducation", "from")
+            onDateChange(e, selectedDate, "Education", "From")
           }
         />
       )}
       <Button
         title="Till Date"
-        onPress={() => showDatePicker("education", "Till")}
+        onPress={() => showDatePicker("Education", "Till")}
       />
-      {formData.showDatePicker.educationTill && (
+      {formData.showDatePicker.EducationTill && (
         <DateTimePicker
-          value={formData.currentEducation.till}
+          value={formData.currentEducation.Till}
           mode="date"
           display="default"
           onChange={(e, selectedDate) =>
-            onDateChange(e, selectedDate, "currentEducation", "till")
+            onDateChange(e, selectedDate, "Education", "Till")
           }
         />
       )}
@@ -268,8 +269,8 @@ const ResumeForm = () => {
             onPress={() => removeEducation(index)}
           >
             <Text style={styles.rectangleText}>
-              {edu.institute} - {edu.grade} ({edu.from.toDateString()} to{" "}
-              {edu.till.toDateString()}) ✕
+              {edu.institute} - {edu.grade} ({edu.From.toDateString()} to{" "}
+              {edu.Till.toDateString()}) ✕
             </Text>
           </TouchableOpacity>
         ))}
@@ -295,29 +296,29 @@ const ResumeForm = () => {
       />
       <Button
         title="From Date"
-        onPress={() => showDatePicker("experience", "From")}
+        onPress={() => showDatePicker("Experience", "From")}
       />
-      {formData.showDatePicker.experienceFrom && (
+      {formData.showDatePicker.ExperienceFrom && (
         <DateTimePicker
-          value={formData.currentExperience.from}
+          value={formData.currentExperience.From}
           mode="date"
           display="default"
           onChange={(e, selectedDate) =>
-            onDateChange(e, selectedDate, "currentExperience", "from")
+            onDateChange(e, selectedDate, "Experience", "From")
           }
         />
       )}
       <Button
         title="Till Date"
-        onPress={() => showDatePicker("experience", "Till")}
+        onPress={() => showDatePicker("Experience", "Till")}
       />
-      {formData.showDatePicker.experienceTill && (
+      {formData.showDatePicker.ExperienceTill && (
         <DateTimePicker
-          value={formData.currentExperience.till}
+          value={formData.currentExperience.Till}
           mode="date"
           display="default"
           onChange={(e, selectedDate) =>
-            onDateChange(e, selectedDate, "currentExperience", "till")
+            onDateChange(e, selectedDate, "Experience", "Till")
           }
         />
       )}
@@ -330,8 +331,8 @@ const ResumeForm = () => {
             onPress={() => removeExperience(index)}
           >
             <Text style={styles.experienceText}>
-              {exp.company} - {exp.jobDetail} ({exp.from.toDateString()} to{" "}
-              {exp.till ? exp.till.toDateString() : "Present"}) ✕
+              {exp.company} - {exp.jobDetail} ({exp.From.toDateString()} to{" "}
+              {exp.Till ? exp.Till.toDateString() : "Present"}) ✕
             </Text>
           </TouchableOpacity>
         ))}
