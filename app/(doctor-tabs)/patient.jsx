@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import {
-  View,
   Text,
-  TouchableOpacity,
+  View,
   StyleSheet,
+  TouchableOpacity,
   FlatList,
+  Modal,
+  TextInput,
+  Button,
 } from "react-native";
+import { router } from "expo-router";
 
 // Sample data for Active and Inactive patients
 const activePatients = [
@@ -22,18 +26,62 @@ const inactivePatients = [
 const PatientTabs = () => {
   // State to track which tab is selected
   const [isActiveTab, setIsActiveTab] = useState(true);
-
+  const [isvisible, setIsVisible] = useState(false);
+  const [otp, setOtp] = useState(0);
+  const [error, setError] = useState("");
+  const [selectedPatient, setSelectedPatient] = useState(null);
   // Function to toggle between Active and Inactive Patients tabs
   const toggleTab = (tab) => {
     setIsActiveTab(tab === "active");
   };
 
   // Function to render each patient in the list
-  const renderPatientItem = ({ item }) => (
-    <View style={styles.patientItem}>
-      <Text style={styles.patientName}>{item.name}</Text>
-    </View>
+  const renderActivePatientItem = ({ item }) => (
+    <TouchableOpacity
+      onPress={() =>
+        router.push({
+          pathname: "/view-patient-profile",
+          params: {
+            patientId: item.id,
+          },
+        })
+      }
+      style={styles.patientItem}
+    >
+      <Text style={styles.patientName}>{item?.name}</Text>
+    </TouchableOpacity>
   );
+
+  // Function to render each patient in the list
+  const renderInactivePatientItem = ({ item }) => (
+    <TouchableOpacity
+      onPress={() => sendOTP(item?.id)}
+      style={styles.patientItem}
+    >
+      <Text style={styles.patientName}>{item?.name}</Text>
+    </TouchableOpacity>
+  );
+
+  const sendOTP = (patientId) => {
+    setIsVisible(true);
+    setSelectedPatient(patientId);
+  };
+
+  const verify = () => {
+    if (otp === "1234" || otp === 1234) {
+      setIsVisible(false);
+      router.push({
+        pathname: "/view-patient-profile",
+        params: {
+          patientId: selectedPatient,
+        },
+      });
+      setOtp(0);
+      setError("");
+    } else {
+      setError("OTP is not correct, re-enter");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -78,9 +126,73 @@ const PatientTabs = () => {
       <FlatList
         data={isActiveTab ? activePatients : inactivePatients}
         keyExtractor={(item) => item.id.toString()}
-        renderItem={renderPatientItem}
+        renderItem={
+          isActiveTab ? renderActivePatientItem : renderInactivePatientItem
+        }
         style={styles.list}
       />
+
+      <Modal
+        className="bg-gray-100"
+        animationType="slide"
+        transparent={true}
+        visible={isvisible}
+        onRequestClose={() => {
+          setIsVisible(false);
+          setOtp(0);
+        }}
+      >
+        <View
+          // className="bg-white"
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <View
+            className="bg-gray-200"
+            style={{
+              padding: 20,
+              borderRadius: 10,
+            }}
+          >
+            <Text>
+              Enter the OTP, recieved on Patient's registered mobile number.
+            </Text>
+            <TextInput
+              className="border border-slate-300 my-2 px-3"
+              keyboardType="numeric"
+              maxLength={6}
+              autoCorrect={false}
+              autoFocus={true}
+              value={otp}
+              onChangeText={setOtp}
+              onSubmitEditing={verify}
+              placeholder="Enter OTP"
+            />
+            {error.length !== 0 && (
+              <Text className="text-red-600 ">{error}</Text>
+            )}
+            <View className="flex-row justify-around">
+              <Button
+                className=" bg-secondary-100"
+                title="Verify"
+                onPress={verify}
+              />
+              <Button
+                className="px-4 mx-2"
+                title="close"
+                onPress={() => {
+                  setIsVisible(false);
+                  setOtp(0);
+                  setError("");
+                }}
+              />
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
