@@ -19,9 +19,45 @@ const BottomSheetModal = ({ visible, closeModal, updateProfileImage }) => {
         closeModal();
       },
     },
-    { title: "option 2", function: pickImage },
+    {
+      title: "Upload from camera",
+      function: () => {
+        openCamera();
+        closeModal();
+      },
+    },
     { title: "option 3", function: pickImage },
   ];
+
+  // Request permission to use the camera
+  const requestCameraPermission = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== "granted") {
+      alert("Sorry, we need camera permissions to make this work!");
+    }
+  };
+
+  const openCamera = async () => {
+    // Ensure the camera permission is granted
+    await requestCameraPermission();
+
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true, // You can edit (crop) the image before saving
+      aspect: [3, 3], // Aspect ratio for the crop box
+      quality: 1, // Image quality (1 for best quality)
+    });
+
+    try {
+      if (!result.canceled) {
+        updateProfileImage(result.assets[0].uri);
+        // Clear any previous errors
+        setError(null);
+      }
+    } catch (error) {
+      Alert("Failed", "Photo canot be selected, Try again!");
+    }
+  };
 
   const pickImage = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();

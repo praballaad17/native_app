@@ -39,6 +39,7 @@ const TabLayout = () => {
         name="patient"
         options={{
           tabBarLabel: "Patient",
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons
               name="health-and-safety"
@@ -54,6 +55,7 @@ const TabLayout = () => {
         name="profile"
         options={{
           tabBarLabel: "Profile",
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <Ionicons name="home" size={24} color={color} />
           ),
