@@ -14,6 +14,8 @@ const CustomDropdownSelect = ({
   placeholder,
   selectedValue,
   setSelectedValue,
+  containerStyles,
+  dropdownStyle,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -30,10 +32,10 @@ const CustomDropdownSelect = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View className={`w-full mb-2 ${containerStyles}`}>
       {/* Display the selected value */}
       <TouchableOpacity
-        className="flex-row justify-between"
+        className={`flex-row justify-between ${dropdownStyle}`}
         style={styles.dropdown}
         onPress={toggleDropdown}
       >

@@ -10,6 +10,9 @@ import {
   Button,
 } from "react-native";
 import { router } from "expo-router";
+import { ScrollView } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Sample data for Active and Inactive patients
 const activePatients = [
@@ -200,7 +203,7 @@ const PatientTabs = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20,
+    paddingTop: 40,
     backgroundColor: "#fff",
   },
   tabContainer: {

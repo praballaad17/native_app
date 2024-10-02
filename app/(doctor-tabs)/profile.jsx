@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -20,6 +21,7 @@ import { images } from "../../constants";
 import ToggleSwitch from "../../components/ToggleSwich";
 
 export default function profile() {
+  const params = useLocalSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
   const [patient, setPatient] = useState({
