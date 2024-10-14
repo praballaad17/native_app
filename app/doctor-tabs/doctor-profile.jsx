@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { router } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -15,13 +16,16 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
-import ToggleSwitch from "../../components/ToggleSwich";
-import { images } from "../../constants";
 import BottomSheetModal from "../../components/BottomModal";
+import { images } from "../../constants";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import UserToggleSwitch from "../../components/UserToggleSwich";
 
-export default function profile() {
+export default function DoctorProfile() {
+  const params = useLocalSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
+
   const [patient, setPatient] = useState({
     name: "John Doe",
     age: 35,
@@ -36,9 +40,9 @@ export default function profile() {
 
   const primaryTabs = [
     {
-      name: "Payouts",
+      name: "My apointments",
       icon: <FontAwesome name="stethoscope" size={24} color="black" />,
-      url: "/payouts",
+      url: "/apointments",
     },
     {
       name: "Membership Plan",
@@ -46,17 +50,38 @@ export default function profile() {
       url: "/select-membership",
     },
     {
+      name: "Manage payments methods",
+      icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
+      url: "/apointments",
+    },
+    {
       name: "Pill Reminder",
       icon: <FontAwesome5 name="pills" size={24} color="black" />,
-      url: "/apointments",
+      url: "/pill-reminder",
     },
     {
       name: "Refer and earn",
       icon: <FontAwesome name="share" size={24} color="black" />,
-      url: "/apointments",
+      url: "/refer-earn",
     },
   ];
-  const secondaryTabs = ["Need help?", "Settings", "About us"];
+  const secondaryTabs = [
+    {
+      name: "Need help?",
+      icon: <MaterialIcons name="help" size={24} color="black" />,
+      url: "/need-help",
+    },
+    {
+      name: "Settings",
+      icon: <MaterialIcons name="settings" size={24} color="black" />,
+      url: "/settings",
+    },
+    {
+      name: "About us",
+      icon: <MaterialIcons name="info" size={24} color="black" />,
+      url: "/about-us",
+    },
+  ];
 
   const logout = () => {
     //
@@ -109,8 +134,6 @@ export default function profile() {
     });
   };
 
-  console.log(patient);
-
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">
@@ -148,10 +171,10 @@ export default function profile() {
           </View>
 
           <View className="bg-white rounded-lg mx-4 px-4">
-            <ToggleSwitch title="Patient Mode" />
+            <UserToggleSwitch />
           </View>
 
-          <View className="w-full justify-center h-100 px-4 my-4 bg-gray-50">
+          <View className="w-full justify-center h-100 px-4 my-6 bg-gray-50">
             {primaryTabs.map((item, index) => (
               <TouchableOpacity
                 onPress={() => router.push(item.url)}
@@ -170,13 +193,13 @@ export default function profile() {
           <View className="w-full justify-center h-100 px-4 my-5px bg-gray-50">
             {secondaryTabs.map((item, idx) => (
               <TouchableOpacity
-                onPress={() => router.push("/patient-consultations")}
+                onPress={() => router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
                 key={idx}
               >
                 <View className="flex flex-row">
-                  <FontAwesome name="stethoscope" size={24} color="black" />
-                  <Text className="font-psemibold mx-2">{item}</Text>
+                  {item.icon}
+                  <Text className="font-psemibold mx-2">{item.name}</Text>
                 </View>
                 <FontAwesome name="angle-right" size={20} color="black" />
               </TouchableOpacity>

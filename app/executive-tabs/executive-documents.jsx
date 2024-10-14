@@ -7,7 +7,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router } from "expo-router";
 import CustomButton from "../../components/CustomButton";
 
-export default function explore() {
+export default function ExecutiveDocument() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (

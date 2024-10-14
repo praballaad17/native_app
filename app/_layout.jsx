@@ -1,6 +1,7 @@
 import { useFonts } from "expo-font";
 import { Stack, SplashScreen } from "expo-router";
 import { useEffect } from "react";
+import { UserProvider } from "../context/UserProvider";
 
 export default function RootLayout() {
   SplashScreen.preventAutoHideAsync();
@@ -30,68 +31,51 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(auth)"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(doctor-tabs)"
-        options={{
-          headerShown: false,
-        }}
-      />
+    <UserProvider>
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(auth)"
+          options={{
+            headerShown: false,
+          }}
+        />
 
-      <Stack.Screen
-        name="(patient-tabs)"
-        options={{
-          headerShown: false,
-        }}
-      />
+        <Stack.Screen
+          name="(executive)"
+          options={{
+            headerShown: false,
+          }}
+        />
 
-      <Stack.Screen
-        name="(executive-tabs)"
-        options={{
-          headerShown: false,
-        }}
-      />
+        <Stack.Screen
+          name="(doctor)"
+          options={{
+            headerShown: false,
+          }}
+        />
 
-      <Stack.Screen
-        name="(executive)"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(doctor)"
-        options={{
-          headerShown: false,
-        }}
-      />
-
-      <Stack.Screen
-        name="(patient)"
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="(common)"
-        options={{
-          headerShown: false,
-        }}
-      />
-      {/* <Stack.Screen name="/search/[query]" options={{
+        <Stack.Screen
+          name="(patient)"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="(common)"
+          options={{
+            headerShown: false,
+          }}
+        />
+        {/* <Stack.Screen name="/search/[query]" options={{
         headerShown: false,
       }} /> */}
-    </Stack>
+      </Stack>
+    </UserProvider>
   );
 }

@@ -17,12 +17,14 @@ import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import PDFViewer from "./PDFViewer";
 import { router } from "expo-router";
+import ToggleSwitch from "./ToggleSwitch";
 
 // CustomForm Component
 const CustomForm = ({ fields, onSubmit }) => {
   // State to manage form data dynamically
   const [formData, setFormData] = useState({});
   const [showDatePicker, setShowDatePicker] = useState(null);
+  const [isPdf, setIsPdf] = useState(false);
 
   // Handler for updating field values
   const handleInputChange = (fieldKey, value) => {
@@ -38,8 +40,17 @@ const CustomForm = ({ fields, onSubmit }) => {
     handleInputChange(fieldKey, currentDate.toISOString().split("T")[0]); // Store date in YYYY-MM-DD format
   };
 
+  const setIsEnabled = () => {
+    handleInputChange("imageOrPdf", null);
+    setIsPdf(!isPdf);
+  };
+
   // Submitting the form
   const handleSubmit = () => {
+    setFormData({
+      ...formData,
+      isPdf,
+    });
     onSubmit(formData); // Call parent onSubmit function
   };
 
@@ -95,6 +106,8 @@ const CustomForm = ({ fields, onSubmit }) => {
     }
   };
 
+  console.log("formdata", formData);
+
   return (
     <ScrollView style={styles.container}>
       {fields.map((field, index) => {
@@ -130,6 +143,60 @@ const CustomForm = ({ fields, onSubmit }) => {
                       handleDateChange(event, selectedDate, key)
                     }
                   />
+                )}
+              </>
+            ) : type === "imageOrPdf" ? (
+              <>
+                <ToggleSwitch isEnabled={isPdf} setIsEnabled={setIsEnabled} />
+                {!isPdf ? (
+                  <>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={() => handleImagePick(key)}
+                    >
+                      <Text style={styles.buttonText}>Select Image</Text>
+                    </TouchableOpacity>
+                    <FlatList
+                      horizontal
+                      data={formData[key] || []}
+                      renderItem={({ item }) => (
+                        <Image
+                          key={item}
+                          source={{ uri: item }}
+                          className="mx-2"
+                          style={{ width: 300, height: 400 }}
+                        />
+                      )}
+                      keyExtractor={(item) => item}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      style={styles.button}
+                      onPress={() => pickDocument(key)}
+                    >
+                      <Text style={styles.buttonText}>Select PDF</Text>
+                    </TouchableOpacity>
+                    {formData[key] ? (
+                      <View>
+                        <Text style={styles.pdfText}>
+                          Selected PDF: {formData[key]}
+                        </Text>
+                        <Button
+                          title="View"
+                          onPress={() =>
+                            router.push({
+                              pathname: "/pdf-view",
+                              params: {
+                                pdfurl: formData[key],
+                              },
+                            })
+                          }
+                        />
+                      </View>
+                    ) : null}
+                  </>
                 )}
               </>
             ) : type === "image" ? (

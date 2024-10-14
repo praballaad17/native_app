@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Loader from "./Loader";
+import useUserType from "../context/UserProvider";
+import { USERS } from "../constants";
 
-const ToggleSwitch = () => {
-  const [selectedType, setSelectedType] = useState("Patient");
+const UserToggleSwitch = () => {
   const [loading, setLoading] = useState(false);
+  const { user, setUser } = useUserType();
 
   const switchUserType = (type) => {
     setLoading(true);
 
     setTimeout(() => {
-      setSelectedType(type);
+      setUser(type);
       setLoading(false);
     }, 3000); // 3 seconds delay for demo purposes
   };
@@ -27,14 +29,14 @@ const ToggleSwitch = () => {
         <TouchableOpacity
           style={[
             styles.switchButton,
-            selectedType === "Patient" && styles.activeButton,
+            user === USERS.PATIENT && styles.activeButton,
           ]}
-          onPress={() => switchUserType("Patient")}
+          onPress={() => switchUserType(USERS.PATIENT)}
         >
           <Text
             style={[
               styles.buttonText,
-              selectedType === "Patient" && styles.activeText,
+              user === USERS.PATIENT && styles.activeText,
             ]}
           >
             Patient
@@ -45,14 +47,14 @@ const ToggleSwitch = () => {
         <TouchableOpacity
           style={[
             styles.switchButton,
-            selectedType === "Doctor" && styles.activeButton,
+            user === USERS.DOCTOR && styles.activeButton,
           ]}
-          onPress={() => switchUserType("Doctor")}
+          onPress={() => switchUserType(USERS.DOCTOR)}
         >
           <Text
             style={[
               styles.buttonText,
-              selectedType === "Doctor" && styles.activeText,
+              user === USERS.DOCTOR && styles.activeText,
             ]}
           >
             Doctor
@@ -63,14 +65,14 @@ const ToggleSwitch = () => {
         <TouchableOpacity
           style={[
             styles.switchButton,
-            selectedType === "Executive" && styles.activeButton,
+            user === USERS.EXECUTIVE && styles.activeButton,
           ]}
-          onPress={() => switchUserType("Executive")}
+          onPress={() => switchUserType(USERS.EXECUTIVE)}
         >
           <Text
             style={[
               styles.buttonText,
-              selectedType === "Executive" && styles.activeText,
+              user === USERS.EXECUTIVE && styles.activeText,
             ]}
           >
             Executive
@@ -80,7 +82,7 @@ const ToggleSwitch = () => {
 
       {/* Display the selected user type */}
       <View style={styles.displayContainer}>
-        <Text style={styles.displayText}>Selected: {selectedType}</Text>
+        <Text style={styles.displayText}>Selected: {user}</Text>
       </View>
     </View>
   );
@@ -128,4 +130,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ToggleSwitch;
+export default UserToggleSwitch;

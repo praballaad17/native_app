@@ -50,7 +50,7 @@ const PatientLayout = () => {
         />
 
         <Stack.Screen
-          name="upload-medical"
+          name="patient-upload-medical"
           options={{
             headerShown: false,
           }}

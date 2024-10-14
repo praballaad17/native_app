@@ -27,11 +27,17 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="apointments"
         options={{
-          tabBarLabel: "Explore",
+          tabBarLabel: "Apointments",
+          headerShown: false,
           tabBarIcon: ({ color, focused }) => (
-            <Ionicons name="home" size={24} color={color} focused={focused} />
+            <MaterialIcons
+              name="calendar-month"
+              size={24}
+              color={color}
+              focused={focused}
+            />
           ),
         }}
       />
@@ -45,7 +51,7 @@ const TabLayout = () => {
               name="health-and-safety"
               size={24}
               color={color}
-              // focused={focused}
+              focused={focused}
             />
           ),
         }}

@@ -7,7 +7,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router } from "expo-router";
 import CustomButton from "../../components/CustomButton";
 
-export default function explore() {
+export default function PatientDocument() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
@@ -23,7 +23,7 @@ export default function explore() {
                 </Text>
                 <CustomButton
                   title={"Proceed"}
-                  handlePress={() => router.push("/upload-medical")}
+                  handlePress={() => router.push("/patient-upload-medical")}
                   containerStyles="px-4 min-h-[40px] bg-white border border-secondary"
                   textStyles="text-secondary"
                   isLoading={isSubmitting}
@@ -35,7 +35,9 @@ export default function explore() {
                 </Text>
                 <CustomButton
                   title={"Proceed"}
-                  handlePress={() => router.push("/upload-prescription")}
+                  handlePress={() =>
+                    router.push("/patient-upload-prescription")
+                  }
                   containerStyles="px-4 min-h-[40px] bg-white border border-secondary"
                   textStyles="text-secondary"
                   isLoading={isSubmitting}

@@ -4,12 +4,41 @@ import { router } from "expo-router";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useEffect } from "react";
+import { getAppointments } from "../../services/doctorServices";
 
 const Apointments = () => {
   const [isvisible, setIsVisible] = useState(false);
   const [otp, setOtp] = useState(0);
   const [selectedPatient, setSelectedPatient] = useState();
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    try {
+      getAppointments();
+    } catch (error) {}
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        "https://native-backend-w2df.onrender.com/api/patient/get-doctor-list",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // This is a hack for React Native to accept self-signed certificates in development
+          insecureHTTPParser: true,
+        }
+      );
+      const json = await response.json();
+      console.log(json);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const appointmentData = [
     {
       patient: "John king",

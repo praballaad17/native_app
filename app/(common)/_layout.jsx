@@ -37,6 +37,41 @@ const CommonLayout = () => {
             headerShown: false,
           }}
         />
+
+        <Stack.Screen
+          name="refer-earn"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="pill-reminder"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="settings"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="about-us"
+          options={{
+            headerShown: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="need-help"
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack>
       <StatusBar backgroundColor="#161622" style="light" />
     </>

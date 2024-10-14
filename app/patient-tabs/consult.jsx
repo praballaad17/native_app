@@ -1,11 +1,13 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ConsultDoctorList } from "../../services/patientServices";
 
 const Consult = () => {
+  const [doctorList, setDoctorList] = useState(null);
   const areas = [
     "Cardiologist (Heart)",
     "Neurologist (Nervous System, Brain, Spinal Cord)",
@@ -31,6 +33,16 @@ const Consult = () => {
       },
     });
   };
+
+  const getDoctorListBySpeciality = async (speciality) => {
+    console.log(speciality);
+    try {
+      const res = await ConsultDoctorList(speciality);
+      setDoctorList(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">
@@ -43,6 +55,7 @@ const Consult = () => {
               {areas.map((item, idx) => (
                 <TouchableOpacity
                   key={idx}
+                  onPress={() => getDoctorListBySpeciality(item)}
                   className="border border-gray-400 rounded-xl p-1 m-1"
                 >
                   <Text className="text-primary">{item}</Text>

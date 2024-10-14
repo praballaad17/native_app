@@ -1,6 +1,7 @@
 import axios from "axios";
+import "@env";
 
-const apiEndpoint = import.meta.env.VITE_API_URL + "/doctor";
+const apiEndpoint = process.env.API_URL + "/doctor";
 const tokenKey = "token";
 
 // /**
@@ -33,6 +34,19 @@ export const submitDoctorDetails = async (details) => {
     const response = await axios(`${apiEndpoint}/submit-details`, {
       method: "POST",
       ...details,
+    });
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const getAppointments = async () => {
+  console.log("getAppointments");
+  try {
+    const response = await axios(`${apiEndpoint}/get-appoitments`, {
+      method: "GET",
     });
 
     return response.data;

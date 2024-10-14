@@ -12,7 +12,7 @@ import {
 import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
 
-const PatientTab = () => {
+const ExecutivePatientTab = () => {
   const [patients, setPatients] = useState(null);
   const [isActiveTab, setIsActiveTab] = useState(true);
   const [isvisible, setIsVisible] = useState(false);
@@ -272,4 +272,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PatientTab;
+export default ExecutivePatientTab;
