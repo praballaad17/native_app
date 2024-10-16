@@ -7,11 +7,8 @@ export function useUserType() {
 }
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(USERS.DOCTOR);
-  // Function to toggle between 'patient', 'doctor' and 'executive'
-  const changeUserType = (type) => {
-    setUser(type);
-  };
+  // const [user, setUser] = useState(USERS.PATIENT);
+  const [user, setUser] = useState();
 
   const value = {
     user,

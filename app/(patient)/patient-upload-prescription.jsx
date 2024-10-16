@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -8,6 +8,10 @@ import { router } from "expo-router";
 
 const UploadPrescription = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const getter = () => {};
+  });
 
   const records = [
     {

@@ -15,7 +15,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
-import { images } from "../../constants";
+import { images, secondaryTabs } from "../../constants";
 import BottomSheetModal from "../../components/BottomModal";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 
@@ -56,7 +56,6 @@ export default function ExecutiveProfile() {
       url: "/apointments",
     },
   ];
-  const secondaryTabs = ["Need help?", "Settings", "About us"];
 
   const logout = () => {
     //
@@ -170,15 +169,15 @@ export default function ExecutiveProfile() {
           <View className="w-full justify-center h-100 px-4 my-5px bg-gray-50">
             {secondaryTabs.map((item, idx) => (
               <TouchableOpacity
-                onPress={() => router.push("/patient-consultations")}
+                onPress={() => router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
                 key={idx}
               >
                 <View className="flex flex-row">
                   <FontAwesome name="stethoscope" size={24} color="black" />
-                  <Text className="font-psemibold mx-2">{item}</Text>
+                  <Text className="font-psemibold mx-2">{item.name}</Text>
                 </View>
-                <FontAwesome name="angle-right" size={20} color="black" />
+                {item.icon}
               </TouchableOpacity>
             ))}
             <CustomButton

@@ -22,6 +22,7 @@ import ExecutiveHome from "./executive-tabs/executive-home";
 import ExecutiveProfile from "./executive-tabs/profile";
 import ExecutivePatientTab from "./executive-tabs/executive-patient";
 import { USERS } from "../constants";
+import SignIn from "./(auth)/sign-in";
 
 const ExecutiveTab = createBottomTabNavigator();
 const PatientTab = createBottomTabNavigator();
@@ -204,8 +205,10 @@ const SwitchableNavigator = () => {
         <DoctorTabNavigator />
       ) : user === USERS.PATIENT ? (
         <PatientTabNavigator />
-      ) : (
+      ) : user === USERS.EXECUTIVE ? (
         <ExecutiveTabNavigator />
+      ) : (
+        <SignIn />
       )}
     </>
   );

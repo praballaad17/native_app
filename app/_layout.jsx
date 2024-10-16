@@ -2,6 +2,7 @@ import { useFonts } from "expo-font";
 import { Stack, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { UserProvider } from "../context/UserProvider";
+import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
   SplashScreen.preventAutoHideAsync();
@@ -75,6 +76,7 @@ export default function RootLayout() {
         {/* <Stack.Screen name="/search/[query]" options={{
         headerShown: false,
       }} /> */}
+        <StatusBar backgroundColor="#161622" style="light" />
       </Stack>
     </UserProvider>
   );

@@ -1,17 +1,47 @@
 import axios from "axios";
+import "@env";
+import * as SecureStore from "expo-secure-store";
 
-const apiEndpoint = import.meta.env.VITE_API_URL + "/auth";
+const apiEndpoint = process.env.VITE_API_URL + "/auth";
 const tokenKey = "token";
 
 function setJwt(jwt) {
   axios.defaults.headers.common["token"] = jwt;
 }
 
-setJwt(getJwt());
+// Save JWT Token
+const saveToken = async (token) => {
+  try {
+    await SecureStore.setItemAsync("authToken", token);
+  } catch (error) {
+    console.log("Error saving the token", error);
+  }
+};
 
-export function getJwt() {
-  return localStorage.getItem(tokenKey);
-}
+const getToken = async () => {
+  try {
+    const token = await SecureStore.getItemAsync("authToken");
+    if (token) {
+      // Token exists, proceed with auto-login
+      return token;
+    } else {
+      // No token, prompt for login
+      return null;
+    }
+  } catch (error) {
+    console.log("Error retrieving the token", error);
+    return null;
+  }
+};
+
+const deleteToken = async () => {
+  try {
+    await SecureStore.deleteItemAsync("authToken");
+  } catch (error) {
+    console.log("Error deleting the token", error);
+  }
+};
+
 // /**
 //  * Logs a user in with the provided credentials
 //  * @function login
@@ -30,7 +60,7 @@ export const login = async (usernameOrEmail, password, authToken) => {
       method: "POST",
       ...request,
     });
-    localStorage.setItem(tokenKey, response.data.token);
+    saveToken;
     return response.data;
   } catch (err) {
     throw new Error(err.response.data.error);
@@ -54,7 +84,6 @@ export const registerUser = async (username, fullName, email, password) => {
       password,
     });
     console.log(response.data.token);
-    localStorage.setItem(tokenKey, response.data.token);
     return response.data;
   } catch (err) {
     throw new Error(err.response.data.error);
@@ -116,6 +145,5 @@ export const changePassword = async (data) => {
 };
 
 export async function logout() {
-  localStorage.removeItem(tokenKey);
-  window.location.reload(false);
+  deleteToken();
 }

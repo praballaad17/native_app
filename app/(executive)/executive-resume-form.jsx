@@ -12,6 +12,7 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker"; // Import the date picker component
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { DATEOPTIONS } from "../../constants";
 
 const ResumeForm = () => {
   const [formData, setFormData] = useState({
@@ -159,7 +160,7 @@ const ResumeForm = () => {
     Alert.alert("Form Submitted", "Your resume details have been submitted!");
     console.log(formData);
   };
-  const options = { month: "short", day: "numeric", year: "numeric" };
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView>
@@ -249,7 +250,7 @@ const ResumeForm = () => {
               {formData.currentEducation.From
                 ? formData.currentEducation.From.toLocaleDateString(
                     "en-US",
-                    options
+                    DATEOPTIONS
                   )
                 : "Select Date"}
             </Text>
@@ -273,7 +274,7 @@ const ResumeForm = () => {
               {formData.currentEducation.Till
                 ? formData.currentEducation.Till.toLocaleDateString(
                     "en-US",
-                    options
+                    DATEOPTIONS
                   )
                 : "Select Date"}
             </Text>
@@ -307,8 +308,8 @@ const ResumeForm = () => {
                 </View>
                 <Text className="text-sm"> {edu.grade}</Text>
                 <Text>
-                  {edu.From.toLocaleDateString("en-US", options)} -{" "}
-                  {edu.Till.toLocaleDateString("en-US", options)}
+                  {edu.From.toLocaleDateString("en-US", DATEOPTIONS)} -{" "}
+                  {edu.Till.toLocaleDateString("en-US", DATEOPTIONS)}
                 </Text>
               </TouchableOpacity>
             ))}
@@ -337,7 +338,7 @@ const ResumeForm = () => {
               {formData.currentEducation.Till
                 ? formData.currentEducation.Till.toLocaleDateString(
                     "en-US",
-                    options
+                    DATEOPTIONS
                   )
                 : "Select Date"}
             </Text>
@@ -361,7 +362,7 @@ const ResumeForm = () => {
               {formData.currentEducation.Till
                 ? formData.currentEducation.Till.toLocaleDateString(
                     "en-US",
-                    options
+                    DATEOPTIONS
                   )
                 : "Select Date"}
             </Text>
@@ -394,8 +395,8 @@ const ResumeForm = () => {
                 </View>
                 <Text className="text-sm"> {exp.jobDetail}</Text>
                 <Text>
-                  {exp.From.toLocaleDateString("en-US", options)} -{" "}
-                  {exp.Till.toLocaleDateString("en-US", options)}
+                  {exp.From.toLocaleDateString("en-US", DATEOPTIONS)} -{" "}
+                  {exp.Till.toLocaleDateString("en-US", DATEOPTIONS)}
                 </Text>
               </TouchableOpacity>
             ))}

@@ -126,8 +126,7 @@ export const verifyDoctor = async (usernameOrEmail, password, authToken) => {
   }
 };
 
-export const FetchAllDoctorList = async (speciality = "") => {
-  console.log(speciality, apiEndpoint);
+export const FetchAllDoctorList = async (page, limit = 10) => {
   try {
     const response = await axios.get(`${apiEndpoint}/get-doctor-list`, {
       params: {

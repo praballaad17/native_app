@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link } from "expo-router";
+import { patientRegister } from "../../services/patientServices";
 
 const Details = () => {
   const [form, setForm] = useState({
@@ -21,8 +22,14 @@ const Details = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = () => {
-    //
+  const submit = async () => {
+    try {
+      const res = await patientRegister(form);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+
     router.push("/subscription");
   };
 

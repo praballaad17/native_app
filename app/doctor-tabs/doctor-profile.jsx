@@ -17,8 +17,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
 import BottomSheetModal from "../../components/BottomModal";
-import { images } from "../../constants";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { images, secondaryTabs } from "../../constants";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 
 export default function DoctorProfile() {
@@ -63,23 +62,6 @@ export default function DoctorProfile() {
       name: "Refer and earn",
       icon: <FontAwesome name="share" size={24} color="black" />,
       url: "/refer-earn",
-    },
-  ];
-  const secondaryTabs = [
-    {
-      name: "Need help?",
-      icon: <MaterialIcons name="help" size={24} color="black" />,
-      url: "/need-help",
-    },
-    {
-      name: "Settings",
-      icon: <MaterialIcons name="settings" size={24} color="black" />,
-      url: "/settings",
-    },
-    {
-      name: "About us",
-      icon: <MaterialIcons name="info" size={24} color="black" />,
-      url: "/about-us",
     },
   ];
 

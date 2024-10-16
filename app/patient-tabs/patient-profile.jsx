@@ -16,7 +16,9 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
 import UserToggleSwitch from "../../components/UserToggleSwich";
-import { images } from "../../constants";
+import { images, secondaryTabs } from "../../constants";
+import { logout } from "../../services/AuthenticationServices";
+import BottomSheetModal from "../../components/BottomModal";
 
 export default function PatientProfile() {
   // const router = useRouter();
@@ -30,29 +32,34 @@ export default function PatientProfile() {
     {
       name: "My consultations",
       icon: <FontAwesome name="stethoscope" size={24} color="black" />,
+      url: "/apointments",
     },
     {
       name: "My Lab Tests",
       icon: <Fontisto name="test-tube" size={24} color="black" />,
+      url: "/apointments",
     },
     {
       name: "Membership Plan",
       icon: <Fontisto name="test-tube" size={24} color="black" />,
+      url: "/select-membership",
     },
     {
       name: "Manage payments methods",
       icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
+      url: "/apointments",
     },
     {
       name: "Pill Reminder",
       icon: <FontAwesome5 name="pills" size={24} color="black" />,
+      url: "/pill-reminder",
     },
     {
       name: "Refer and earn",
       icon: <FontAwesome name="share" size={24} color="black" />,
+      url: "/refer-earn",
     },
   ];
-  const secondaryTabs = ["Need help?", "Settings", "About us"];
 
   const patient = {
     name: "John Doe",
@@ -155,7 +162,7 @@ export default function PatientProfile() {
           <View className="w-full justify-center h-100 px-4 my-1 bg-gray-50">
             {primaryTabs.map((item, index) => (
               <TouchableOpacity
-                onPress={() => router.push("/patient-consultations")}
+                onPress={() => router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
                 key={index}
               >
@@ -171,25 +178,31 @@ export default function PatientProfile() {
           <View className="w-full justify-center h-100 px-4 my-1 bg-gray-50">
             {secondaryTabs.map((item, idx) => (
               <TouchableOpacity
-                onPress={() => router.push("/patient-consultations")}
+                onPress={() => router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
                 key={idx}
               >
                 <View className="flex flex-row">
-                  <FontAwesome name="stethoscope" size={24} color="black" />
-                  <Text className="font-psemibold mx-2">{item}</Text>
+                  {item.icon}
+                  <Text className="font-psemibold mx-2">{item.name}</Text>
                 </View>
                 <FontAwesome name="angle-right" size={20} color="black" />
               </TouchableOpacity>
             ))}
             <CustomButton
               title={"Sign out"}
-              handlePress={submit}
+              handlePress={logout}
               containerStyles="mt-4 bg-white border border-slate-300  min-h-[42px]"
               textStyles="text-orange-600 text-sm"
               isLoading={isSubmitting}
             />
           </View>
+
+          <BottomSheetModal
+            closeModal={closeModal}
+            visible={visible}
+            updateProfileImage={updateProfileImage}
+          />
         </ScrollView>
       </SafeAreaView>
     </GestureHandlerRootView>
