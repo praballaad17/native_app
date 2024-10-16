@@ -29,7 +29,6 @@ const Details = () => {
     } catch (error) {
       console.log(error);
     }
-
     router.push("/subscription");
   };
 

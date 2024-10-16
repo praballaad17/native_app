@@ -7,8 +7,8 @@ export function useUserType() {
 }
 
 export const UserProvider = ({ children }) => {
-  // const [user, setUser] = useState(USERS.PATIENT);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(USERS.EXECUTIVE);
+  // const [user, setUser] = useState();
 
   const value = {
     user,

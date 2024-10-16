@@ -18,6 +18,7 @@ import {
   Feather,
 } from "@expo/vector-icons"; // Icons
 import CustomDropdownSelect from "../../components/CustomDropDownSelect";
+import { GENDEROPTIONS } from "../../constants";
 
 const ProfileEdit = () => {
   const [name, setName] = useState("");
@@ -32,13 +33,6 @@ const ProfileEdit = () => {
     // Handle save action
     console.log("Profile updated");
   };
-
-  const dropdownOptions = [
-    { label: "select", value: "select" },
-    { label: "male", value: "male" },
-    { label: "female", value: "female" },
-    { label: "other", value: "other" },
-  ];
 
   const onDateChange = (event, selectedDate) => {
     setDob(selectedDate);
@@ -112,7 +106,7 @@ const ProfileEdit = () => {
               style={styles.icon}
             />
             <CustomDropdownSelect
-              options={dropdownOptions}
+              options={GENDEROPTIONS}
               placeholder="select gender"
               onSelect={(option) => setGender(option)}
               selectedValue={gender}

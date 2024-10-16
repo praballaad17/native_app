@@ -12,7 +12,9 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker"; // Import the date picker component
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { DATEOPTIONS } from "../../constants";
+import { DATEOPTIONS, GENDEROPTIONS } from "../../constants";
+import CustomDropdownSelect from "../../components/CustomDropDownSelect";
+import { executiveRegister } from "../../services/executiveServices";
 
 const ResumeForm = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +22,9 @@ const ResumeForm = () => {
     email: "",
     phone: "",
     currentSkill: "",
+    gender: "",
+    address: "",
+    dob: new Date(),
     skills: [],
     currentEducation: {
       institute: "",
@@ -156,9 +161,16 @@ const ResumeForm = () => {
     });
   };
 
-  const handleSubmit = () => {
-    Alert.alert("Form Submitted", "Your resume details have been submitted!");
-    console.log(formData);
+  const handleSubmit = async () => {
+    try {
+      Alert.alert("Form Submitted", "Your resume details have been submitted!");
+      const newFormData = { ...formData, isResume: false };
+      console.log(newFormData);
+      const res = await executiveRegister(newFormData);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -194,6 +206,27 @@ const ResumeForm = () => {
             keyboardType="phone-pad"
             value={formData.phone}
             onChangeText={(text) => handleInputChange("phone", text)}
+          />
+
+          {/* Address */}
+          <Text style={styles.label}>Address</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your address"
+            value={formData.address}
+            onChangeText={(text) => handleInputChange("address", text)}
+          />
+
+          {/* Gender */}
+          <Text style={styles.label}>Gender</Text>
+          <CustomDropdownSelect
+            options={GENDEROPTIONS}
+            placeholder="select gender"
+            onSelect={(text) => handleInputChange("gender", text)}
+            selectedValue={formData.gender}
+            // setSelectedValue={setGender}
+            // containerStyles="absolute bottom-0 right-0"
+            dropdownStyle=""
           />
 
           {/* Skills */}

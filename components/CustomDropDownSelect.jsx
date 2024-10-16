@@ -13,7 +13,7 @@ const CustomDropdownSelect = ({
   onSelect,
   placeholder,
   selectedValue,
-  setSelectedValue,
+  // setSelectedValue,
   containerStyles,
   dropdownStyle,
 }) => {
@@ -26,21 +26,24 @@ const CustomDropdownSelect = ({
 
   // Handle selecting an option from the dropdown
   const handleSelect = (option) => {
-    setSelectedValue(option);
+    console.log(option.value);
+    // setSelectedValue(option);
     setIsVisible(false);
-    onSelect(option); // Pass the selected option to parent via onSelect prop
+    onSelect(option.value); // Pass the selected option to parent via onSelect prop
   };
+
+  console.log(selectedValue);
 
   return (
     <View className={`w-full mb-2 ${containerStyles}`}>
       {/* Display the selected value */}
       <TouchableOpacity
-        className={`flex-row justify-between ${dropdownStyle}`}
         style={styles.dropdown}
+        className={`flex-row justify-between ${dropdownStyle}`}
         onPress={toggleDropdown}
       >
         <Text style={styles.dropdownText}>
-          {selectedValue ? selectedValue.label : placeholder}
+          {selectedValue ? selectedValue : placeholder}
         </Text>
         <FontAwesome name="angle-down" size={24} color="black" />
       </TouchableOpacity>
@@ -74,7 +77,6 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     borderWidth: 1,
-    borderColor: "gray",
     padding: 10,
     borderRadius: 5,
     backgroundColor: "white",
@@ -84,12 +86,16 @@ const styles = StyleSheet.create({
     color: "black",
   },
   dropdownMenu: {
+    position: "absolute",
+    width: "100%",
+    top: "0px",
+    zIndex: 100,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 5,
     marginTop: 5,
     backgroundColor: "white",
-    maxHeight: 150, // Set a max height for the dropdown menu
+    maxHeight: "auto", // Set a max height for the dropdown menu
   },
   dropdownItem: {
     padding: 10,

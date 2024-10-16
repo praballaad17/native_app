@@ -6,15 +6,19 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
+import { MMKV } from "react-native-mmkv";
 
 const ResumeUpload = () => {
   const [pdfUri, setPdfUri] = useState(null);
+  // const storage = new MMKV();
 
   const pickDocument = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: "application/pdf",
       });
+
+      console.log(result);
 
       if (result.canceled === false) {
         setPdfUri(result.assets[0].uri);
@@ -27,7 +31,7 @@ const ResumeUpload = () => {
               onPress: () => console.log("Cancel Pressed"),
               style: "cancel",
             },
-            { text: "OK", onPress: () => router.push("/upload-profile") },
+            { text: "OK", onPress: handleSubmit },
           ],
           { cancelable: false }
         );
@@ -37,6 +41,22 @@ const ResumeUpload = () => {
     } catch (error) {
       console.error("Error picking document:", error);
     }
+  };
+
+  const handleSubmit = (url) => {
+    // storage.set("resumeUrl", url);
+    router.push("/upload-profile");
+  };
+
+  const uploadPdfToServer = async (pdfUri) => {
+    const formData = new FormData();
+
+    // Create a FormData object and append the PDF file
+    formData.append("pdf", {
+      uri: pdfUri, // File path from the document picker
+      type: "application/pdf", // MIME type
+      name: "resume.pdf", // Custom name for the file
+    });
   };
 
   return (

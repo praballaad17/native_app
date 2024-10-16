@@ -65,4 +65,18 @@ const CONSULTAREAS = [
 
 const DATEOPTIONS = { month: "short", day: "numeric", year: "numeric" };
 
-export { icons, images, USERS, secondaryTabs, CONSULTAREAS, DATEOPTIONS };
+const GENDEROPTIONS = [
+  { label: "select", value: "select" },
+  { label: "male", value: "male" },
+  { label: "female", value: "female" },
+  { label: "other", value: "other" },
+];
+export {
+  icons,
+  images,
+  USERS,
+  secondaryTabs,
+  CONSULTAREAS,
+  DATEOPTIONS,
+  GENDEROPTIONS,
+};
