@@ -31,6 +31,24 @@ export const executiveRegister = async (formData) => {
   }
 };
 
+export const editExecutiveDetails = async (formData, id) => {
+  try {
+    const response = await axios.post(
+      `${apiEndpoint}/edit-details/${id}`,
+      formData
+    );
+
+    if (response.data.success) {
+      Alert.alert("Success", "PDF uploaded successfully!");
+    } else {
+      Alert.alert("Error", "Failed to upload the PDF.");
+    }
+  } catch (error) {
+    console.error("Error uploading PDF:", error);
+    Alert.alert("Error", "An error occurred while uploading.");
+  }
+};
+
 export const verifyExecutive = async (patientId, executiveId) => {
   try {
     const response = await axios(
@@ -39,6 +57,54 @@ export const verifyExecutive = async (patientId, executiveId) => {
         method: "POST",
       }
     );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const getPatientListByExecutiveId = async (executiveId) => {
+  try {
+    const response = await axios(`${apiEndpoint}/get-patient/${executiveId}`, {
+      method: "GET",
+    });
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const addPatientByExecutive = async (formData, id) => {
+  try {
+    const response = await axios.post(
+      `${apiEndpoint}/add-patinet/${id}`,
+      formData
+    );
+
+    return response;
+  } catch (error) {
+    console.error("Error uploading PDF:", error);
+    Alert.alert("Error", "An error occurred while uploading.");
+  }
+};
+
+export const addWithdraw = async (formData) => {
+  try {
+    const response = await axios.post(`${apiEndpoint}/add-withdraw`, formData);
+
+    return response;
+  } catch (error) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const getWithdraw = async (executiveId) => {
+  try {
+    const response = await axios(`${apiEndpoint}/get-withdraw/${executiveId}`, {
+      method: "GET",
+    });
 
     return response.data;
   } catch (err) {

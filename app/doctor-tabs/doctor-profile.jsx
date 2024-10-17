@@ -17,7 +17,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
 import BottomSheetModal from "../../components/BottomModal";
-import { images, secondaryTabs } from "../../constants";
+import { DOCTORFIELDS, images, secondaryTabs, USERS } from "../../constants";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 
 export default function DoctorProfile() {
@@ -25,7 +25,7 @@ export default function DoctorProfile() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const [patient, setPatient] = useState({
+  const [doctor, setDoctor] = useState({
     name: "John Doe",
     age: 35,
     gender: "Male",
@@ -73,7 +73,9 @@ export default function DoctorProfile() {
     router.push({
       pathname: "/edit-profile",
       params: {
-        ...patient,
+        user: USERS.DOCTOR,
+        Profile: JSON.stringify(doctor),
+        Fields: JSON.stringify(DOCTORFIELDS),
       },
     });
   };
@@ -110,8 +112,8 @@ export default function DoctorProfile() {
   };
 
   const updateProfileImage = (url) => {
-    setPatient({
-      ...patient,
+    setDoctor({
+      ...doctor,
       profileImage: url,
     });
   };
@@ -121,11 +123,11 @@ export default function DoctorProfile() {
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="mt-2" style={styles.container}>
-            {/* Left - Patient Image */}
+            {/* Left - Doctor Image */}
             <TouchableOpacity onPress={openModal}>
-              {patient.profileImage && patient.profileImage.length ? (
+              {doctor.profileImage && doctor.profileImage.length ? (
                 <Image
-                  source={{ uri: patient.profileImage }}
+                  source={{ uri: doctor.profileImage }}
                   style={styles.profileImage}
                 />
               ) : (
@@ -135,11 +137,11 @@ export default function DoctorProfile() {
 
             {/* Right - Profile Information */}
             <View style={styles.infoContainer}>
-              <Text style={styles.nameText}>{patient.name}</Text>
-              <Text style={styles.detailText}>Age: {patient.age}</Text>
-              <Text style={styles.detailText}>Gender: {patient.gender}</Text>
-              <Text style={styles.detailText}>Contact: {patient.contact}</Text>
-              <Text style={styles.detailText}>Address: {patient.address}</Text>
+              <Text style={styles.nameText}>Dr. {doctor.name}</Text>
+              <Text style={styles.detailText}>Age: {doctor.age}</Text>
+              <Text style={styles.detailText}>Gender: {doctor.gender}</Text>
+              <Text style={styles.detailText}>Contact: {doctor.contact}</Text>
+              <Text style={styles.detailText}>Address: {doctor.address}</Text>
 
               {/* Edit Profile Button */}
               <TouchableOpacity

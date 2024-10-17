@@ -16,7 +16,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
 import UserToggleSwitch from "../../components/UserToggleSwich";
-import { images, secondaryTabs } from "../../constants";
+import { images, PATIENTFIELDS, secondaryTabs, USERS } from "../../constants";
 import { logout } from "../../services/AuthenticationServices";
 import BottomSheetModal from "../../components/BottomModal";
 
@@ -24,6 +24,14 @@ export default function PatientProfile() {
   // const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [patient, setPatient] = useState({
+    name: "John Doe",
+    age: "35",
+    gender: "male",
+    contact: "+1 234 567 8901",
+    address: "123, Baker Street, London",
+    profileImage: "",
+  });
 
   const overlayOpacity = useRef(new Animated.Value(0)).current; // Initial opacity of 0
   const bottomSheetTranslateY = useRef(new Animated.Value(300)).current; // Initial translateY position offscreen
@@ -61,15 +69,6 @@ export default function PatientProfile() {
     },
   ];
 
-  const patient = {
-    name: "John Doe",
-    age: 35,
-    gender: "Male",
-    contact: "+1 234 567 8901",
-    address: "123, Baker Street, London",
-    profileImage: "https://via.placeholder.com/100", // Replace with actual image or from your assets
-  };
-
   const submit = () => {
     //
   };
@@ -78,7 +77,9 @@ export default function PatientProfile() {
     router.push({
       pathname: "/edit-profile",
       params: {
-        ...patient,
+        user: USERS.PATIENT,
+        Profile: JSON.stringify(patient),
+        Fields: JSON.stringify(PATIENTFIELDS),
       },
     });
   };

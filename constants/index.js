@@ -71,6 +71,108 @@ const GENDEROPTIONS = [
   { label: "female", value: "female" },
   { label: "other", value: "other" },
 ];
+
+const EXECUTIVEFIELDS = [
+  {
+    label: "Name",
+    key: "name",
+    placeholder: "Enter name",
+    type: "text",
+  },
+  {
+    label: "Age",
+    key: "age",
+    placeholder: "Enter Age",
+    type: "text",
+  },
+  {
+    label: "Gender",
+    key: "gender",
+    placeholder: "Select the gender",
+    type: "dropdown",
+    options: GENDEROPTIONS,
+  },
+  {
+    label: "Contact",
+    key: "contact",
+    placeholder: "Enter Contact details",
+    type: "text",
+  },
+  {
+    label: "Address",
+    key: "address",
+    placeholder: "Enter Address",
+    type: "text",
+  },
+];
+
+const DOCTORFIELDS = [
+  {
+    label: "Name",
+    key: "name",
+    placeholder: "Enter name",
+    type: "text",
+  },
+  {
+    label: "Age",
+    key: "age",
+    placeholder: "Enter Age",
+    type: "text",
+  },
+  {
+    label: "Gender",
+    key: "gender",
+    placeholder: "Select the gender",
+    type: "dropdown",
+    options: GENDEROPTIONS,
+  },
+  {
+    label: "Contact",
+    key: "contact",
+    placeholder: "Enter Contact details",
+    type: "text",
+  },
+  {
+    label: "Address",
+    key: "address",
+    placeholder: "Enter Address",
+    type: "text",
+  },
+];
+
+const PATIENTFIELDS = [
+  {
+    label: "Name",
+    key: "name",
+    placeholder: "Enter name",
+    type: "text",
+  },
+  {
+    label: "Age",
+    key: "age",
+    placeholder: "Enter Age",
+    type: "text",
+  },
+  {
+    label: "Gender",
+    key: "gender",
+    placeholder: "Select the gender",
+    type: "dropdown",
+    options: GENDEROPTIONS,
+  },
+  {
+    label: "Contact",
+    key: "contact",
+    placeholder: "Enter Contact details",
+    type: "text",
+  },
+  {
+    label: "Address",
+    key: "address",
+    placeholder: "Enter Address",
+    type: "text",
+  },
+];
 export {
   icons,
   images,
@@ -79,4 +181,7 @@ export {
   CONSULTAREAS,
   DATEOPTIONS,
   GENDEROPTIONS,
+  PATIENTFIELDS,
+  DOCTORFIELDS,
+  EXECUTIVEFIELDS,
 };

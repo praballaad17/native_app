@@ -15,17 +15,23 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
-import { images, secondaryTabs } from "../../constants";
+import {
+  EXECUTIVEFIELDS,
+  GENDEROPTIONS,
+  images,
+  secondaryTabs,
+  USERS,
+} from "../../constants";
 import BottomSheetModal from "../../components/BottomModal";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 
 export default function ExecutiveProfile() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [patient, setPatient] = useState({
+  const [executive, setExecutive] = useState({
     name: "John Doe",
-    age: 35,
-    gender: "Male",
+    age: "35",
+    gender: "male",
     contact: "+1 234 567 8901",
     address: "123, Baker Street, London",
     profileImage: "",
@@ -65,7 +71,9 @@ export default function ExecutiveProfile() {
     router.push({
       pathname: "/edit-profile",
       params: {
-        ...patient,
+        user: USERS.EXECUTIVE,
+        Profile: JSON.stringify(executive),
+        Fields: JSON.stringify(EXECUTIVEFIELDS),
       },
     });
   };
@@ -102,24 +110,22 @@ export default function ExecutiveProfile() {
   };
 
   const updateProfileImage = (url) => {
-    setPatient({
-      ...patient,
+    setExecutive({
+      ...executive,
       profileImage: url,
     });
   };
-
-  console.log(patient);
 
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="mt-2" style={styles.container}>
-            {/* Left - Patient Image */}
+            {/* Left - Executive Image */}
             <TouchableOpacity onPress={openModal}>
-              {patient.profileImage && patient.profileImage.length ? (
+              {executive.profileImage && executive.profileImage.length ? (
                 <Image
-                  source={{ uri: patient.profileImage }}
+                  source={{ uri: executive.profileImage }}
                   style={styles.profileImage}
                 />
               ) : (
@@ -129,11 +135,15 @@ export default function ExecutiveProfile() {
 
             {/* Right - Profile Information */}
             <View style={styles.infoContainer}>
-              <Text style={styles.nameText}>{patient.name}</Text>
-              <Text style={styles.detailText}>Age: {patient.age}</Text>
-              <Text style={styles.detailText}>Gender: {patient.gender}</Text>
-              <Text style={styles.detailText}>Contact: {patient.contact}</Text>
-              <Text style={styles.detailText}>Address: {patient.address}</Text>
+              <Text style={styles.nameText}>{executive.name}</Text>
+              <Text style={styles.detailText}>Age: {executive.age}</Text>
+              <Text style={styles.detailText}>Gender: {executive.gender}</Text>
+              <Text style={styles.detailText}>
+                Contact: {executive.contact}
+              </Text>
+              <Text style={styles.detailText}>
+                Address: {executive.address}
+              </Text>
 
               {/* Edit Profile Button */}
               <TouchableOpacity
@@ -147,7 +157,7 @@ export default function ExecutiveProfile() {
           </View>
 
           <View className="bg-white rounded-lg mx-4 px-4">
-            <UserToggleSwitch title="Patient Mode" />
+            <UserToggleSwitch title="Executive Mode" />
           </View>
 
           <View className="w-full justify-center h-100 px-4 my-4 bg-gray-50">

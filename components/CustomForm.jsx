@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -18,13 +18,23 @@ import * as ImagePicker from "expo-image-picker";
 import PDFViewer from "./PDFViewer";
 import { router } from "expo-router";
 import ToggleSwitch from "./ToggleSwitch";
+import CustomDropdownSelect from "./CustomDropDownSelect";
 
 // CustomForm Component
-const CustomForm = ({ fields, onSubmit }) => {
+const CustomForm = ({ fields, onSubmit, data }) => {
   // State to manage form data dynamically
   const [formData, setFormData] = useState({});
   const [showDatePicker, setShowDatePicker] = useState(null);
   const [isPdf, setIsPdf] = useState(false);
+
+  useEffect(() => {
+    if (data) {
+      setFormData(data);
+    } else {
+      setFormData({});
+    }
+  }, [data]);
+  console.log("formData", formData);
 
   // Handler for updating field values
   const handleInputChange = (fieldKey, value) => {
@@ -106,13 +116,10 @@ const CustomForm = ({ fields, onSubmit }) => {
     }
   };
 
-  console.log("formdata", formData);
-
   return (
     <ScrollView style={styles.container}>
       {fields.map((field, index) => {
         const { label, key, placeholder, type } = field;
-
         return (
           <View key={index} style={styles.formField}>
             <Text className="font-psemibold" style={styles.label}>
@@ -248,6 +255,13 @@ const CustomForm = ({ fields, onSubmit }) => {
                   </View>
                 ) : null}
               </>
+            ) : type === "dropdown" ? (
+              <CustomDropdownSelect
+                options={field.options}
+                placeholder={field.placeholder}
+                onSelect={(option) => handleInputChange(key, option)}
+                selectedValue={formData[key] || ""}
+              />
             ) : (
               <TextInput
                 style={styles.input}

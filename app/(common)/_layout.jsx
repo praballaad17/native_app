@@ -33,9 +33,11 @@ const CommonLayout = () => {
 
         <Stack.Screen
           name="edit-profile"
-          options={{
-            headerShown: false,
-          }}
+          options={
+            {
+              // headerShown: false,
+            }
+          }
         />
 
         <Stack.Screen

@@ -29,6 +29,24 @@ export const verifyDoctor = async (usernameOrEmail, password, authToken) => {
   }
 };
 
+export const editDoctorDetails = async (formData, id) => {
+  try {
+    const response = await axios.post(
+      `${apiEndpoint}/edit-details/${id}`,
+      formData
+    );
+
+    if (response.data.success) {
+      Alert.alert("Success", "PDF uploaded successfully!");
+    } else {
+      Alert.alert("Error", "Failed to upload the PDF.");
+    }
+  } catch (error) {
+    console.error("Error uploading PDF:", error);
+    Alert.alert("Error", "An error occurred while uploading.");
+  }
+};
+
 export const submitDoctorDetails = async (details) => {
   try {
     const response = await axios(`${apiEndpoint}/submit-details`, {
