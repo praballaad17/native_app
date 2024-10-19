@@ -1,7 +1,7 @@
 import axios from "axios";
 import "@env";
 
-const apiEndpoint = process.env.API_URL + "/patient";
+const apiEndpoint = process.env.API_URL + "/executive";
 const tokenKey = "token";
 
 // /**
@@ -14,20 +14,12 @@ const tokenKey = "token";
 //  */
 export const executiveRegister = async (formData) => {
   try {
-    const response = await axios.post(`${apiEndpoint}/upload`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await axios.post(`${apiEndpoint}/register`, formData);
 
-    if (response.data.success) {
-      Alert.alert("Success", "PDF uploaded successfully!");
-    } else {
-      Alert.alert("Error", "Failed to upload the PDF.");
-    }
+    return response;
   } catch (error) {
-    console.error("Error uploading PDF:", error);
-    Alert.alert("Error", "An error occurred while uploading.");
+    console.error("Error creating executive:", error);
+    return error;
   }
 };
 

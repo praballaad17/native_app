@@ -197,15 +197,15 @@ const ExecutiveTabNavigator = () => (
 );
 
 const SwitchableNavigator = () => {
-  const { user } = useUserType();
+  const { userType } = useUserType();
 
   return (
     <>
-      {user === USERS.DOCTOR ? (
+      {userType === USERS.DOCTOR ? (
         <DoctorTabNavigator />
-      ) : user === USERS.PATIENT ? (
+      ) : userType === USERS.PATIENT ? (
         <PatientTabNavigator />
-      ) : user === USERS.EXECUTIVE ? (
+      ) : userType === USERS.EXECUTIVE ? (
         <ExecutiveTabNavigator />
       ) : (
         <SignIn />

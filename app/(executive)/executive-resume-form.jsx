@@ -12,11 +12,14 @@ import {
 import DateTimePicker from "@react-native-community/datetimepicker"; // Import the date picker component
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { DATEOPTIONS, GENDEROPTIONS } from "../../constants";
+import { DATEOPTIONS, GENDEROPTIONS, USERS } from "../../constants";
 import CustomDropdownSelect from "../../components/CustomDropDownSelect";
 import { executiveRegister } from "../../services/executiveServices";
+import { router } from "expo-router";
+import useUserType from "../../context/UserProvider";
 
 const ResumeForm = () => {
+  const { user, setUser } = useUserType();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -163,13 +166,21 @@ const ResumeForm = () => {
 
   const handleSubmit = async () => {
     try {
-      Alert.alert("Form Submitted", "Your resume details have been submitted!");
       const newFormData = { ...formData, isResume: false };
-      console.log(newFormData);
       const res = await executiveRegister(newFormData);
-      console.log(res);
+      if (res.status === 201) {
+        Alert.alert(
+          "Form Submitted",
+          "Your resume details have been submitted!"
+        );
+      }
+
+      console.log(res.data);
+
+      setUser({ ...res.data, type: USERS.EXECUTIVE });
+      // router.push()
     } catch (error) {
-      console.log(error);
+      console.log("error", error);
     }
   };
 
