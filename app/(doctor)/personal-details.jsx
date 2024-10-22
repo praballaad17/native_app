@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Button,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
@@ -16,9 +17,15 @@ import DateTimePicker from "@react-native-community/datetimepicker"; // Import t
 
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { DATEOPTIONS } from "../../constants";
+import { DATEOPTIONS, USERS } from "../../constants";
+import { doctorRegister } from "../../services/doctorServices";
+import useUserType from "../../context/UserProvider";
+import { useEffect } from "react";
+import useFile from "../../context/FileProvider";
 
 const PersonalDetails = () => {
+  const { setUser } = useUserType();
+  const { readData } = useFile();
   const [form, setForm] = useState({
     name: "",
     address: "",
@@ -37,9 +44,22 @@ const PersonalDetails = () => {
     till: false,
   });
 
-  const submit = () => {
-    //
-    router.push("/photo-upload");
+  const submit = async () => {
+    console.log(form);
+    try {
+      const registrationRes = await readData("doctor-registration-from");
+      console.log(registrationRes);
+      const res = await doctorRegister({ ...form, ...registrationRes });
+      console.log(res);
+      setUser({ ...res, type: USERS.DOCTOR });
+      router.push("/photo-upload");
+    } catch (error) {
+      Alert.alert(
+        "Form Failed",
+        "Your details were unable to save! Please retry later"
+      );
+      console.log(error);
+    }
   };
 
   const addEducation = () => {
@@ -88,7 +108,6 @@ const PersonalDetails = () => {
               placeholder={"Name"}
               handleChangeText={(e) => setForm({ ...form, name: e })}
               otherStyle="mt-7"
-              //   keyboardType="email-address"
             />
 
             <FormField
@@ -96,6 +115,14 @@ const PersonalDetails = () => {
               value={form.password}
               placeholder={"Address"}
               handleChangeText={(e) => setForm({ ...form, address: e })}
+              otherStyle="mt-7"
+            />
+
+            <FormField
+              title="Experiance"
+              value={form.experience}
+              placeholder={"Enter Experiance in Number Of Years"}
+              handleChangeText={(e) => setForm({ ...form, experience: e })}
               otherStyle="mt-7"
             />
 

@@ -17,13 +17,14 @@ import CustomDropdownSelect from "../../components/CustomDropDownSelect";
 import { executiveRegister } from "../../services/executiveServices";
 import { router } from "expo-router";
 import useUserType from "../../context/UserProvider";
+import useFile from "../../context/FileProvider";
 
 const ResumeForm = () => {
   const { user, setUser } = useUserType();
+  const { readData } = useFile();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
     currentSkill: "",
     gender: "",
     address: "",
@@ -166,7 +167,13 @@ const ResumeForm = () => {
 
   const handleSubmit = async () => {
     try {
-      const newFormData = { ...formData, isResume: false };
+      const numberRes = await readData("number");
+      console.log(numberRes);
+      const newFormData = {
+        ...formData,
+        isResume: false,
+        phone: numberRes.number,
+      };
       const res = await executiveRegister(newFormData);
       if (res.status === 201) {
         Alert.alert(
@@ -175,12 +182,14 @@ const ResumeForm = () => {
         );
       }
 
-      console.log(res.data);
-
       setUser({ ...res.data, type: USERS.EXECUTIVE });
-      // router.push()
+      router.push("/");
     } catch (error) {
       console.log("error", error);
+      Alert.alert(
+        "Form Error",
+        "Your details were not able to save! Please Try Later"
+      );
     }
   };
 
@@ -207,16 +216,6 @@ const ResumeForm = () => {
             keyboardType="email-address"
             value={formData.email}
             onChangeText={(text) => handleInputChange("email", text)}
-          />
-
-          {/* Phone */}
-          <Text style={styles.label}>Phone</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Enter your phone number"
-            keyboardType="phone-pad"
-            value={formData.phone}
-            onChangeText={(text) => handleInputChange("phone", text)}
           />
 
           {/* Address */}

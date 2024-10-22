@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Alert, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
@@ -9,28 +9,90 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link } from "expo-router";
 import { patientRegister } from "../../services/patientServices";
+import CustomForm from "../../components/CustomForm";
+import { GENDEROPTIONS, USERS } from "../../constants";
+import useUserType from "../../context/UserProvider";
+import useFile from "../../context/FileProvider";
+import Loader from "../../components/Loader";
 
 const Details = () => {
-  const [form, setForm] = useState({
-    name: "",
-    height: "",
-    weight: "",
-    bloodGrp: "",
-    gender: "",
-    dob: "",
-    photo: "",
-  });
+  const { setUser } = useUserType();
+  const { readData } = useFile();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const submit = async () => {
+  const fields = [
+    {
+      label: "Name",
+      key: "name",
+      placeholder: "Enter Patient name",
+      type: "text",
+    },
+    {
+      label: "Height",
+      key: "height",
+      placeholder: "Enter Height",
+      type: "number",
+    },
+    {
+      label: "Weight",
+      key: "weight",
+      placeholder: "Enter Weight",
+      type: "number",
+    },
+    {
+      label: "Blood Group",
+      key: "bloodGrp",
+      placeholder: "Enter Blood Group",
+      type: "text",
+    },
+    {
+      label: "Gender",
+      key: "gender",
+      placeholder: "Select the gender",
+      type: "dropdown",
+      options: GENDEROPTIONS,
+    },
+    {
+      label: "Date Of Birth",
+      key: "dob",
+      placeholder: "Select the date of Birth",
+      type: "date",
+    },
+    {
+      label: "address",
+      key: "address",
+      placeholder: "Enter Address",
+      type: "text",
+    },
+  ];
+
+  const submit = async (formData) => {
+    setIsSubmitting(true);
     try {
-      const res = await patientRegister(form);
-      console.log(res);
+      console.log(formData);
+      const numberRes = await readData("number");
+      console.log(numberRes);
+      const res = await patientRegister({
+        ...formData,
+        contact: numberRes.number,
+      });
+      setIsSubmitting(false);
+      Alert.alert("Form Submitted", "Your details have been submitted!");
+      setUser({ ...res, type: USERS.PATIENT });
+      router.push("/");
     } catch (error) {
+      setIsSubmitting(false);
       console.log(error);
+      Alert.alert(
+        "Form Error",
+        "Your details were not able to save! Please Try Later"
+      );
     }
-    router.push("/subscription");
   };
+
+  if (isSubmitting) {
+    return <Loader />;
+  }
 
   return (
     <GestureHandlerRootView>
@@ -40,7 +102,10 @@ const Details = () => {
             <Text className="text-2xl text-semibold mt-10 font-psemibold">
               Just little one more step, for our true warrior
             </Text>
-            <FormField
+
+            <CustomForm fields={fields} onSubmit={submit} />
+
+            {/* <FormField
               title="Name"
               value={form.name}
               placeholder={"Name"}
@@ -93,7 +158,7 @@ const Details = () => {
               handlePress={submit}
               containerStyles="mt-7"
               isLoading={isSubmitting}
-            />
+            /> */}
             <View className=" justify-center pt-5 flex-row gap-2"></View>
           </View>
         </ScrollView>

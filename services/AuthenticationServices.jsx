@@ -2,7 +2,7 @@ import axios from "axios";
 import "@env";
 import * as SecureStore from "expo-secure-store";
 
-const apiEndpoint = process.env.VITE_API_URL + "/auth";
+const apiEndpoint = process.env.API_URL + "/auth";
 const tokenKey = "token";
 
 function setJwt(jwt) {
@@ -50,6 +50,28 @@ const deleteToken = async () => {
 //  * @param {string} authToken A token to be used instead of a username/email or password
 //  * @returns {object} The user object
 //  */
+export const generateOTP = async (number) => {
+  try {
+    console.log(typeof number);
+    const response = await axios.post(`${apiEndpoint}/get-otp`, { number });
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const verifyOtp = async (form) => {
+  console.log(form);
+  try {
+    const response = await axios.post(`${apiEndpoint}/verify-otp`, form);
+    // saveToken;
+    return response;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+
 export const login = async (usernameOrEmail, password, authToken) => {
   try {
     const request =
@@ -110,15 +132,6 @@ export const getUserByUserId = async (userId) => {
     return response.data;
   } catch (err) {
     throw new Error(err.response.data.error);
-  }
-};
-
-export const generateOtp = async (userId) => {
-  try {
-    const response = await axios.get(`${apiEndpoint}/generate-otp/${userId}`);
-    return response.data;
-  } catch (err) {
-    throw new Error(err);
   }
 };
 

@@ -17,10 +17,10 @@ import DoctorProfile from "./doctor-tabs/doctor-profile";
 import DoctorHome from "./doctor-tabs/doctor-home";
 import ApointmentTab from "./doctor-tabs/apointments";
 import PatientTabs from "./doctor-tabs/patient";
-import ExecutiveDocument from "./executive-tabs/executive-documents";
-import ExecutiveHome from "./executive-tabs/executive-home";
-import ExecutiveProfile from "./executive-tabs/profile";
-import ExecutivePatientTab from "./executive-tabs/executive-patient";
+import ExecutiveDocument from "./(executive-tabs)/executive-documents";
+import ExecutiveHome from "./(executive-tabs)/executive-home";
+import ExecutiveProfile from "./(executive-tabs)/profile";
+import ExecutivePatientTab from "./(executive-tabs)/executive-patient";
 import { USERS } from "../constants";
 import SignIn from "./(auth)/sign-in";
 

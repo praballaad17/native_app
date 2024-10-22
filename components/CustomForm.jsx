@@ -34,7 +34,6 @@ const CustomForm = ({ fields, onSubmit, data }) => {
       setFormData({});
     }
   }, [data]);
-  console.log("formData", formData);
 
   // Handler for updating field values
   const handleInputChange = (fieldKey, value) => {
@@ -113,6 +112,14 @@ const CustomForm = ({ fields, onSubmit, data }) => {
       });
 
       handleInputChange(fieldKey, images); // Store the image URI
+    }
+  };
+
+  const handleTextNumberInput = (type, key, text) => {
+    if (type === "number") {
+      handleInputChange(key, Number(text));
+    } else {
+      handleInputChange(key, text);
     }
   };
 
@@ -267,7 +274,7 @@ const CustomForm = ({ fields, onSubmit, data }) => {
                 style={styles.input}
                 placeholder={placeholder || `Enter ${label}`}
                 value={formData[key] || ""}
-                onChangeText={(text) => handleInputChange(key, text)}
+                onChangeText={(text) => handleTextNumberInput(type, key, text)}
                 keyboardType={type === "number" ? "numeric" : "default"} // Handle different input types
               />
             )}

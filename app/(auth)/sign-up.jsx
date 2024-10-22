@@ -1,4 +1,4 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Alert } from "react-native";
 import React, { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -8,16 +8,29 @@ import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
+import useFile from "../../context/FileProvider";
 
 const SignUp = () => {
-  const [form, setForm] = useState({
-    number: "",
-    password: "",
-  });
+  const [number, setNumber] = useState();
+  const [otp, setOtp] = useState("");
+  const [visible, setVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { writeData } = useFile();
+
+  const sendOTP = () => {
+    //send otp
+    setVisible(true);
+    writeData("number", number);
+  };
 
   const submit = () => {
-    router.push("/role");
+    if (otp === "1234") {
+      router.push("/role");
+    } else {
+      Alert.alert("In-Correct OTP", "Your entered In-correct OTP!");
+      setVisible(true);
+      setOtp("");
+    }
   };
 
   return (
@@ -35,26 +48,27 @@ const SignUp = () => {
             </Text>
             <FormField
               title="Number"
-              value={form.number}
+              value={number}
               placeholder={"number"}
-              handleChangeText={(e) => setForm({ ...form, number: e })}
+              handleChangeText={(e) => setNumber(e)}
               otherStyle="mt-7"
-              //   keyboardType="email-address"
             />
 
-            {/* <FormField 
-          title="Password"
-          value={form.password}
-          placeholder={"password"}
-          handleChangeText={(e) => setForm({ ...form, 
-            password: e })}
-            otherStyle="mt-7"
-         //   keyboardType="email-address"
-        /> */}
+            {visible ? (
+              <FormField
+                title="OTP"
+                value={otp}
+                placeholder={"enter OTP"}
+                handleChangeText={(e) => setOtp(e)}
+                otherStyle="mt-7"
+              />
+            ) : (
+              <></>
+            )}
 
             <CustomButton
-              title={"Send OTP"}
-              handlePress={submit}
+              title={visible ? "Verify" : "Send OTP"}
+              handlePress={visible ? submit : sendOTP}
               containerStyles="mt-7"
               isLoading={isSubmitting}
             />

@@ -12,6 +12,17 @@ const tokenKey = "token";
 //  * @param {string} authToken A token to be used instead of a username/email or password
 //  * @returns {object} The user object
 //  */
+
+export const doctorRegister = async (formData) => {
+  try {
+    const response = await axios.post(`${apiEndpoint}/register`, formData);
+    return response.data;
+  } catch (error) {
+    console.error("Error creating doctor:", error);
+    return error;
+  }
+};
+
 export const verifyDoctor = async (usernameOrEmail, password, authToken) => {
   try {
     const request =

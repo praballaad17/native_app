@@ -14,10 +14,7 @@ const tokenKey = "token";
 //  */
 export const patientRegister = async (formData) => {
   try {
-    const response = await axios(`${apiEndpoint}/register`, {
-      method: "POST",
-      ...formData,
-    });
+    const response = await axios.post(`${apiEndpoint}/register`, formData);
     return response.data;
   } catch (err) {
     throw new Error(err.response.data.error);
@@ -169,5 +166,17 @@ export const getAllowedDoctors = async (patientId) => {
     throw new Error(
       `Error: ${err.response?.status} - ${err.response?.data?.error}`
     );
+  }
+};
+
+export const postSubscription = async (patientId, plan) => {
+  try {
+    const response = await axios(`${apiEndpoint}/subscription/${patientId}`, {
+      method: "POST",
+      formData,
+    });
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
   }
 };

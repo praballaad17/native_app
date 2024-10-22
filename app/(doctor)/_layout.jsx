@@ -7,7 +7,7 @@ const DocLayout = () => {
     <>
       <Stack>
         <Stack.Screen
-          name="details"
+          name="registration-details"
           options={{
             headerShown: false,
           }}

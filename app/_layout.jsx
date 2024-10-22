@@ -3,6 +3,7 @@ import { Stack, SplashScreen } from "expo-router";
 import { useEffect } from "react";
 import { UserProvider } from "../context/UserProvider";
 import { StatusBar } from "expo-status-bar";
+import { FileProvider } from "../context/FileProvider";
 
 export default function RootLayout() {
   SplashScreen.preventAutoHideAsync();
@@ -33,51 +34,53 @@ export default function RootLayout() {
 
   return (
     <UserProvider>
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="(auth)"
-          options={{
-            headerShown: false,
-          }}
-        />
+      <FileProvider>
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(auth)"
+            options={{
+              headerShown: false,
+            }}
+          />
 
-        <Stack.Screen
-          name="(executive)"
-          options={{
-            headerShown: false,
-          }}
-        />
+          <Stack.Screen
+            name="(executive)"
+            options={{
+              headerShown: false,
+            }}
+          />
 
-        <Stack.Screen
-          name="(doctor)"
-          options={{
-            headerShown: false,
-          }}
-        />
+          <Stack.Screen
+            name="(doctor)"
+            options={{
+              headerShown: false,
+            }}
+          />
 
-        <Stack.Screen
-          name="(patient)"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="(common)"
-          options={{
-            headerShown: false,
-          }}
-        />
-        {/* <Stack.Screen name="/search/[query]" options={{
+          <Stack.Screen
+            name="(patient)"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(common)"
+            options={{
+              headerShown: false,
+            }}
+          />
+          {/* <Stack.Screen name="/search/[query]" options={{
         headerShown: false,
       }} /> */}
-        <StatusBar backgroundColor="#161622" style="light" />
-      </Stack>
+          <StatusBar backgroundColor="#161622" style="light" />
+        </Stack>
+      </FileProvider>
     </UserProvider>
   );
 }
