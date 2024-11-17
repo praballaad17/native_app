@@ -9,29 +9,59 @@ import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import useFile from "../../context/FileProvider";
+import { generateOTP, verifyOtp } from "../../services/AuthenticationServices";
+import Loader from "../../components/Loader";
+import useUserType from "../../context/UserProvider";
 
 const SignUp = () => {
   const [number, setNumber] = useState();
   const [otp, setOtp] = useState("");
   const [visible, setVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [otpId, setOtpId] = useState();
   const { writeData } = useFile();
 
-  const sendOTP = () => {
-    //send otp
-    setVisible(true);
-    writeData("number", number);
+  const sendOTP = async () => {
+    setIsSubmitting(true);
+    try {
+      const res = await generateOTP(number);
+      console.log(res);
+      setVisible(true);
+      setOtpId(res.otpId);
+      await writeData("number", number);
+      setIsSubmitting(false);
+      // Alert.alert("Form Submitted", "Your details have been submitted!");
+    } catch (error) {
+      console.log(error);
+      setIsSubmitting(false);
+      setVisible(false);
+      Alert.alert("Error", "Unable To generate OTP");
+    }
   };
 
-  const submit = () => {
-    if (otp === "1234") {
-      router.push("/role");
-    } else {
+  const submit = async () => {
+    console.log("Submit");
+    try {
+      const res = await verifyOtp({ otp, otpId });
+      console.log(res);
+      if (res.status === 202) {
+        console.log(res.data);
+        setNumber("");
+        setOtp("");
+        setVisible(false);
+        router.push("/role");
+      }
+    } catch (error) {
+      console.log(error);
       Alert.alert("In-Correct OTP", "Your entered In-correct OTP!");
       setVisible(true);
       setOtp("");
     }
   };
+
+  if (isSubmitting) {
+    return <Loader />;
+  }
 
   return (
     <GestureHandlerRootView>
@@ -52,6 +82,7 @@ const SignUp = () => {
               placeholder={"number"}
               handleChangeText={(e) => setNumber(e)}
               otherStyle="mt-7"
+              numeric={true}
             />
 
             {visible ? (
@@ -61,6 +92,7 @@ const SignUp = () => {
                 placeholder={"enter OTP"}
                 handleChangeText={(e) => setOtp(e)}
                 otherStyle="mt-7"
+                numeric={true}
               />
             ) : (
               <></>

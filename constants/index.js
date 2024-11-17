@@ -8,6 +8,12 @@ const USERS = {
   EXECUTIVE: "executive",
 };
 
+const PROFILETYPE = {
+  DOCTOR: "doctorId",
+  PATIENT: "patientId",
+  EXECUTIVE: "executiveId",
+};
+
 const secondaryTabs = [
   {
     name: "Need help?",
@@ -184,4 +190,5 @@ export {
   PATIENTFIELDS,
   DOCTORFIELDS,
   EXECUTIVEFIELDS,
+  PROFILETYPE,
 };

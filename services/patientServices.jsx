@@ -1,6 +1,6 @@
 import axios from "axios";
 import "@env";
-
+import { saveToken } from "./AuthenticationServices";
 const apiEndpoint = process.env.API_URL + "/patient";
 const tokenKey = "token";
 
@@ -15,9 +15,10 @@ const tokenKey = "token";
 export const patientRegister = async (formData) => {
   try {
     const response = await axios.post(`${apiEndpoint}/register`, formData);
+    saveToken(response.data.token);
     return response.data;
   } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err.response.data);
   }
 };
 
@@ -131,7 +132,7 @@ export const FetchAllDoctorList = async (page, limit = 10) => {
         limit: limit,
       },
     });
-    return response;
+    return response.data;
   } catch (err) {
     console.error("Error fetching data:", err);
     throw new Error(

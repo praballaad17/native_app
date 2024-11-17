@@ -1,5 +1,7 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { USERS } from "../constants/index";
+import { PROFILETYPE, USERS } from "../constants/index";
+import { getUser } from "../services/comonService";
+import useAuthListener from "../hooks/useAuthListener";
 export const UserContext = createContext();
 
 export function useUserType() {
@@ -7,19 +9,54 @@ export function useUserType() {
 }
 
 export const UserProvider = ({ children }) => {
-  // const [user, setUser] = useState(USERS.EXECUTIVE);
+  const { userId } = useAuthListener();
   const [user, setUser] = useState();
   const [userType, setUserType] = useState();
+  // const [userType, setUserType] = useState(USERS.EXECUTIVE);
 
   useEffect(() => {
-    if (user && user.type) {
-      if (user.type === USERS.DOCTOR) setUserType(USERS.DOCTOR);
-      else if (user.type === USERS.EXECUTIVE) setUserType(USERS.EXECUTIVE);
-      else if (user.type === USERS.PATIENT) setUserType(USERS.PATIENT);
+    console.log("fetching user", userId);
+    if (userId) {
+      const fetchUser = async () => {
+        console.log("fetching user");
+        const res = await getUser(userId, "adfdf");
+        console.log("fetching user", res);
+        if (res.user.userType === USERS.DOCTOR) setUserType(USERS.DOCTOR);
+        else if (res.user.userType === USERS.EXECUTIVE)
+          setUserType(USERS.EXECUTIVE);
+        else if (res.user.userType === USERS.PATIENT)
+          setUserType(USERS.PATIENT);
+      };
+      fetchUser();
     }
-  }, [user, user?.type]);
+  }, [userId]);
 
-  console.log(user, userType);
+  useEffect(() => {
+    if (user && user.userType) {
+      if (user.userType === USERS.DOCTOR) setUserType(USERS.DOCTOR);
+      else if (user.userType === USERS.EXECUTIVE) setUserType(USERS.EXECUTIVE);
+      else if (user.userType === USERS.PATIENT) setUserType(USERS.PATIENT);
+    }
+  }, [user, user?.userType]);
+
+  // useEffect(() => {
+  //   const getter = async (userType) => {
+  //     console.log("getter: ", userType);
+  //     const res = await getUser(user._id, userType);
+  //     console.log(res);
+  //     setUser(res);
+  //   };
+  //   console.log("user changed to: ", userType);
+  //   if (userType === USERS.EXECUTIVE) {
+  //     getter(PROFILETYPE.EXECUTIVE);
+  //   } else if (userType === USERS.PATIENT) {
+  //     getter(PROFILETYPE.PATIENT);
+  //   } else if (userType === USERS.DOCTOR) {
+  //     getter(PROFILETYPE.DOCTOR);
+  //   }
+  // }, [userType]);
+
+  // console.log(user, userType);
 
   const value = {
     user,

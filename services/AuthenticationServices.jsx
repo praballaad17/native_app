@@ -3,29 +3,32 @@ import "@env";
 import * as SecureStore from "expo-secure-store";
 
 const apiEndpoint = process.env.API_URL + "/auth";
-const tokenKey = "token";
+const tokenKey = "authToken";
 
 function setJwt(jwt) {
   axios.defaults.headers.common["token"] = jwt;
 }
 
 // Save JWT Token
-const saveToken = async (token) => {
+export const saveToken = async (token) => {
   try {
-    await SecureStore.setItemAsync("authToken", token);
+    await SecureStore.setItemAsync(tokenKey, token);
+    console.log("token is saved");
   } catch (error) {
     console.log("Error saving the token", error);
   }
 };
 
-const getToken = async () => {
+export const getToken = async () => {
   try {
-    const token = await SecureStore.getItemAsync("authToken");
+    const token = await SecureStore.getItemAsync(tokenKey);
     if (token) {
       // Token exists, proceed with auto-login
+      console.log("token is ", token);
       return token;
     } else {
       // No token, prompt for login
+      console.log("token does exists");
       return null;
     }
   } catch (error) {
@@ -50,79 +53,56 @@ const deleteToken = async () => {
 //  * @param {string} authToken A token to be used instead of a username/email or password
 //  * @returns {object} The user object
 //  */
+export const generateOTPIfUser = async (number) => {
+  try {
+    console.log(typeof number);
+    const response = await axios.post(`${apiEndpoint}/get-otp-if-user`, {
+      number,
+    });
+    console.log("res", response.status);
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data);
+  }
+};
+
+export const verifyOtpWithUser = async (form) => {
+  console.log(form);
+  try {
+    const response = await axios.post(
+      `${apiEndpoint}/verify-otp-with-user`,
+      form
+    );
+    console.log("res", response.status);
+    // if(response.data.status)
+    saveToken(response.data.token);
+    return response;
+  } catch (err) {
+    console.log(err);
+    throw new Error(err.response.data);
+  }
+};
+
 export const generateOTP = async (number) => {
   try {
     console.log(typeof number);
-    const response = await axios.post(`${apiEndpoint}/get-otp`, { number });
+    const response = await axios.post(`${apiEndpoint}/get-otp`, {
+      number,
+    });
     return response.data;
   } catch (err) {
-    return err;
+    throw new Error(err.response.data);
   }
 };
 
 export const verifyOtp = async (form) => {
-  console.log(form);
   try {
     const response = await axios.post(`${apiEndpoint}/verify-otp`, form);
-    // saveToken;
     return response;
   } catch (err) {
     console.log(err);
-    return err;
-  }
-};
-
-export const login = async (usernameOrEmail, password, authToken) => {
-  try {
-    const request =
-      usernameOrEmail && password
-        ? { data: { usernameOrEmail, password } }
-        : { headers: { authorization: authToken } };
-    const response = await axios(`${apiEndpoint}/login`, {
-      method: "POST",
-      ...request,
-    });
-    saveToken;
-    return response.data;
-  } catch (err) {
-    throw new Error(err.response.data.error);
-  }
-};
-
-// /**
-//  * Registers a user with the provided credentials
-//  * @param {string} email A user's email address
-//  * @param {string} fullName A user's full name
-//  * @param {string} username A user's username
-//  * @param {string} password A user's password
-//  * @returns {object} The user object
-//  */
-export const registerUser = async (username, fullName, email, password) => {
-  try {
-    const response = await axios.post(`${apiEndpoint}/register`, {
-      email,
-      fullName,
-      username,
-      password,
-    });
-    console.log(response.data.token);
-    return response.data;
-  } catch (err) {
-    throw new Error(err.response.data.error);
-  }
-};
-
-/**
- * update buisness profile by user id.
- * @param {buissness details} business
- * @param {*} userId
- */
-
-export const updateBusinessDetails = async (userId, business) => {
-  try {
-    await axios.put(`${apiEndpoint}/updateDetails/${userId}`, business);
-  } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err.response.data);
   }
 };
 

@@ -69,16 +69,16 @@ const Details = () => {
   const submit = async (formData) => {
     setIsSubmitting(true);
     try {
-      console.log(formData);
       const numberRes = await readData("number");
       console.log(numberRes);
       const res = await patientRegister({
         ...formData,
-        contact: numberRes.number,
+        contact: numberRes,
       });
       setIsSubmitting(false);
+      console.log(res);
       Alert.alert("Form Submitted", "Your details have been submitted!");
-      setUser({ ...res, type: USERS.PATIENT });
+      setUser(res);
       router.push("/");
     } catch (error) {
       setIsSubmitting(false);

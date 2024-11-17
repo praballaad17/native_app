@@ -8,10 +8,15 @@ import { images } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
-import { generateOTP, verifyOtp } from "../../services/AuthenticationServices";
+import {
+  generateOTPIfUser,
+  verifyOtpWithUser,
+} from "../../services/AuthenticationServices";
 import Loader from "../../components/Loader";
+import useUserType from "../../context/UserProvider";
 
 const SignIn = () => {
+  const { setUser } = useUserType();
   const [number, setNumber] = useState();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [otp, setOtp] = useState("");
@@ -20,8 +25,9 @@ const SignIn = () => {
 
   const sendOTP = async () => {
     setIsSubmitting(true);
+
     try {
-      const res = await generateOTP(number);
+      const res = await generateOTPIfUser(number);
       console.log(res);
       setVisible(true);
       setOtpId(res.otpId);
@@ -37,11 +43,18 @@ const SignIn = () => {
 
   const submit = async () => {
     //submit otp
+    console.log("sign-in submit");
+
     try {
-      const res = await verifyOtp({ otp, otpId });
+      const res = await verifyOtpWithUser({ otp, otpId });
 
       if (res.status === 202) {
-        console.log(res.data);
+        //update this manual switch in userProvider
+
+        console.log(res.data.userId.userType.toLowerCase());
+        res.data.userId.userType = res.data.userId.userType.toLowerCase();
+        console.log("res", res.data);
+        setUser(res.data.userId);
         router.push("/");
       }
     } catch (error) {
@@ -72,7 +85,7 @@ const SignIn = () => {
               placeholder={"number"}
               handleChangeText={(e) => setNumber(e)}
               otherStyle="mt-7"
-              keyboardType="number"
+              numeric={true}
             />
 
             {visible ? (

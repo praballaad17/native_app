@@ -23,6 +23,8 @@ import ExecutiveProfile from "./(executive-tabs)/profile";
 import ExecutivePatientTab from "./(executive-tabs)/executive-patient";
 import { USERS } from "../constants";
 import SignIn from "./(auth)/sign-in";
+import useAuthListener from "../hooks/useAuthListener";
+import Loader from "../components/Loader";
 
 const ExecutiveTab = createBottomTabNavigator();
 const PatientTab = createBottomTabNavigator();
@@ -197,7 +199,13 @@ const ExecutiveTabNavigator = () => (
 );
 
 const SwitchableNavigator = () => {
+  // const { userId } = useAuthListener();
   const { userType } = useUserType();
+  // console.log("index userId: ", userId);
+
+  // if (!userId) {
+  //   return <SignIn />;
+  // }
 
   return (
     <>

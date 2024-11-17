@@ -23,9 +23,10 @@ const Consult = () => {
 
       setLoading(true);
       try {
-        const res = await FetchAllDoctorList(page); // Pass the page number
-        if (res.length > 0) {
-          setDoctorList((prev) => [...prev, ...res]); // Append new doctors to the list
+        const res = await FetchAllDoctorList(page); // Pass the page
+        console.log(res);
+        if (res.doctors.length > 0) {
+          setDoctorList((prev) => [...prev, ...res.doctors]); // Append new doctors to the list
         } else {
           setHasMore(false); // No more data to load
         }

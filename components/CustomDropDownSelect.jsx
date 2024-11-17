@@ -32,8 +32,6 @@ const CustomDropdownSelect = ({
     onSelect(option.value); // Pass the selected option to parent via onSelect prop
   };
 
-  console.log(selectedValue);
-
   return (
     <View className={`w-full mb-2 ${containerStyles}`}>
       {/* Display the selected value */}

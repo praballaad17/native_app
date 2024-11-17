@@ -1,8 +1,8 @@
 import axios from "axios";
 import "@env";
+import { saveToken } from "./AuthenticationServices";
 
 const apiEndpoint = process.env.API_URL + "/executive";
-const tokenKey = "token";
 
 // /**
 //  * Logs a user in with the provided credentials
@@ -15,11 +15,11 @@ const tokenKey = "token";
 export const executiveRegister = async (formData) => {
   try {
     const response = await axios.post(`${apiEndpoint}/register`, formData);
-
+    saveToken(response.data.token);
     return response;
   } catch (error) {
     console.error("Error creating executive:", error);
-    return error;
+    throw new Error(err.response);
   }
 };
 

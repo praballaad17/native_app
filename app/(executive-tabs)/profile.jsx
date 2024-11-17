@@ -24,18 +24,13 @@ import {
 } from "../../constants";
 import BottomSheetModal from "../../components/BottomModal";
 import UserToggleSwitch from "../../components/UserToggleSwich";
+import useUserType from "../../context/UserProvider";
 
 export default function ExecutiveProfile() {
+  const { user, setUser } = useUserType();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [executive, setExecutive] = useState({
-    name: "John Doe",
-    age: "35",
-    gender: "male",
-    contact: "+1 234 567 8901",
-    address: "123, Baker Street, London",
-    profileImage: "",
-  });
+  const [executive, setExecutive] = useState(user.executiveId);
 
   const overlayOpacity = useRef(new Animated.Value(0)).current; // Initial opacity of 0
   const bottomSheetTranslateY = useRef(new Animated.Value(300)).current; // Initial translateY position offscreen
@@ -110,11 +105,13 @@ export default function ExecutiveProfile() {
   };
 
   const updateProfileImage = (url) => {
-    setExecutive({
-      ...executive,
-      profileImage: url,
+    setUser({
+      ...user,
+      profilePhoto: url,
     });
   };
+
+  console.log("executive: ", user);
 
   return (
     <GestureHandlerRootView>
@@ -123,13 +120,13 @@ export default function ExecutiveProfile() {
           <View className="mt-2" style={styles.container}>
             {/* Left - Executive Image */}
             <TouchableOpacity onPress={openModal}>
-              {executive.profileImage && executive.profileImage.length ? (
+              {user.profilePhoto && user.profilePhoto.length ? (
                 <Image
-                  source={{ uri: executive.profileImage }}
-                  style={styles.profileImage}
+                  source={{ uri: user.profilePhoto }}
+                  style={styles.profilePhoto}
                 />
               ) : (
-                <Image source={images.profile} style={styles.profileImage} />
+                <Image source={images.profile} style={styles.profilePhoto} />
               )}
             </TouchableOpacity>
 
@@ -224,7 +221,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 20,
   },
-  profileImage: {
+  profilePhoto: {
     width: 100,
     height: 100,
     borderRadius: 50,

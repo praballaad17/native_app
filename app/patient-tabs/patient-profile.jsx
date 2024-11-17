@@ -19,19 +19,23 @@ import UserToggleSwitch from "../../components/UserToggleSwich";
 import { images, PATIENTFIELDS, secondaryTabs, USERS } from "../../constants";
 import { logout } from "../../services/AuthenticationServices";
 import BottomSheetModal from "../../components/BottomModal";
+import useUserType from "../../context/UserProvider";
 
 export default function PatientProfile() {
-  // const router = useRouter();
+  const { user, setUser } = useUserType();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [patient, setPatient] = useState({
-    name: "John Doe",
-    age: "35",
-    gender: "male",
-    contact: "+1 234 567 8901",
-    address: "123, Baker Street, London",
-    profileImage: "",
-  });
+  const [patient, setPatient] = useState(user.patientId);
+  // const [patient, setPatient] = useState({
+  //   name: "John Doe",
+  //   age: "35",
+  //   gender: "male",
+  //   contact: "+1 234 567 8901",
+  //   address: "123, Baker Street, London",
+  //   profilePhoto: "",
+  // });
+
+  console.log("profile page ", user.patientId, patient);
 
   const overlayOpacity = useRef(new Animated.Value(0)).current; // Initial opacity of 0
   const bottomSheetTranslateY = useRef(new Animated.Value(300)).current; // Initial translateY position offscreen
@@ -116,9 +120,9 @@ export default function PatientProfile() {
   };
 
   const updateProfileImage = (url) => {
-    setPatient({
-      ...patient,
-      profileImage: url,
+    setUser({
+      ...user,
+      profilePhoto: url,
     });
   };
 
@@ -129,13 +133,13 @@ export default function PatientProfile() {
           <View className="mt-2" style={styles.container}>
             {/* Left - Patient Image */}
             <TouchableOpacity onPress={openModal}>
-              {patient.profileImage && patient.profileImage.length ? (
+              {user.profilePhoto && user.profilePhoto.length ? (
                 <Image
-                  source={{ uri: patient.profileImage }}
-                  style={styles.profileImage}
+                  source={{ uri: user.profilePhoto }}
+                  style={styles.profilePhoto}
                 />
               ) : (
-                <Image source={images.profile} style={styles.profileImage} />
+                <Image source={images.profile} style={styles.profilePhoto} />
               )}
             </TouchableOpacity>
 
@@ -224,7 +228,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     marginBottom: 20,
   },
-  profileImage: {
+  profilePhoto: {
     width: 100,
     height: 100,
     borderRadius: 50,

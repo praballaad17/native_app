@@ -1,12 +1,16 @@
 import { useFonts } from "expo-font";
 import { Stack, SplashScreen } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { UserProvider } from "../context/UserProvider";
 import { StatusBar } from "expo-status-bar";
 import { FileProvider } from "../context/FileProvider";
+import useAuthListener from "../hooks/useAuthListener";
+import { getToken } from "../services/AuthenticationServices";
 
 export default function RootLayout() {
   SplashScreen.preventAutoHideAsync();
+  // const [userId, setUserId] = useState();
+  // const { userId } = useAuthListener();
 
   const [fontsLoaded, error] = useFonts({
     "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
@@ -31,6 +35,21 @@ export default function RootLayout() {
   if (!fontsLoaded && !error) {
     return null;
   }
+
+  // useEffect(() => {
+  //   const getter = async () => {
+  //     jwt = await getToken();
+  //     userId = jwtDecode(jwt);
+  //     if (userId && userId.id) {
+  //       console.log("userId: ", userId);
+  //       setUserId(userId.id);
+  //     }
+  //   };
+
+  //   getter();
+  // }, []);
+
+  // console.log("index userId: ", userId);
 
   return (
     <UserProvider>

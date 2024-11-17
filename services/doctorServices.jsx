@@ -1,5 +1,6 @@
 import axios from "axios";
 import "@env";
+import { saveToken } from "./AuthenticationServices";
 
 const apiEndpoint = process.env.API_URL + "/doctor";
 const tokenKey = "token";
@@ -16,6 +17,7 @@ const tokenKey = "token";
 export const doctorRegister = async (formData) => {
   try {
     const response = await axios.post(`${apiEndpoint}/register`, formData);
+    saveToken(response.data.token);
     return response.data;
   } catch (error) {
     console.error("Error creating doctor:", error);
