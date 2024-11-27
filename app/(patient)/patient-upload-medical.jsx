@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -8,6 +8,9 @@ import { router } from "expo-router";
 
 const UploadMedical = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [page, setPage] = useState(1); // Start from page 1
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const records = [
     {
       name: "report 1",
@@ -22,6 +25,31 @@ const UploadMedical = () => {
       uploadedBy: "doctor",
     },
   ];
+
+   // Fetch all doctors when component loads or page changes
+   useEffect(() => {
+    const getter = async () => {
+      if (loading) return; // Prevent multiple calls if already loading
+
+      setLoading(true);
+      try {
+        const res = await FetchAllDoctorList(page); // Pass the page
+        console.log(res);
+        if (res.doctors.length > 0) {
+          setDoctorList((prev) => [...prev, ...res.doctors]); // Append new doctors to the list
+        } else {
+          setHasMore(false); // No more data to load
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false); // Stop loading after data fetch
+      }
+    };
+
+    getter();
+  }, [page]); // Trigger when page changes
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">

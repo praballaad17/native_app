@@ -8,7 +8,7 @@ import {
   ConsultDoctorList,
   FetchAllDoctorList,
 } from "../../services/patientServices";
-import { CONSULTAREAS } from "../../constants/index";
+import { CONSULTAREAS, URLS } from "../../constants/index";
 
 const Consult = () => {
   const [doctorList, setDoctorList] = useState([]);
@@ -19,14 +19,17 @@ const Consult = () => {
   // Fetch all doctors when component loads or page changes
   useEffect(() => {
     const getter = async () => {
-      if (loading) return; // Prevent multiple calls if already loading
+      if (loading || !hasMore) return; // Prevent multiple calls if already loading
 
       setLoading(true);
       try {
         const res = await FetchAllDoctorList(page); // Pass the page
-        console.log(res);
+        console.log("response: ", res);
         if (res.doctors.length > 0) {
           setDoctorList((prev) => [...prev, ...res.doctors]); // Append new doctors to the list
+          if (res.currentPage == res.totalPages) {
+            setHasMore(false);
+          }
         } else {
           setHasMore(false); // No more data to load
         }
@@ -40,11 +43,11 @@ const Consult = () => {
     getter();
   }, [page]); // Trigger when page changes
 
-  const handlePress = (doctorID) => {
+  const handlePress = (doctorId) => {
     router.push({
-      pathname: "/appointment",
+      pathname: URLS.PATIENTBOOKAPPOINTMENT,
       params: {
-        doctorID: 123,
+        doctorId: doctorId,
       },
     });
   };
@@ -65,6 +68,8 @@ const Consult = () => {
       setPage((prevPage) => prevPage + 1); // Increment page number to fetch more data
     }
   };
+
+  console.log(doctorList, "has more: ", hasMore);
 
   return (
     <GestureHandlerRootView>
@@ -89,17 +94,18 @@ const Consult = () => {
               {doctorList.map((doctor, idx) => (
                 <TouchableOpacity
                   className="w-full flex flex-row border border-gray-400 rounded-xl p-2 m-1"
-                  onPress={() => handlePress(item)}
+                  onPress={() => handlePress(doctor._id)}
+                  key={idx}
                 >
                   <View
                     resizeMode="contain"
                     className="w-1/2 h-28 border border-black "
                   />
                   <View className="w-1/2 ml-3 justify-center">
-                    <Text>Name</Text>
+                    <Text>{doctor.name}</Text>
                     <Text>Education</Text>
                     <Text>Ratting</Text>
-                    <Text>Total Experiece</Text>
+                    <Text>Total Experience</Text>
                   </View>
                 </TouchableOpacity>
               ))}

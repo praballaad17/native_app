@@ -27,9 +27,9 @@ const TabLayout = () => {
         }}
       />
       <Tabs.Screen
-        name="apointments"
+        name="appointments"
         options={{
-          tabBarLabel: "Apointments",
+          tabBarLabel: "Appointments",
           headerShown: false,
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons

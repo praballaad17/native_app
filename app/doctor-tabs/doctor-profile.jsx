@@ -20,6 +20,7 @@ import BottomSheetModal from "../../components/BottomModal";
 import { DOCTORFIELDS, images, secondaryTabs, USERS } from "../../constants";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 import useUserType from "../../context/UserProvider";
+import { logout } from "../../services/AuthenticationServices";
 
 export default function DoctorProfile() {
   const { user, setUser } = useUserType();
@@ -34,9 +35,9 @@ export default function DoctorProfile() {
 
   const primaryTabs = [
     {
-      name: "My apointments",
+      name: "My appointments",
       icon: <FontAwesome name="stethoscope" size={24} color="black" />,
-      url: "/apointments",
+      url: "/appointments",
     },
     {
       name: "Membership Plan",
@@ -46,7 +47,7 @@ export default function DoctorProfile() {
     {
       name: "Manage payments methods",
       icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
-      url: "/apointments",
+      url: "/appointments",
     },
     {
       name: "Pill Reminder",
@@ -60,9 +61,9 @@ export default function DoctorProfile() {
     },
   ];
 
-  const logout = () => {
-    //
-  };
+  // const logout = () => {
+  //   //
+  // };
 
   const handleEditProfile = () => {
     router.push({

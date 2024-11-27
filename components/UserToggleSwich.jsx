@@ -3,18 +3,41 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Loader from "./Loader";
 import useUserType from "../context/UserProvider";
 import { USERS } from "../constants";
+import { router } from "expo-router";
+import url from "../constants/url";
 
 const UserToggleSwitch = () => {
+  const { user } = useUserType();
   const [loading, setLoading] = useState(false);
   const { userType, setUserType } = useUserType();
 
   const switchUserType = (type) => {
     setLoading(true);
 
-    setTimeout(() => {
-      setUserType(type);
-      setLoading(false);
-    }, 3000); // 3 seconds delay for demo purposes
+    console.log(user);
+    if (type === USERS.DOCTOR) {
+      if (!user.doctorId) {
+        console.log("doctor profile is not active");
+        router.push(url.DOCTORWELCOME);
+      }
+    }
+    if (type === USERS.EXECUTIVE) {
+      if (!user.executiveId) {
+        console.log("executive profile is not active");
+        router.push(url.EXECUTIVERESUME);
+      }
+    }
+    if (type === USERS.PATIENT) {
+      if (!user.patientId) {
+        console.log("patient profile is not active");
+        router.push(url.PATIENTDETAILSSIGNUP);
+      }
+    }
+    // setTimeout(() => {
+    //   setUserType(type);
+    //   setLoading(false);
+    // }, 3000); // 3 seconds delay for demo purposes
+    setLoading(false);
   };
 
   if (loading) {

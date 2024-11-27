@@ -2,7 +2,7 @@ import axios from "axios";
 import "@env";
 import { saveToken } from "./AuthenticationServices";
 
-const apiEndpoint = process.env.API_URL + "/executive";
+const apiEndpoint = process.env.EXPO_PUBLIC_API_URL + "/executive";
 
 // /**
 //  * Logs a user in with the provided credentials
