@@ -1,8 +1,10 @@
 import axios from "axios";
 import "@env";
 import * as SecureStore from "expo-secure-store";
+import { router } from "expo-router";
+import { URLS } from "../constants";
 
-const apiEndpoint = process.env.API_URL + "/auth";
+const apiEndpoint = process.env.EXPO_PUBLIC_API_URL + "/auth";
 const tokenKey = "authToken";
 
 function setJwt(jwt) {
@@ -28,7 +30,7 @@ export const getToken = async () => {
       return token;
     } else {
       // No token, prompt for login
-      console.log("token does exists");
+      console.log("token does not exists");
       return null;
     }
   } catch (error) {
@@ -40,6 +42,7 @@ export const getToken = async () => {
 const deleteToken = async () => {
   try {
     await SecureStore.deleteItemAsync("authToken");
+    console.log("token is deleted");
   } catch (error) {
     console.log("Error deleting the token", error);
   }
@@ -55,15 +58,16 @@ const deleteToken = async () => {
 //  */
 export const generateOTPIfUser = async (number) => {
   try {
-    console.log(typeof number);
+    console.log(apiEndpoint);
     const response = await axios.post(`${apiEndpoint}/get-otp-if-user`, {
       number,
     });
-    console.log("res", response.status);
+    console.log("generateOTPIfUser res", response.status);
 
     return response.data;
   } catch (err) {
-    throw new Error(err.response.data);
+    console.log("generateOTPIfUser error: ", err);
+    throw new Error(err.response);
   }
 };
 
@@ -138,5 +142,7 @@ export const changePassword = async (data) => {
 };
 
 export async function logout() {
+  console.log("logout enter!");
   deleteToken();
+  router.replace(URLS.AUTHSIGNIN);
 }

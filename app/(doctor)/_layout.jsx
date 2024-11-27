@@ -35,7 +35,7 @@ const DocLayout = () => {
         />
 
         <Stack.Screen
-          name="apointments"
+          name="appointments"
           options={{
             headerShown: false,
           }}

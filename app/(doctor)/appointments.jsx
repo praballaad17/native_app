@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, Button, Modal } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Button,
+  Modal,
+  Alert,
+} from "react-native";
 import React, { useState } from "react";
 import { router } from "expo-router";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
@@ -6,8 +13,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { getAppointments } from "../../services/doctorServices";
+import useUserType from "../../context/UserProvider";
 
-const Apointments = () => {
+const Appointments = () => {
+  const { user } = useUserType();
   const [isvisible, setIsVisible] = useState(false);
   const [otp, setOtp] = useState(0);
   const [selectedPatient, setSelectedPatient] = useState();
@@ -21,21 +30,12 @@ const Apointments = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        "https://native-backend-w2df.onrender.com/api/patient/get-doctor-list",
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // This is a hack for React Native to accept self-signed certificates in development
-          insecureHTTPParser: true,
-        }
-      );
+      const response = await getAppointments(user.patientId._id);
       const json = await response.json();
       console.log(json);
     } catch (error) {
       console.error(error);
+      Alert.alert("Error", "Unable To fetch Appointments");
     }
   };
 
@@ -85,7 +85,7 @@ const Apointments = () => {
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="w-full justify-center h-100 px-4 my-6 ">
-            <Text className="text-xl font-psemibold py-2">Apointments</Text>
+            <Text className="text-xl font-psemibold py-2">Appointments</Text>
             {appointmentData.map((item, idx) => (
               <View className="my-1 py-1 bg-gray-50" key={idx}>
                 <Text>
@@ -167,4 +167,4 @@ const Apointments = () => {
   );
 };
 
-export default Apointments;
+export default Appointments;

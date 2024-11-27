@@ -1,7 +1,7 @@
 import axios from "axios";
 import "@env";
 import { saveToken } from "./AuthenticationServices";
-const apiEndpoint = process.env.API_URL + "/patient";
+const apiEndpoint = process.env.EXPO_PUBLIC_API_URL + "/patient";
 const tokenKey = "token";
 
 // /**
@@ -34,6 +34,20 @@ export const editPatientDetails = async (formData, patientId) => {
   }
 };
 
+export const fetchDoctorAvailability = async (doctorId) => {
+  try {
+    const response = await axios(
+      `${apiEndpoint}/fetch-doctor-availability/${doctorId}`,
+      {
+        method: "GET",
+      }
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
 export const postAppointment = async (formData) => {
   try {
     const response = await axios(`${apiEndpoint}/post-appointment`, {
@@ -56,7 +70,7 @@ export const getAppointment = async (patientId) => {
     );
     return response.data;
   } catch (err) {
-    throw new Error(err.response.data.error);
+    throw new Error(err);
   }
 };
 
@@ -75,7 +89,7 @@ export const postPhoto = async (patientId, file) => {
   }
 };
 
-export const postDocument = async (patientId, formData) => {
+export const postDocumentImageOrPdf = async (patientId, formData) => {
   try {
     if (formData.isPdf) {
       const response = await axios(
@@ -102,6 +116,21 @@ export const postDocument = async (patientId, formData) => {
       );
       return response.data;
     }
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const postDocument = async (formData) => {
+  try {
+    const response = await axios(`${apiEndpoint}/post-document/`, {
+      method: "POST",
+      formData,
+      headers: {
+        "Content-Type": "multipart/form-data", // Ensure proper headers for file uploads
+      },
+    });
+    return response.data;
   } catch (err) {
     throw new Error(err.response.data.error);
   }

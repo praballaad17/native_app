@@ -1,5 +1,6 @@
 import icons from "./icons";
 import images from "./images";
+import URLS from "./url";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const USERS = {
@@ -181,6 +182,7 @@ const PATIENTFIELDS = [
 ];
 export {
   icons,
+  URLS,
   images,
   USERS,
   secondaryTabs,

@@ -44,12 +44,12 @@ export default function PatientProfile() {
     {
       name: "My consultations",
       icon: <FontAwesome name="stethoscope" size={24} color="black" />,
-      url: "/apointments",
+      url: "/patient/patient-consultations",
     },
     {
       name: "My Lab Tests",
       icon: <Fontisto name="test-tube" size={24} color="black" />,
-      url: "/apointments",
+      url: "/appointments",
     },
     {
       name: "Membership Plan",
@@ -59,7 +59,7 @@ export default function PatientProfile() {
     {
       name: "Manage payments methods",
       icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
-      url: "/apointments",
+      url: "/appointments",
     },
     {
       name: "Pill Reminder",

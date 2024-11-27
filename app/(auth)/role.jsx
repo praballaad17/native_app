@@ -6,6 +6,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
 import { StatusBar } from "expo-status-bar";
+import url from "../../constants/url";
 
 const Role = () => {
   return (
@@ -17,17 +18,17 @@ const Role = () => {
 
             <CustomButton
               title="Patient"
-              handlePress={() => router.push("/patient-details")}
+              handlePress={() => router.push(url.PATIENTDETAILSSIGNUP)}
               containerStyles="w-full mt-7"
             />
             <CustomButton
               title="Doctor"
-              handlePress={() => router.push("/welcome")}
+              handlePress={() => router.push(url.DOCTORWELCOME)}
               containerStyles="w-full mt-7"
             />
             <CustomButton
               title="Executive"
-              handlePress={() => router.push("/resume-upload")}
+              handlePress={() => router.push(url.EXECUTIVERESUME)}
               containerStyles="w-full mt-7"
             />
           </View>

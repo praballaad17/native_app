@@ -15,17 +15,12 @@ export const UserProvider = ({ children }) => {
   // const [userType, setUserType] = useState(USERS.EXECUTIVE);
 
   useEffect(() => {
-    console.log("fetching user", userId);
+    console.log("useEffect called with userId: ", userId);
     if (userId) {
       const fetchUser = async () => {
-        console.log("fetching user");
         const res = await getUser(userId, "adfdf");
-        console.log("fetching user", res);
-        if (res.user.userType === USERS.DOCTOR) setUserType(USERS.DOCTOR);
-        else if (res.user.userType === USERS.EXECUTIVE)
-          setUserType(USERS.EXECUTIVE);
-        else if (res.user.userType === USERS.PATIENT)
-          setUserType(USERS.PATIENT);
+        console.log("user is: ", res);
+        setUser(res.user);
       };
       fetchUser();
     }
@@ -63,6 +58,7 @@ export const UserProvider = ({ children }) => {
     setUser,
     userType,
     setUserType,
+    userId,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

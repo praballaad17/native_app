@@ -15,7 +15,7 @@ import PatientProfile from "./patient-tabs/patient-profile";
 import Consult from "./patient-tabs/consult";
 import DoctorProfile from "./doctor-tabs/doctor-profile";
 import DoctorHome from "./doctor-tabs/doctor-home";
-import ApointmentTab from "./doctor-tabs/apointments";
+import AppointmentTab from "./doctor-tabs/appointments";
 import PatientTabs from "./doctor-tabs/patient";
 import ExecutiveDocument from "./(executive-tabs)/executive-documents";
 import ExecutiveHome from "./(executive-tabs)/executive-home";
@@ -113,7 +113,7 @@ const DoctorTabNavigator = () => (
           />
         ),
       }}
-      component={ApointmentTab}
+      component={AppointmentTab}
     />
     <DoctorTab.Screen
       name="Patients"
@@ -199,13 +199,11 @@ const ExecutiveTabNavigator = () => (
 );
 
 const SwitchableNavigator = () => {
-  // const { userId } = useAuthListener();
-  const { userType } = useUserType();
-  // console.log("index userId: ", userId);
+  const { userType, userId } = useUserType();
 
-  // if (!userId) {
-  //   return <SignIn />;
-  // }
+  if (!userId) {
+    return <SignIn />;
+  }
 
   return (
     <>
@@ -216,7 +214,7 @@ const SwitchableNavigator = () => {
       ) : userType === USERS.EXECUTIVE ? (
         <ExecutiveTabNavigator />
       ) : (
-        <SignIn />
+        <Loader />
       )}
     </>
   );

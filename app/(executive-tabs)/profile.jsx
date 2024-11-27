@@ -49,12 +49,12 @@ export default function ExecutiveProfile() {
     {
       name: "Pill Reminder",
       icon: <FontAwesome5 name="pills" size={24} color="black" />,
-      url: "/apointments",
+      url: "/appointments",
     },
     {
       name: "Refer and earn",
       icon: <FontAwesome name="share" size={24} color="black" />,
-      url: "/apointments",
+      url: "/appointments",
     },
   ];
 
