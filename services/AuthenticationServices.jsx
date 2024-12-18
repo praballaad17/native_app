@@ -1,5 +1,4 @@
 import axios from "axios";
-import "@env";
 import * as SecureStore from "expo-secure-store";
 import { router } from "expo-router";
 import { URLS } from "../constants";
@@ -58,7 +57,7 @@ const deleteToken = async () => {
 //  */
 export const generateOTPIfUser = async (number) => {
   try {
-    console.log(apiEndpoint);
+    console.log("endpoint", apiEndpoint);
     const response = await axios.post(`${apiEndpoint}/get-otp-if-user`, {
       number,
     });

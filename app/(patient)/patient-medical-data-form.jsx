@@ -1,12 +1,18 @@
 import { View, Text, Alert } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomForm from "../../components/CustomForm";
 import { postDocument } from "../../services/patientServices";
+import { generateURLUpload, uploadFileToS3 } from "../../services/awsServices";
+import { useLoader } from "../../hooks/useLoader";
+import useAuthListener from "../../hooks/useAuthListener";
+import { FILETYPE } from "../../constants";
 
 const MedicalDataForm = () => {
+  const { setIsLoading } = useLoader();
+  const { jwt } = useAuthListener();
   const fields = [
     {
       label: "Report Name",
@@ -33,10 +39,18 @@ const MedicalDataForm = () => {
     },
   ];
 
-  const handleFormSubmit = (formData) => {
-    formData.reportType = "medicalRecords";
-    console.log("Form Submitted", formData);
-    postDocument(formData);
+  const handleFormSubmit = async (formData) => {
+    setIsLoading(true);
+    try {
+      formData.reportType = "medicalRecords";
+      console.log("Form Submitted", formData);
+      const { url } = await generateURLUpload(jwt, FILETYPE.MEDICALRECORD);
+
+      await uploadFileToS3(formData.imageOrPdf[0], url);
+    } catch (error) {
+      console.log("error uploading prescription", error);
+    }
+    setIsLoading(false);
   };
 
   return (

@@ -105,6 +105,8 @@ const CustomForm = ({ fields, onSubmit, data }) => {
       quality: 1,
     });
 
+    console.log(result);
+
     if (result.canceled === false) {
       const images = [];
       result.assets.map((item) => {

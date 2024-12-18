@@ -10,12 +10,14 @@ export default function useAuthListener() {
 
   const getter = async () => {
     resjwt = await getToken();
-    setJwt(resjwt);
-    res = jwtDecode(jwt);
-    if (res && res.id) {
-      console.log("userId: ", res);
-      // res = res.id;
-      setUserId(res.id);
+    if (resjwt) {
+      setJwt(resjwt);
+      res = jwtDecode(resjwt);
+      if (res && res.id) {
+        console.log("userId: ", res);
+        // res = res.id;
+        setUserId(res.id);
+      }
     }
   };
 

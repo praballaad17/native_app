@@ -180,6 +180,12 @@ const PATIENTFIELDS = [
     type: "text",
   },
 ];
+
+const FILETYPE = {
+  MEDICALRECORD: "medical-records",
+  PRESCRIPTION: "prescriptions",
+};
+
 export {
   icons,
   URLS,
@@ -193,4 +199,5 @@ export {
   DOCTORFIELDS,
   EXECUTIVEFIELDS,
   PROFILETYPE,
+  FILETYPE,
 };
