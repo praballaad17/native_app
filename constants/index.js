@@ -79,6 +79,18 @@ const GENDEROPTIONS = [
   { label: "other", value: "other" },
 ];
 
+const BLOODGROUPOPTIONS = [
+  { label: "select", value: "select" },
+  { label: "A+", value: "A+" },
+  { label: "A-", value: "A-" },
+  { label: "B+", value: "B+" },
+  { label: "B-", value: "B-" },
+  { label: "AB+", value: "AB+" },
+  { label: "AB-", value: "AB-" },
+  { label: "O+", value: "O+" },
+  { label: "O-", value: "O-" },
+];
+
 const EXECUTIVEFIELDS = [
   {
     label: "Name",
@@ -185,6 +197,7 @@ const FILETYPE = {
   MEDICALRECORD: "medical-records",
   PRESCRIPTION: "prescriptions",
   EXECUTIVERESUME: "executive-resume",
+  PROFILEPHOTO: "profile-photo",
 };
 
 export {
@@ -201,4 +214,5 @@ export {
   EXECUTIVEFIELDS,
   PROFILETYPE,
   FILETYPE,
+  BLOODGROUPOPTIONS,
 };

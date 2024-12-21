@@ -73,14 +73,11 @@ export const getAppointment = async (patientId) => {
   }
 };
 
-export const postPhoto = async (patientId, file) => {
+export const postPhoto = async (patientId, formdata) => {
   try {
     const response = await axios(`${apiEndpoint}/post-photo/${patientId}`, {
       method: "POST",
-      file,
-      headers: {
-        "Content-Type": "multipart/form-data", // Ensure proper headers for file uploads
-      },
+      formdata,
     });
     return response.data;
   } catch (err) {

@@ -5,28 +5,52 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
+import { FILETYPE } from "../../constants";
+import FileReaderModal from "../../components/FileReaderModal";
+import useUserType from "../../context/UserProvider";
+import { getDocumentList } from "../../services/patientServices";
+import { formateDate } from "../../utils/utils";
+import { TouchableOpacity } from "react-native";
 
 const UploadPrescription = () => {
+  const { userId } = useUserType();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const [page, setPage] = useState(1); // Start from page 1
+  const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [recordList, setRecordList] = useState([]);
+  const [selectedRecord, setSelectedRecord] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
-    const getter = () => {};
-  });
+    const getter = async () => {
+      if (loading) return;
 
-  const records = [
-    {
-      name: "report 1",
-      url: "",
-      date: "24-08-2024",
-      uploadedBy: "doctor",
-    },
-    {
-      name: "report 2",
-      url: "",
-      date: "24-08-2024",
-      uploadedBy: "doctor",
-    },
-  ];
+      setLoading(true);
+      try {
+        const resList = await getDocumentList(userId, FILETYPE.PRESCRIPTION);
+
+        if (resList.length > 0) {
+          setRecordList(resList); // Append new doctors to the list
+        } else {
+          setHasMore(false); // No more data to load
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false); // Stop loading after data fetch
+      }
+    };
+    getter();
+  }, []);
+
+  const openReport = (report) => {
+    console.log("openReport");
+    setModalVisible(true);
+    setSelectedRecord(report);
+  };
+
+  console.log(recordList);
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">
@@ -43,17 +67,26 @@ const UploadPrescription = () => {
               isLoading={isSubmitting}
             />
             <View>
-              {records.map((item, index) => (
-                <View className="bg-white p-3 my-2" key={index}>
-                  <Text>{item.name}</Text>
-                  <Text>{item.date}</Text>
-                  <Text>
-                    <Text className="font-bold">Prescription by:</Text>{" "}
-                    {item.uploadedBy}
-                  </Text>
-                </View>
+              {recordList.map((item, index) => (
+                <TouchableOpacity onPress={() => openReport(item)}>
+                  <View className="bg-white p-3 my-2" key={index}>
+                    <Text>{item.fileName}</Text>
+                    <Text>{formateDate(item.date)}</Text>
+                    <Text>
+                      <Text className="font-bold">Prescription by:</Text>{" "}
+                      {item.uploadedBy}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               ))}
             </View>
+            {setModalVisible && selectedRecord && (
+              <FileReaderModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                report={selectedRecord}
+              />
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

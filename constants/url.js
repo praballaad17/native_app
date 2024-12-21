@@ -10,6 +10,8 @@ const EXECUTIVERESUME = "/resume-upload";
 const EXECUTIVEPROFILE = "/profile";
 const DOCTORWELCOME = "/welcome";
 
+const DOCUMENTREADER = "document-reader";
+
 export default {
   AUTHROLE,
   AUTHSIGNUP,
@@ -22,4 +24,6 @@ export default {
   EXECUTIVERESUME,
   EXECUTIVEPROFILE,
   DOCTORWELCOME,
+
+  DOCUMENTREADER,
 };

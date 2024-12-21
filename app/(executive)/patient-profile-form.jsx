@@ -5,10 +5,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
 import CustomDropdownSelect from "../../components/CustomDropDownSelect";
-import { GENDEROPTIONS } from "../../constants";
+import { BLOODGROUPOPTIONS, GENDEROPTIONS } from "../../constants";
 import FormField from "../../components/FormField";
+import { addPatientByExecutive } from "../../services/executiveServices";
+import useUserType from "../../context/UserProvider";
+import CustomForm from "../../components/CustomForm";
 
-const PatientProfileForm = ({ onSubmit }) => {
+const PatientProfileForm = () => {
   const [form, setForm] = useState({
     name: "",
     height: "",
@@ -24,6 +27,54 @@ const PatientProfileForm = ({ onSubmit }) => {
   const [isvisible, setIsVisible] = useState(false);
   const [otp, setOtp] = useState(0);
   const [error, setError] = useState("");
+  const { userId } = useUserType();
+
+  const fields = [
+    {
+      label: "Patient Name",
+      key: "name",
+      placeholder: "Enter Patient Name",
+      type: "text",
+    },
+    {
+      label: "Contact",
+      key: "contact",
+      placeholder: "Enter Patient contact",
+      type: "number",
+    },
+    {
+      label: "Weight",
+      key: "weight",
+      placeholder: "Enter Patient weight",
+      type: "number",
+    },
+    {
+      label: "Height",
+      key: "height",
+      placeholder: "Enter Patient height",
+      type: "number",
+    },
+    {
+      label: "Date of Birth",
+      key: "dob",
+      placeholder: "Select the date of Birth",
+      type: "date",
+    },
+    {
+      label: "Gender",
+      key: "gender",
+      placeholder: "Select the gender",
+      type: "dropdown",
+      options: GENDEROPTIONS,
+    },
+    {
+      label: "Blood Group",
+      key: "bloodGrp",
+      placeholder: "Select the Blood Group",
+      type: "dropdown",
+      options: BLOODGROUPOPTIONS,
+    },
+  ];
 
   const handleSelect = (option) => {
     setSelectedOption(option);
@@ -32,22 +83,21 @@ const PatientProfileForm = ({ onSubmit }) => {
   const sendOTP = () => {
     console.log("send otp is send");
     setIsVisible(true);
+    //send otp and also check if user with the given number is registered or not.
   };
 
-  const verifyAndSend = () => {
-    //
+  const verifyAndSend = async () => {
     if (otp === "1234" || otp === 1234) {
       setIsVisible(false);
-      // handlePress();
+      try {
+        const res = await addPatientByExecutive(form, userId);
+        console.log(res);
+      } catch (error) {
+        console.log("error creating patient profile: ", error);
+      }
+
       setOtp(0);
       setError("");
-      // const patientData = {
-      //   name,
-      //   age,
-      //   contact,
-      //   isActive: true, // Default patient is active when created
-      // };
-      // onSubmit(patientData);
     } else {
       setError("OTP is not correct, re-enter");
     }
@@ -56,13 +106,12 @@ const PatientProfileForm = ({ onSubmit }) => {
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">
-        <ScrollView>
-          <View className="w-full min-h-[85vh] px-4 my-6">
-            <Text className="text-2xl my-3 font-bold">
-              Patient Profile Form
-            </Text>
+        <View className="w-full min-h-[85vh] px-4 my-6">
+          <Text className="text-2xl my-3 font-bold">Patient Profile Form</Text>
 
-            <View className="w-full px-4 py-7 rounded-lg justify-center bg-white">
+          <CustomForm fields={fields} onSubmit={sendOTP} />
+
+          {/* <View className="w-full px-4 py-7 rounded-lg justify-center bg-white">
               <FormField
                 title="Name"
                 value={form.name}
@@ -135,66 +184,65 @@ const PatientProfileForm = ({ onSubmit }) => {
                 handlePress={sendOTP}
               />
 
-              <Modal
-                className="bg-gray-100"
-                animationType="slide"
-                transparent={true}
-                visible={isvisible}
-                onRequestClose={() => {
-                  setIsVisible(false);
+              
+            </View> */}
+          <Modal
+            className="bg-gray-100"
+            animationType="slide"
+            transparent={true}
+            visible={isvisible}
+            onRequestClose={() => {
+              setIsVisible(false);
+            }}
+          >
+            <View
+              // className="bg-white"
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View
+                className="bg-gray-200"
+                style={{
+                  padding: 20,
+                  borderRadius: 10,
                 }}
               >
-                <View
-                  // className="bg-white"
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
-                  <View
-                    className="bg-gray-200"
-                    style={{
-                      padding: 20,
-                      borderRadius: 10,
-                    }}
-                  >
-                    <Text>
-                      Enter the OTP, recieved on Patient's registered mobile
-                      number.
-                    </Text>
-                    <TextInput
-                      className="border border-slate-300 my-2 px-3"
-                      keyboardType="numeric"
-                      maxLength={6}
-                      autoCorrect={false}
-                      autoFocus={true}
-                      value={otp}
-                      onChangeText={setOtp}
-                      onSubmitEditing={verifyAndSend}
-                      placeholder="Enter OTP"
-                    />
-                    {error.length !== 0 && (
-                      <Text className="text-red-600 ">{error}</Text>
-                    )}
-                    <View className="flex-row justify-around">
-                      <Button
-                        className=" bg-secondary-100"
-                        title="Verify"
-                        onPress={verifyAndSend}
-                      />
-                      <Button
-                        className="px-4 mx-2"
-                        title="close"
-                        onPress={() => setIsVisible(false)}
-                      />
-                    </View>
-                  </View>
+                <Text>
+                  Enter the OTP, recieved on Patient's registered mobile number.
+                </Text>
+                <TextInput
+                  className="border border-slate-300 my-2 px-3"
+                  keyboardType="numeric"
+                  maxLength={6}
+                  autoCorrect={false}
+                  autoFocus={true}
+                  value={otp}
+                  onChangeText={setOtp}
+                  onSubmitEditing={verifyAndSend}
+                  placeholder="Enter OTP"
+                />
+                {error.length !== 0 && (
+                  <Text className="text-red-600 ">{error}</Text>
+                )}
+                <View className="flex-row justify-around">
+                  <Button
+                    className=" bg-secondary-100"
+                    title="Verify"
+                    onPress={verifyAndSend}
+                  />
+                  <Button
+                    className="px-4 mx-2"
+                    title="close"
+                    onPress={() => setIsVisible(false)}
+                  />
                 </View>
-              </Modal>
+              </View>
             </View>
-          </View>
-        </ScrollView>
+          </Modal>
+        </View>
       </SafeAreaView>
     </GestureHandlerRootView>
   );

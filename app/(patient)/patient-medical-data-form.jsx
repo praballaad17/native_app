@@ -50,10 +50,9 @@ const MedicalDataForm = () => {
       formData.userType = userType;
       formData.patientId = userId;
       await uploadFileToS3(formData.imageOrPdf[0], url);
-      console.log("Form Submitted", formData);
       await createFileMetaData(formData, jwt);
 
-      // router.push(MEDICALRECORDLIST);
+      router.push(MEDICALRECORDLIST);
     } catch (error) {
       console.log("error uploading medical record", error);
     }

@@ -8,17 +8,14 @@ import { generateURLUpload, uploadFileToS3 } from "../../services/awsServices";
 import { useLoader } from "../../hooks/useLoader";
 import { FILETYPE } from "../../constants";
 import useAuthListener from "../../hooks/useAuthListener";
+import useUserType from "../../context/UserProvider";
+import { createFileMetaData } from "../../services/utilityServices";
 
 const PrescriptionForm = () => {
   const { setIsLoading } = useLoader();
-  const { jwt } = useAuthListener();
+  const { jwt, userId } = useAuthListener();
+  const { userType } = useUserType();
   const fields = [
-    {
-      label: "Patient Name",
-      key: "patientName",
-      placeholder: "Enter Patient name",
-      type: "text",
-    },
     {
       label: "Prescription By",
       key: "prescriptionBy",
@@ -40,7 +37,7 @@ const PrescriptionForm = () => {
 
   const handleFormSubmit = async (formData) => {
     setIsLoading(true);
-    formData.reportType = "prescription";
+    formData.reportType = FILETYPE.PRESCRIPTION;
     console.log("Form Submitted", formData);
     try {
       const filename = new Date() + `_${FILETYPE.PRESCRIPTION}`;
@@ -48,17 +45,32 @@ const PrescriptionForm = () => {
 
       const { url } = await generateURLUpload(jwt, s3key);
       console.log(url);
-      await uploadFileToS3(formData.imageOrPdf, url);
+      formData.key = s3key;
+      formData.userType = userType;
+      formData.patientId = userId;
+      if (formData.isPdf) {
+        await uploadFileToS3(formData.imageOrPdf, url);
+      } else {
+        await uploadFileToS3(formData.imageOrPdf[0], url);
+      }
+      await createFileMetaData(formData, jwt);
     } catch (error) {
       console.log("error uploading prescription", error);
     }
     setIsLoading(false);
   };
+
   return (
-    <View className="h-full w-full justify-center h-100 py-4 px-2 my-6">
-      <Text className="font-pbold text-2xl my-2">Prescription Form</Text>
-      <CustomForm fields={fields} onSubmit={handleFormSubmit} />
-    </View>
+    <GestureHandlerRootView>
+      <SafeAreaView className="h-full">
+        <ScrollView>
+          <View className="h-full w-full justify-center h-100 py-4 px-2 my-6">
+            <Text className="font-pbold text-2xl my-2">Prescription Form</Text>
+            <CustomForm fields={fields} onSubmit={handleFormSubmit} />
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 

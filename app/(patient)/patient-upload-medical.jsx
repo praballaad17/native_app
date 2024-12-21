@@ -11,6 +11,10 @@ import {
 } from "../../services/patientServices";
 import useUserType from "../../context/UserProvider";
 import { FILETYPE } from "../../constants";
+import { formateDate } from "../../utils/utils";
+import { TouchableOpacity } from "react-native";
+import DocumentReader from "../../components/document-reader";
+import FileReaderModal from "../../components/FileReaderModal";
 
 const UploadMedical = () => {
   const { userId } = useUserType();
@@ -19,21 +23,8 @@ const UploadMedical = () => {
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const [recordList, setRecordList] = useState([]);
-  const records = [
-    {
-      name: "report 1",
-      url: "",
-      date: "24-08-2024",
-      uploadedBy: "doctor",
-    },
-    {
-      name: "report 2",
-      url: "",
-      date: "24-08-2024",
-      uploadedBy: "doctor",
-    },
-  ];
-
+  const [selectedRecord, setSelectedRecord] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     const getter = async () => {
       if (loading) return;
@@ -42,12 +33,11 @@ const UploadMedical = () => {
       try {
         const resList = await getDocumentList(userId, FILETYPE.MEDICALRECORD);
 
-        console.log("document List", resList);
-        // if (res.doctors.length > 0) {
-        //   setRecordList((prev) => [...prev, ...res.doctors]); // Append new doctors to the list
-        // } else {
-        //   setHasMore(false); // No more data to load
-        // }
+        if (resList.length > 0) {
+          setRecordList(resList); // Append new doctors to the list
+        } else {
+          setHasMore(false); // No more data to load
+        }
       } catch (error) {
         console.log(error);
       } finally {
@@ -55,7 +45,15 @@ const UploadMedical = () => {
       }
     };
     getter();
-  }, [page]);
+  }, []);
+
+  const openReport = (report) => {
+    console.log("openReport");
+    setModalVisible(true);
+    setSelectedRecord(report);
+  };
+
+  console.log(recordList);
 
   return (
     <GestureHandlerRootView>
@@ -73,14 +71,24 @@ const UploadMedical = () => {
               isLoading={isSubmitting}
             />
             <View>
-              {records.map((item, index) => (
-                <View className="bg-white p-3 my-2" key={index}>
-                  <Text>{item.name}</Text>
-                  <Text>{item.date}</Text>
-                  <Text>{item.uploadedBy}</Text>
-                </View>
-              ))}
+              {recordList &&
+                recordList.map((item, index) => (
+                  <TouchableOpacity onPress={() => openReport(item)}>
+                    <View className="bg-white p-3 my-2" key={index}>
+                      <Text>{item.fileName}</Text>
+                      <Text>{formateDate(item.date)}</Text>
+                      <Text>{item.uploadedBy}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
             </View>
+            {setModalVisible && selectedRecord && (
+              <FileReaderModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                report={selectedRecord}
+              />
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

@@ -16,16 +16,17 @@ export const generateURLUpload = async (token, s3key) => {
     });
     return response.data;
   } catch (err) {
+    console.log("Error: ", err);
     throw new Error(err.response.data.error);
   }
 };
 
-export const generateURLView = async (fileName) => {
+export const generateURLView = async (key) => {
   try {
     const response = await axios(`${apiEndpoint}/generate-aws-url-view`, {
       method: "GET",
       params: {
-        fileName: fileName,
+        key,
       },
     });
     return response.data;

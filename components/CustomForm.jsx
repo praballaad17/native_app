@@ -19,6 +19,7 @@ import PDFViewer from "./PDFViewer";
 import { router } from "expo-router";
 import ToggleSwitch from "./ToggleSwitch";
 import CustomDropdownSelect from "./CustomDropDownSelect";
+import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 // CustomForm Component
 const CustomForm = ({ fields, onSubmit, data }) => {
@@ -125,97 +126,48 @@ const CustomForm = ({ fields, onSubmit, data }) => {
     }
   };
 
-  return (
-    <ScrollView style={styles.container}>
-      {fields.map((field, index) => {
-        const { label, key, placeholder, type } = field;
-        return (
-          <View key={index} style={styles.formField}>
-            <Text className="font-psemibold" style={styles.label}>
-              {label}:
-            </Text>
+  const renderItem = ({ item }) => {
+    console.log(item);
+    if (!item || !item.label || !item.placeholder || !item.key || !item.type) {
+      return null; // Return null if item or its properties are undefined
+    }
 
-            {type === "date" ? (
-              <>
-                {/* Date Input */}
-                <TouchableOpacity
-                  style={styles.dateInput}
-                  onPress={() => setShowDatePicker(key)}
-                >
-                  <Text style={styles.dateText}>
-                    {formData[key]
-                      ? formData[key]
-                      : placeholder || "Select date"}
-                  </Text>
-                </TouchableOpacity>
+    const { label, key, placeholder, type } = item;
 
-                {/* Date Picker */}
-                {showDatePicker === key && (
-                  <DateTimePicker
-                    value={formData[key] ? new Date(formData[key]) : new Date()}
-                    mode="date"
-                    display="default"
-                    onChange={(event, selectedDate) =>
-                      handleDateChange(event, selectedDate, key)
-                    }
-                  />
-                )}
-              </>
-            ) : type === "imageOrPdf" ? (
-              <>
-                <ToggleSwitch isEnabled={isPdf} setIsEnabled={setIsEnabled} />
-                {!isPdf ? (
-                  <>
-                    <TouchableOpacity
-                      style={styles.button}
-                      onPress={() => handleImagePick(key)}
-                    >
-                      <Text style={styles.buttonText}>Select Image</Text>
-                    </TouchableOpacity>
-                    <FlatList
-                      horizontal
-                      data={formData[key] || []}
-                      renderItem={({ item }) => (
-                        <Image
-                          key={item}
-                          source={{ uri: item }}
-                          className="mx-2"
-                          style={{ width: 300, height: 400 }}
-                        />
-                      )}
-                      keyExtractor={(item) => item}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <TouchableOpacity
-                      style={styles.button}
-                      onPress={() => pickDocument(key)}
-                    >
-                      <Text style={styles.buttonText}>Select PDF</Text>
-                    </TouchableOpacity>
-                    {formData[key] ? (
-                      <View>
-                        <Text style={styles.pdfText}>
-                          Selected PDF: {formData[key]}
-                        </Text>
-                        <Button
-                          title="View"
-                          onPress={() =>
-                            router.push({
-                              pathname: "/pdf-view",
-                              params: {
-                                pdfurl: formData[key],
-                              },
-                            })
-                          }
-                        />
-                      </View>
-                    ) : null}
-                  </>
-                )}
-              </>
-            ) : type === "image" ? (
+    return (
+      <View style={styles.formField}>
+        <Text className="font-psemibold" style={styles.label}>
+          {label}:
+        </Text>
+
+        {type === "date" ? (
+          <>
+            {/* Date Input */}
+            <TouchableOpacity
+              style={styles.dateInput}
+              onPress={() => setShowDatePicker(key)}
+            >
+              <Text style={styles.dateText}>
+                {formData[key] ? formData[key] : placeholder || "Select date"}
+              </Text>
+            </TouchableOpacity>
+
+            {/* Date Picker */}
+            {showDatePicker === key && (
+              <DateTimePicker
+                value={formData[key] ? new Date(formData[key]) : new Date()}
+                mode="date"
+                display="default"
+                onChange={(event, selectedDate) =>
+                  handleDateChange(event, selectedDate, key)
+                }
+              />
+            )}
+          </>
+        ) : type === "imageOrPdf" ? (
+          <>
+            <ToggleSwitch isEnabled={isPdf} setIsEnabled={setIsEnabled} />
+            {!isPdf ? (
               <>
                 <TouchableOpacity
                   style={styles.button}
@@ -235,9 +187,10 @@ const CustomForm = ({ fields, onSubmit, data }) => {
                     />
                   )}
                   keyExtractor={(item) => item}
+                  //scrollEnabled={false} // Disable scroll for the inner FlatList
                 />
               </>
-            ) : type === "pdf" ? (
+            ) : (
               <>
                 <TouchableOpacity
                   style={styles.button}
@@ -264,31 +217,99 @@ const CustomForm = ({ fields, onSubmit, data }) => {
                   </View>
                 ) : null}
               </>
-            ) : type === "dropdown" ? (
-              <CustomDropdownSelect
-                options={field.options}
-                placeholder={field.placeholder}
-                onSelect={(option) => handleInputChange(key, option)}
-                selectedValue={formData[key] || ""}
-              />
-            ) : (
-              <TextInput
-                style={styles.input}
-                placeholder={placeholder || `Enter ${label}`}
-                value={formData[key] || ""}
-                onChangeText={(text) => handleTextNumberInput(type, key, text)}
-                keyboardType={type === "number" ? "numeric" : "default"} // Handle different input types
-              />
             )}
-          </View>
+          </>
+        ) : type === "image" ? (
+          <>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => handleImagePick(key)}
+            >
+              <Text style={styles.buttonText}>Select Image</Text>
+            </TouchableOpacity>
+            <FlatList
+              horizontal
+              data={formData[key] || []}
+              renderItem={({ item }) => (
+                <Image
+                  key={item}
+                  source={{ uri: item }}
+                  className="mx-2"
+                  style={{ width: 300, height: 400 }}
+                />
+              )}
+              keyExtractor={(item) => item}
+            />
+          </>
+        ) : type === "pdf" ? (
+          <>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => pickDocument(key)}
+            >
+              <Text style={styles.buttonText}>Select PDF</Text>
+            </TouchableOpacity>
+            {formData[key] ? (
+              <View>
+                <Text style={styles.pdfText}>
+                  Selected PDF: {formData[key]}
+                </Text>
+                <Button
+                  title="View"
+                  onPress={() =>
+                    router.push({
+                      pathname: "/pdf-view",
+                      params: {
+                        pdfurl: formData[key],
+                      },
+                    })
+                  }
+                />
+              </View>
+            ) : null}
+          </>
+        ) : type === "dropdown" ? (
+          <CustomDropdownSelect
+            options={item.options}
+            placeholder={item.placeholder}
+            onSelect={(option) => handleInputChange(key, option)}
+            selectedValue={formData[key] || ""}
+          />
+        ) : (
+          <TextInput
+            style={styles.input}
+            placeholder={placeholder || `Enter ${label}`}
+            value={formData[key] || ""}
+            onChangeText={(text) => handleTextNumberInput(type, key, text)}
+            keyboardType={type === "number" ? "numeric" : "default"} // Handle different input types
+          />
+        )}
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={styles.container}>
+        <FlatList
+          data={fields}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.key}
+          // contentContainerStyle={styles.listContainer}
+        />
+        {/* {fields.map((field, index) => {
+        
+        return (
+          
         );
-      })}
-      <CustomButton
-        title="Submit"
-        containerStyles=""
-        handlePress={handleSubmit}
-      />
-    </ScrollView>
+      })} */}
+        <CustomButton
+          title="Submit"
+          containerStyles=""
+          handlePress={handleSubmit}
+        />
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 };
 

@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
+import useUserType from "../context/UserProvider";
 
 const BottomSheetModal = ({ visible, closeModal, updateProfileImage }) => {
   const options = [
@@ -50,7 +51,7 @@ const BottomSheetModal = ({ visible, closeModal, updateProfileImage }) => {
 
     try {
       if (!result.canceled) {
-        updateProfileImage(result.assets[0].uri);
+        await updateProfileImage(result.assets[0].uri);
         // Clear any previous errors
         setError(null);
       }
@@ -77,7 +78,7 @@ const BottomSheetModal = ({ visible, closeModal, updateProfileImage }) => {
         if (!result.canceled) {
           // If an image is selected (not cancelled),
           // update the file state variable
-          updateProfileImage(result.assets[0].uri);
+          await updateProfileImage(result.assets[0].uri);
 
           // Clear any previous errors
           setError(null);

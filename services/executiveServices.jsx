@@ -80,10 +80,10 @@ export const getPatientListByExecutiveId = async (executiveId) => {
   }
 };
 
-export const addPatientByExecutive = async (formData, id) => {
+export const addPatientByExecutive = async (formData, executiveId) => {
   try {
     const response = await axios.post(
-      `${apiEndpoint}/add-patinet/${id}`,
+      `${apiEndpoint}/add-patinet/${executiveId}`,
       formData
     );
 

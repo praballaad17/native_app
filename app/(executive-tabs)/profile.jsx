@@ -6,7 +6,7 @@ import {
   Image,
   Animated,
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,6 +25,8 @@ import {
 import BottomSheetModal from "../../components/BottomModal";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 import useUserType from "../../context/UserProvider";
+import { generateURLView } from "../../services/awsServices";
+import { logout } from "../../services/AuthenticationServices";
 
 export default function ExecutiveProfile() {
   const { user, setUser } = useUserType();
@@ -57,10 +59,6 @@ export default function ExecutiveProfile() {
       url: "/appointments",
     },
   ];
-
-  const logout = () => {
-    //
-  };
 
   const handleEditProfile = () => {
     router.push({
@@ -104,14 +102,49 @@ export default function ExecutiveProfile() {
     }).start();
   };
 
-  const updateProfileImage = (url) => {
-    setUser({
-      ...user,
-      profilePhoto: url,
-    });
+  const updateProfileImage = async (imageurl) => {
+    if (!imageurl) {
+      Alert.alert("Error selecting Image", "Please Try again in some time");
+      return;
+    }
+    try {
+      const filename = userId + `_${FILETYPE.PROFILEPHOTO}`;
+      const s3key = `${userId}/${FILETYPE.PROFILEPHOTO}/${filename}`;
+
+      const { url: presignedurl } = await generateURLUpload(jwt, s3key);
+      if (presignedurl) {
+        try {
+          await uploadFileToS3(imageurl, presignedurl);
+          await postPhoto(userId, { s3key });
+          setUser({
+            ...user,
+            profilePhotoURL: imageurl,
+          });
+        } catch (error) {
+          console.log("unable to upload!", error);
+        }
+      } else {
+        console.log("unable to create presigned url!");
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
-  console.log("executive: ", user);
+  useEffect(() => {
+    const getter = async () => {
+      try {
+        const { url } = await generateURLView(user.profilePhoto);
+        setUser({
+          ...user,
+          profilePhotoURL: url,
+        });
+      } catch (error) {
+        console.log("error getting profile image from s3: ", error);
+      }
+    };
+    if (user && user.profilePhoto && !user.profilePhotoURL) getter();
+  }, [user.profilePhoto]);
 
   return (
     <GestureHandlerRootView>
@@ -120,9 +153,11 @@ export default function ExecutiveProfile() {
           <View className="mt-2" style={styles.container}>
             {/* Left - Executive Image */}
             <TouchableOpacity onPress={openModal}>
-              {user.profilePhoto && user.profilePhoto.length ? (
+              {user.profilePhoto &&
+              user.profilePhotoURL &&
+              user.profilePhotoURL.length ? (
                 <Image
-                  source={{ uri: user.profilePhoto }}
+                  source={{ uri: user.profilePhotoURL }}
                   style={styles.profilePhoto}
                 />
               ) : (

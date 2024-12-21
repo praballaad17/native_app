@@ -7,6 +7,7 @@ import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
 import useUserType from "../../context/UserProvider";
 import { FILETYPE } from "../../constants";
+import { TouchableOpacity } from "react-native";
 
 const UploadMedical = () => {
   const { userId } = useUserType();
@@ -58,14 +59,23 @@ const UploadMedical = () => {
             />
             <View>
               {records.map((item, index) => (
-                <View className="bg-white p-3 my-2" key={index}>
-                  <Text>{item.patient}</Text>
-                  <Text>{item.name}</Text>
-                  <Text>{item.date}</Text>
-                  <Text>{item.uploadedBy}</Text>
-                </View>
+                <TouchableOpacity onPress={() => openReport(item)}>
+                  <View className="bg-white p-3 my-2" key={index}>
+                    <Text>{item.patient}</Text>
+                    <Text>{item.name}</Text>
+                    <Text>{item.date}</Text>
+                    <Text>{item.uploadedBy}</Text>
+                  </View>
+                </TouchableOpacity>
               ))}
             </View>
+            {setModalVisible && selectedRecord && (
+              <FileReaderModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                report={selectedRecord}
+              />
+            )}
           </View>
         </ScrollView>
       </SafeAreaView>

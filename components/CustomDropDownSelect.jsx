@@ -60,6 +60,7 @@ const CustomDropdownSelect = ({
                 <Text style={styles.dropdownItemText}>{item.label}</Text>
               </TouchableOpacity>
             )}
+            scrollEnabled={false} // Disable scroll for the inner FlatList
           />
         </View>
       )}

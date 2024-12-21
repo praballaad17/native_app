@@ -6,7 +6,6 @@ import { useState } from "react";
 export default function useAuthListener() {
   const [userId, setUserId] = useState();
   const [jwt, setJwt] = useState();
-  // let userId, jwt;
 
   const getter = async () => {
     resjwt = await getToken();
@@ -14,8 +13,6 @@ export default function useAuthListener() {
       setJwt(resjwt);
       res = jwtDecode(resjwt);
       if (res && res.id) {
-        console.log("userId: ", res);
-        // res = res.id;
         setUserId(res.id);
       }
     }
