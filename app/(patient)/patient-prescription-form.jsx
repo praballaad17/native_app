@@ -43,7 +43,10 @@ const PrescriptionForm = () => {
     formData.reportType = "prescription";
     console.log("Form Submitted", formData);
     try {
-      const { url } = await generateURLUpload(jwt, FILETYPE.PRESCRIPTION);
+      const filename = new Date() + `_${FILETYPE.PRESCRIPTION}`;
+      const s3key = `${userId}/${FILETYPE.PRESCRIPTION}/${filename}`;
+
+      const { url } = await generateURLUpload(jwt, s3key);
       console.log(url);
       await uploadFileToS3(formData.imageOrPdf, url);
     } catch (error) {

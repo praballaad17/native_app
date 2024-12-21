@@ -7,9 +7,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "../../components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 import { MMKV } from "react-native-mmkv";
+import { generateURLUpload, uploadFileToS3 } from "../../services/awsServices";
+import useAuthListener from "../../hooks/useAuthListener";
+import { FILETYPE } from "../../constants";
 
 const ResumeUpload = () => {
   const [pdfUri, setPdfUri] = useState(null);
+  const { jwt, userId } = useAuthListener();
   // const storage = new MMKV();
 
   const pickDocument = async () => {
@@ -43,9 +47,17 @@ const ResumeUpload = () => {
     }
   };
 
-  const handleSubmit = (url) => {
+  const handleSubmit = async () => {
     // storage.set("resumeUrl", url);
-    router.push("/upload-profile");
+    try {
+      const filename = new Date() + `_${FILETYPE.EXECUTIVERESUME}`;
+      const s3key = `${userId}/${FILETYPE.EXECUTIVERESUME}/${filename}`;
+      const { url } = await generateURLUpload(jwt, s3key);
+      console.log(url);
+      await uploadFileToS3(formData.imageOrPdf, url);
+    } catch (error) {
+      console.log("error uploading prescription", error);
+    }
   };
 
   const uploadPdfToServer = async (pdfUri) => {

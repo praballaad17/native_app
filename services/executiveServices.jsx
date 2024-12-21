@@ -22,6 +22,19 @@ export const executiveRegister = async (formData) => {
   }
 };
 
+export const addExecutiveProfile = async (formData, userId) => {
+  try {
+    const response = await axios.post(
+      `${apiEndpoint}/add-executive-profile/${userId}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating executive:", error);
+    throw new Error(err.response);
+  }
+};
+
 export const editExecutiveDetails = async (formData, id) => {
   try {
     const response = await axios.post(

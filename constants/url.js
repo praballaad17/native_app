@@ -4,9 +4,10 @@ const AUTHROLE = "/role";
 
 const PATIENTBOOKAPPOINTMENT = "/book-appointment";
 const PATIENTDETAILSSIGNUP = "/patient-details";
+const MEDICALRECORDLIST = "/upload-medical";
 
 const EXECUTIVERESUME = "/resume-upload";
-
+const EXECUTIVEPROFILE = "/profile";
 const DOCTORWELCOME = "/welcome";
 
 export default {
@@ -16,7 +17,9 @@ export default {
 
   PATIENTBOOKAPPOINTMENT,
   PATIENTDETAILSSIGNUP,
+  MEDICALRECORDLIST,
 
   EXECUTIVERESUME,
+  EXECUTIVEPROFILE,
   DOCTORWELCOME,
 };

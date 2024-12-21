@@ -1,12 +1,15 @@
 import { View, Text } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
+import useUserType from "../../context/UserProvider";
+import { FILETYPE } from "../../constants";
 
 const UploadMedical = () => {
+  const { userId } = useUserType();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const records = [
     {
@@ -24,6 +27,20 @@ const UploadMedical = () => {
       uploadedBy: "doctor",
     },
   ];
+
+  useEffect(() => {
+    const getter = async () => {
+      try {
+        const resList = await getDocumentList(userId, FILETYPE.MEDICALRECORD);
+
+        console.log(resList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getter();
+  }, []);
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">

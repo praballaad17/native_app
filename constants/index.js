@@ -184,6 +184,7 @@ const PATIENTFIELDS = [
 const FILETYPE = {
   MEDICALRECORD: "medical-records",
   PRESCRIPTION: "prescriptions",
+  EXECUTIVERESUME: "executive-resume",
 };
 
 export {

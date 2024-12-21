@@ -14,7 +14,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DATEOPTIONS, GENDEROPTIONS, USERS } from "../../constants";
 import CustomDropdownSelect from "../../components/CustomDropDownSelect";
-import { executiveRegister } from "../../services/executiveServices";
+import {
+  addExecutiveProfile,
+  executiveRegister,
+} from "../../services/executiveServices";
 import { router } from "expo-router";
 import useUserType from "../../context/UserProvider";
 import useFile from "../../context/FileProvider";
@@ -22,6 +25,8 @@ import useFile from "../../context/FileProvider";
 const ResumeForm = () => {
   const { user, setUser } = useUserType();
   const { readData } = useFile();
+
+  console.log(user);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -165,7 +170,34 @@ const ResumeForm = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  const submitExecutiveProfile = async () => {
+    try {
+      const newFormData = {
+        ...formData,
+        isResume: false,
+      };
+
+      const res = await addExecutiveProfile(newFormData, user._id);
+
+      if (res.status === 201) {
+        Alert.alert(
+          "Form Submitted",
+          "Your resume details have been submitted!"
+        );
+      }
+      console.log(res);
+      setUser(res);
+      router.push("/");
+    } catch (error) {
+      console.log("error", error);
+      Alert.alert(
+        "Form Error",
+        "Your details were not able to save! Please Try Later"
+      );
+    }
+  };
+
+  const registerExecutiveProfile = async () => {
     try {
       const numberRes = await readData("number");
       console.log(numberRes);
@@ -190,6 +222,14 @@ const ResumeForm = () => {
         "Form Error",
         "Your details were not able to save! Please Try Later"
       );
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (user) {
+      submitExecutiveProfile();
+    } else {
+      registerExecutiveProfile();
     }
   };
 

@@ -88,7 +88,7 @@ export const postPhoto = async (patientId, file) => {
   }
 };
 
-export const postDocumentImageOrPdf = async (patientId, formData) => {
+export const postDocumentMetaData = async (patientId, formData) => {
   try {
     if (formData.isPdf) {
       const response = await axios(
@@ -190,6 +190,20 @@ export const getAllowedDoctors = async (patientId) => {
       `${apiEndpoint}/allowed-doctors/${patientId}`
     );
     return response;
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    throw new Error(
+      `Error: ${err.response?.status} - ${err.response?.data?.error}`
+    );
+  }
+};
+
+export const getDocumentList = async (patientId, fileType) => {
+  try {
+    const response = await axios.get(
+      `${apiEndpoint}/get-document/${patientId}/${fileType}`
+    );
+    return response.data;
   } catch (err) {
     console.error("Error fetching data:", err);
     throw new Error(

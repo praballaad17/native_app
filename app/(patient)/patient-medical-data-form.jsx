@@ -9,21 +9,19 @@ import { generateURLUpload, uploadFileToS3 } from "../../services/awsServices";
 import { useLoader } from "../../hooks/useLoader";
 import useAuthListener from "../../hooks/useAuthListener";
 import { FILETYPE } from "../../constants";
+import useUserType from "../../context/UserProvider";
+import { createFileMetaData } from "../../services/utilityServices";
+import { router } from "expo-router";
 
 const MedicalDataForm = () => {
   const { setIsLoading } = useLoader();
-  const { jwt } = useAuthListener();
+  const { jwt, userId } = useAuthListener();
+  const { userType } = useUserType();
   const fields = [
     {
       label: "Report Name",
       key: "reportName",
       placeholder: "Enter Report Name",
-      type: "text",
-    },
-    {
-      label: "Report By",
-      key: "reporter",
-      placeholder: "Enter Report issued by",
       type: "text",
     },
     {
@@ -42,13 +40,22 @@ const MedicalDataForm = () => {
   const handleFormSubmit = async (formData) => {
     setIsLoading(true);
     try {
-      formData.reportType = "medicalRecords";
-      console.log("Form Submitted", formData);
-      const { url } = await generateURLUpload(jwt, FILETYPE.MEDICALRECORD);
+      formData.reportType = FILETYPE.MEDICALRECORD;
 
+      const filename = new Date().toISOString() + `_${FILETYPE.MEDICALRECORD}`;
+      const s3key = `${userId}/${FILETYPE.MEDICALRECORD}/${filename}`;
+
+      const { url } = await generateURLUpload(jwt, s3key);
+      formData.key = s3key;
+      formData.userType = userType;
+      formData.patientId = userId;
       await uploadFileToS3(formData.imageOrPdf[0], url);
+      console.log("Form Submitted", formData);
+      await createFileMetaData(formData, jwt);
+
+      // router.push(MEDICALRECORDLIST);
     } catch (error) {
-      console.log("error uploading prescription", error);
+      console.log("error uploading medical record", error);
     }
     setIsLoading(false);
   };
