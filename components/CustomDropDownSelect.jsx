@@ -4,6 +4,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Modal,
   StyleSheet,
 } from "react-native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
@@ -18,6 +19,9 @@ const CustomDropdownSelect = ({
   dropdownStyle,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [dropdownPosition, setDropdownPosition] = React.useState(null);
+
+  console.log(options);
 
   // Toggle the visibility of the dropdown
   const toggleDropdown = () => {
@@ -32,37 +36,47 @@ const CustomDropdownSelect = ({
     onSelect(option.value); // Pass the selected option to parent via onSelect prop
   };
 
+  const handleLayout = (event) => {
+    const { x, y, height } = event.nativeEvent.layout;
+    setDropdownPosition({ x, y: y + height });
+  };
+
   return (
-    <View className={`w-full mb-2 ${containerStyles}`}>
-      {/* Display the selected value */}
+    <View>
       <TouchableOpacity
-        style={styles.dropdown}
-        className={`flex-row justify-between ${dropdownStyle}`}
+        style={styles.dropdownButton}
         onPress={toggleDropdown}
+        onLayout={handleLayout}
       >
-        <Text style={styles.dropdownText}>
-          {selectedValue ? selectedValue : placeholder}
-        </Text>
-        <FontAwesome name="angle-down" size={24} color="black" />
+        <Text>{selectedValue || placeholder || "Select an option"}</Text>
       </TouchableOpacity>
 
-      {/* Render the dropdown options when visible */}
-      {isVisible && (
-        <View style={styles.dropdownMenu}>
-          <FlatList
-            data={options}
-            keyExtractor={(item) => item.value}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.dropdownItem}
-                onPress={() => handleSelect(item)}
-              >
-                <Text style={styles.dropdownItemText}>{item.label}</Text>
-              </TouchableOpacity>
-            )}
-            scrollEnabled={false} // Disable scroll for the inner FlatList
+      {isVisible && dropdownPosition && (
+        <Modal transparent={true} animationType="fade">
+          <TouchableOpacity
+            style={styles.modalBackdrop}
+            onPress={() => setIsVisible(false)}
           />
-        </View>
+          <View
+            style={[
+              styles.dropdownList,
+              { top: dropdownPosition.y, left: dropdownPosition.x },
+            ]}
+          >
+            {options.map((option, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.dropdownItem}
+                onPress={() => {
+                  onSelect(option.key);
+                  setIsVisible(false);
+                }}
+              >
+                <Text>{option.value}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Modal>
       )}
     </View>
   );
@@ -70,39 +84,26 @@ const CustomDropdownSelect = ({
 
 // Styles
 const styles = StyleSheet.create({
-  container: {
-    width: "100%",
-    marginBottom: 10,
-  },
-  dropdown: {
-    borderWidth: 1,
+  dropdownButton: {
     padding: 10,
-    borderRadius: 5,
-    backgroundColor: "white",
-  },
-  dropdownText: {
-    fontSize: 16,
-    color: "black",
-  },
-  dropdownMenu: {
-    position: "absolute",
-    width: "100%",
-    top: "0px",
-    zIndex: 101,
     borderWidth: 1,
-    borderColor: "gray",
+    borderColor: "#ccc",
     borderRadius: 5,
-    marginTop: 5,
-    backgroundColor: "white",
-    maxHeight: "auto", // Set a max height for the dropdown menu
+  },
+  modalBackdrop: {
+    flex: 1,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  dropdownList: {
+    position: "absolute",
+    backgroundColor: "#fff",
+    elevation: 5,
+    borderRadius: 5,
+    zIndex: 1000,
+    padding: 10,
   },
   dropdownItem: {
     padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-  },
-  dropdownItemText: {
-    fontSize: 16,
   },
 });
 

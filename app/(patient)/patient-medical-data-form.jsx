@@ -33,6 +33,7 @@ const MedicalDataForm = () => {
     {
       label: "Select Medical Form",
       key: "imageOrPdf",
+      placeholder: "Select the file",
       type: "imageOrPdf",
     },
   ];

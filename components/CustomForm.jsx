@@ -127,8 +127,10 @@ const CustomForm = ({ fields, onSubmit, data }) => {
   };
 
   const renderItem = ({ item }) => {
-    console.log(item);
     if (!item || !item.label || !item.placeholder || !item.key || !item.type) {
+      console.error(
+        `check ${item} the fields array for the following field: label, placeholder, key, type`
+      );
       return null; // Return null if item or its properties are undefined
     }
 
@@ -187,7 +189,7 @@ const CustomForm = ({ fields, onSubmit, data }) => {
                     />
                   )}
                   keyExtractor={(item) => item}
-                  //scrollEnabled={false} // Disable scroll for the inner FlatList
+                  // scrollEnabled={false} // Disable scroll for the inner FlatList
                 />
               </>
             ) : (
@@ -295,7 +297,8 @@ const CustomForm = ({ fields, onSubmit, data }) => {
           data={fields}
           renderItem={renderItem}
           keyExtractor={(item) => item.key}
-          // contentContainerStyle={styles.listContainer}
+          initialNumToRender={10}
+          windowSize={5}
         />
         {/* {fields.map((field, index) => {
         
