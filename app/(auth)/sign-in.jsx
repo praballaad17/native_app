@@ -95,6 +95,7 @@ const SignIn = () => {
                 placeholder={"enter OTP"}
                 handleChangeText={(e) => setOtp(e)}
                 otherStyle="mt-7"
+                numeric={true}
               />
             ) : (
               <></>
