@@ -12,6 +12,7 @@ export const UserProvider = ({ children }) => {
   const { userId } = useAuthListener();
   const [user, setUser] = useState();
   const [userType, setUserType] = useState();
+  const [location, setLocation] = useState();
   // const [userType, setUserType] = useState(USERS.EXECUTIVE);
 
   useEffect(() => {
@@ -59,6 +60,8 @@ export const UserProvider = ({ children }) => {
     userType,
     setUserType,
     userId,
+    location,
+    setLocation
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

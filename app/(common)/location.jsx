@@ -15,6 +15,9 @@ import {
   MaterialIcons,
   Entypo,
 } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import useUserType from "../../context/UserProvider";
 
 const majorCitiesInIndia = [
   "Mumbai",
@@ -66,8 +69,8 @@ const cityIcons = {
 const LocationSelector = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredCities, setFilteredCities] = useState(majorCitiesInIndia);
-  const [currentCity, setCurrentCity] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { location, setLocation } = useUserType();
 
   useEffect(() => {
     // Filter cities based on search text
@@ -104,7 +107,7 @@ const LocationSelector = () => {
       longitude,
     });
     if (reverseGeocode.length > 0) {
-      setCurrentCity(reverseGeocode[0].city || "Unknown City");
+      setLocation(reverseGeocode[0].city || "Unknown City");
       // Alert.alert(
       //   "Location Detected",
       //   `Detected City: ${reverseGeocode[0].city}`
@@ -116,11 +119,16 @@ const LocationSelector = () => {
     }
   };
 
+  const selectCity = (city) => {
+    console.log(city);
+    setLocation(city);
+  }
+
   const renderCityItem = ({ item }) => {
     const { name, library: IconLibrary } = cityIcons[item] || defaultCityIcon;
 
     return (
-      <TouchableOpacity style={styles.cityItem}>
+      <TouchableOpacity  onPress={() => selectCity(item)} style={styles.cityItem}>
         {/* City Icon */}
         {/* <IconLibrary
           name={name}
@@ -144,6 +152,8 @@ const LocationSelector = () => {
   };
 
   return (
+     <GestureHandlerRootView>
+          <SafeAreaView className="h-full">
     <View style={styles.container}>
       <TextInput
         style={styles.searchInput}
@@ -158,8 +168,8 @@ const LocationSelector = () => {
         onPress={detectCurrentLocation}
       >
         <Text style={styles.detectButtonText}>
-          {currentCity
-            ? `Current Location: ${currentCity}`
+          {location
+            ? `Current Location: ${location}`
             : "Detect Current Location"}
         </Text>
       </TouchableOpacity>
@@ -171,6 +181,8 @@ const LocationSelector = () => {
         style={styles.cityList}
       />
     </View>
+    </SafeAreaView>
+    </GestureHandlerRootView>
   );
 };
 

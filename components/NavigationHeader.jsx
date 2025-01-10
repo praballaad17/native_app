@@ -3,8 +3,11 @@ import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { router } from "expo-router";
+import useUserType from "../context/UserProvider";
 
 const NavigationHeader = () => {
+  const { location } = useUserType();
+  
   return (
     <View className="flex flex-row items-center justify-between">
       <View className="flex flex-row items-center">
@@ -15,7 +18,7 @@ const NavigationHeader = () => {
           onPress={() => router.push("/location")}
           className="flex flex-row items-center ml-2"
         >
-          <Text>Location</Text>
+          <Text>{location ? location : "Location"}</Text>
           <FontAwesome
             name="angle-down"
             size={25}
