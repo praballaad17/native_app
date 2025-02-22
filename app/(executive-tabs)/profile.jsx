@@ -4,6 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  Alert,
   Animated,
 } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
@@ -25,14 +26,17 @@ import {
 import BottomSheetModal from "../../components/BottomModal";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 import useUserType from "../../context/UserProvider";
-import { generateURLView } from "../../services/awsServices";
+import { generateURLUpload, generateURLView, uploadFileToS3 } from "../../services/awsServices";
 import { logout } from "../../services/AuthenticationServices";
+import { postPhoto } from "../../services/comonService";
+import useAuthListener from "../../hooks/useAuthListener";
 
 export default function ExecutiveProfile() {
   const { user, setUser } = useUserType();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
   const [executive, setExecutive] = useState(user.executiveId);
+  const { jwt, userId } = useAuthListener();
 
   const overlayOpacity = useRef(new Animated.Value(0)).current; // Initial opacity of 0
   const bottomSheetTranslateY = useRef(new Animated.Value(300)).current; // Initial translateY position offscreen
@@ -121,12 +125,15 @@ export default function ExecutiveProfile() {
             profilePhotoURL: imageurl,
           });
         } catch (error) {
+          Alert.alert("Error", "Please try again in some time");
           console.log("unable to upload!", error);
         }
       } else {
+        Alert.alert("Error", "Please try again in some time");
         console.log("unable to create presigned url!");
       }
     } catch (error) {
+      Alert.alert("Error", "Please try again in some time");
       console.log("error: ", error);
     }
   };
@@ -216,10 +223,10 @@ export default function ExecutiveProfile() {
                 key={idx}
               >
                 <View className="flex flex-row">
-                  <FontAwesome name="stethoscope" size={24} color="black" />
+                  {item.icon}
                   <Text className="font-psemibold mx-2">{item.name}</Text>
                 </View>
-                {item.icon}
+                <FontAwesome name="angle-right" size={20} color="black" />
               </TouchableOpacity>
             ))}
             <CustomButton

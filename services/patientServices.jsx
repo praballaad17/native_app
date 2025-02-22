@@ -21,6 +21,19 @@ export const patientRegister = async (formData) => {
   }
 };
 
+export const addPatientProfile = async (formData, userId) => {
+  try {
+    const response = await axios.post(
+      `${apiEndpoint}/add-patient-profile/${userId}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating patient:", error);
+    throw new Error(err.response);
+  }
+};
+
 export const editPatientDetails = async (formData, patientId) => {
   try {
     const response = await axios(`${apiEndpoint}/edit-profile/:${patientId}`, {
@@ -49,10 +62,7 @@ export const fetchDoctorAvailability = async (doctorId) => {
 
 export const postAppointment = async (formData) => {
   try {
-    const response = await axios(`${apiEndpoint}/post-appointment`, {
-      method: "POST",
-      ...formData,
-    });
+    const response = await axios.post(`${apiEndpoint}/post-appointment`, formData);
     return response.data;
   } catch (err) {
     throw new Error(err.response.data.error);
@@ -72,6 +82,20 @@ export const getAppointment = async (patientId) => {
     throw new Error(err);
   }
 };
+
+export const checkAppointment = async (doctorId, date) => {
+  try {
+    const response = await axios(
+      `${apiEndpoint}/fetch-doctor-availability/${doctorId}/${date}`,
+      {
+        method: "GET",
+      }
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 
 export const postPhoto = async (patientId, formdata) => {
   try {

@@ -23,7 +23,7 @@ export default RegistrationDetails = () => {
     try {
       writeData("doctor-registration-from", form);
       Alert.alert("Form Saved", "Your details were save!");
-      router.push("/photo-upload");
+      router.push("/personal-details");
     } catch (error) {
       Alert.alert(
         "Form Failed",

@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, Image } from "react-native";
 import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
@@ -9,6 +9,7 @@ import {
   FetchAllDoctorList,
 } from "../../services/patientServices";
 import { CONSULTAREAS, URLS } from "../../constants/index";
+import { images } from "../../constants";
 
 const Consult = () => {
   const [doctorList, setDoctorList] = useState([]);
@@ -69,7 +70,7 @@ const Consult = () => {
     }
   };
 
-  console.log(doctorList, "has more: ", hasMore);
+  console.log(doctorList);
 
   return (
     <GestureHandlerRootView>
@@ -97,9 +98,9 @@ const Consult = () => {
                   onPress={() => handlePress(doctor._id)}
                   key={idx}
                 >
-                  <View
-                    resizeMode="contain"
-                    className="w-1/2 h-28 border border-black "
+                  <Image
+                    source={doctor.image || images.doctorProfile}
+                    style={{ width: 100, height: 100 }}
                   />
                   <View className="w-1/2 ml-3 justify-center">
                     <Text>{doctor.name}</Text>

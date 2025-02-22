@@ -4,6 +4,7 @@ import NavigationHeader from "../../components/NavigationHeader";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import BalanceComponent from "../../components/executive/BalanceComponent";
 
 const ExecutiveHome = () => {
   return (
@@ -12,6 +13,7 @@ const ExecutiveHome = () => {
         <ScrollView>
           <View className="w-full justify-center h-100 px-4 my-6">
             <NavigationHeader />
+            <BalanceComponent />
           </View>
         </ScrollView>
       </SafeAreaView>

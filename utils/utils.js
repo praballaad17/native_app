@@ -14,3 +14,17 @@ export const formateDate = (isoDate) => {
   const formattedDate = `${day}-${month}-${year}`;
   return formattedDate;
 };
+
+// Generate time slots for the day (e.g., 08:00 AM to 08:00 PM)
+export  const generateTimeSlots = () => {
+    const slots = [];
+    const startHour = 8; // 08:00 AM
+    const endHour = 20; // 08:00 PM
+
+    for (let hour = startHour; hour < endHour; hour++) {
+      slots.push(`${hour}:00`);
+      slots.push(`${hour}:30`);
+    }
+
+    return slots;
+  };

@@ -9,47 +9,47 @@ const ExecutiveLayout = () => {
         <Stack.Screen
           name="resume-upload"
           options={{
-            headerShown: false,
+            // // headerShown: false,
           }}
         />
 
         <Stack.Screen
           name="upload-pdf"
           options={{
-            headerShown: false,
+            // // headerShown: false,
           }}
         />
 
         <Stack.Screen
           name="upload-profile"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
 
         <Stack.Screen
           name="approval-pending"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
         <Stack.Screen
           name="patient-profile-form"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
 
         <Stack.Screen
           name="medical-data-form"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
         <Stack.Screen
           name="prescription-form"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
         <Stack.Screen name="view-patient-profile" />
@@ -57,14 +57,14 @@ const ExecutiveLayout = () => {
         <Stack.Screen
           name="executive-resume-form"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
 
         <Stack.Screen
           name="payouts"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
       </Stack>

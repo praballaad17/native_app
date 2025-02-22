@@ -9,14 +9,14 @@ const DocLayout = () => {
         <Stack.Screen
           name="registration-details"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
 
         <Stack.Screen
           name="welcome"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
 
@@ -30,20 +30,20 @@ const DocLayout = () => {
         <Stack.Screen
           name="personal-details"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
 
         <Stack.Screen
           name="appointments"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
         <Stack.Screen
           name="get-varified-notification"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
       </Stack>

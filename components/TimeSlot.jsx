@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,26 +7,45 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
+import CustomButton from "./CustomButton";
+import { timeSlots } from "../constants/payload";
+import { checkAppointment } from "../services/patientServices";
 
-const TimeSlot = ({ selectedSlot, setSelectedSlot, availableSlots }) => {
-  // Generate time slots for the day (e.g., 08:00 AM to 08:00 PM)
-  const generateTimeSlots = () => {
-    const slots = [];
-    const startHour = 8; // 08:00 AM
-    const endHour = 20; // 08:00 PM
+const filterSlot = (slots, isToday) => {
+  if(isToday) {
+  const currentTime = new Date().getTime();
+  console.log("currentTime: ", currentTime);
+  return slots
+    .map(slot => slot.timeslot)
+    .filter(slot => {
+        const [hours, minutes] = slot.split(":").map(Number);
+        const slotTime = new Date();
+        slotTime.setHours(hours, minutes, 0, 0);
+        console.log("slotTime: ", slotTime);
+        return slotTime.getTime() > currentTime;
+    });
+  } else {
+    return slots.map(slot => slot.timeslot);
+  }
+};
 
-    for (let hour = startHour; hour < endHour; hour++) {
-      slots.push(`${hour}:00`);
-      slots.push(`${hour}:30`);
-    }
+const TimeSlot = ({ selectedSlot, setSelectedSlot, selectedDate, clearDate, doctorId }) => {
+  const [bookedSlots, setBookedSlots] = useState([]);
 
-    return slots;
-  };
+  useEffect(() => {
+    const getter = async () => {
+      const fetchedSlots = await checkAppointment(doctorId, selectedDate);
+      const isToday = new Date(selectedDate).toDateString() === new Date().toDateString();
+      console.log("isToday: ", isToday);
+      const transformedSlots = filterSlot(fetchedSlots, isToday);
+      setBookedSlots(transformedSlots);
+    };
 
-  const timeSlots = generateTimeSlots();
-
+    getter();
+  }, [doctorId, selectedDate]);
+ 
   const handleSlotPress = (slot) => {
-    if (availableSlots.includes(slot)) {
+    if (!bookedSlots.includes(slot)) {
       setSelectedSlot(slot);
       Alert.alert(`Selected Time Slot`, `You selected ${slot}`);
       // Perform other operations here, such as booking the slot or navigating
@@ -35,36 +54,39 @@ const TimeSlot = ({ selectedSlot, setSelectedSlot, availableSlots }) => {
     }
   };
 
-  const renderItem = ({ item }) => {
-    const isAvailable = availableSlots.includes(item);
-    return (
-      <TouchableOpacity
-        style={[
-          styles.slot,
-          selectedSlot === item && styles.selectedSlot,
-          !isAvailable && styles.disabledSlot,
-        ]}
-        onPress={() => handleSlotPress(item)}
-        disabled={!isAvailable}
-      >
-        <Text
-          style={[styles.slotText, !isAvailable && styles.disabledSlotText]}
-        >
-          {item}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
 
   return (
     <View style={styles.container}>
+      <View className="flex-row justify-center space-x-6 mt-6">
+      <Text  className="flex-row items-center bg-gray-300 p-3 rounded-lg text-black ml-2" >Date Selected : {selectedDate}</Text>
+      <TouchableOpacity onPress={clearDate} className="flex-row items-center bg-red-500 p-3 rounded-lg">
+          <Text className="text-white ml-2">Clear Date</Text>
+        </TouchableOpacity>
+        </View>
       <Text style={styles.title}>Select a Time Slot</Text>
-      <FlatList
-        data={timeSlots}
-        renderItem={renderItem}
-        keyExtractor={(item) => item}
-        extraData={selectedSlot}
-      />
+      <View style={styles.slotContainer}>
+      {timeSlots.map((slot) => (
+        <TouchableOpacity
+          key={slot}
+          style={[
+            styles.slot,
+            selectedSlot === slot && styles.selectedSlot,
+            bookedSlots.includes(slot) && styles.disabledSlot,
+          ]}
+          onPress={() => handleSlotPress(slot)}
+          disabled={bookedSlots.includes(slot)}
+        >
+          <Text
+            style={[
+              styles.slotText,
+              bookedSlots.includes(slot) && styles.disabledSlotText,
+            ]}
+          >
+            {slot}
+          </Text>
+        </TouchableOpacity>
+      ))}
+      </View>
     </View>
   );
 };
@@ -80,12 +102,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
+  slotContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
   slot: {
     padding: 15,
     marginVertical: 5,
     marginHorizontal: 20,
     backgroundColor: "#f0f0f0",
     borderRadius: 5,
+    width: 80,
   },
   selectedSlot: {
     backgroundColor: "#4CAF50",
@@ -94,14 +122,17 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
-  selectedSlot: {
-    backgroundColor: "#4CAF50",
-  },
   disabledSlot: {
     backgroundColor: "#d3d3d3",
   },
   disabledSlotText: {
     color: "#a9a9a9",
+  },
+  selectedDate: {
+    marginTop: 20,
+    fontSize: 18,
+    color: "blue",
+    textAlign: "center",
   },
 });
 

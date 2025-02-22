@@ -13,32 +13,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { getAppointment } from "../../services/patientServices";
-import useUserType from "../../context/UserProvider";
+import usePatient from "../../context/PatientProvider";
 
 const PatientConsultations = () => {
-  const { user } = useUserType();
+  const { patientId } = usePatient();
   const [isvisible, setIsVisible] = useState(false);
   const [otp, setOtp] = useState(0);
   const [selectedPatient, setSelectedPatient] = useState();
   const [error, setError] = useState("");
   const [appointmentData, setAppointmentData] = useState([]);
-  //   const appointmentData = [
-  //     {
-  //       patient: "John king",
-  //       date: "24-08-2024",
-  //       slot: "15:00",
-  //     },
-  //     {
-  //       patient: "Jack King",
-  //       date: "24-08-2024",
-  //       slot: "12:00",
-  //     },
-  //     {
-  //       patient: "Jill King",
-  //       date: "24-08-2024",
-  //       slot: "13:00",
-  //     },
-  //   ];
 
   useEffect(() => {
     fetchData();
@@ -46,7 +29,7 @@ const PatientConsultations = () => {
 
   const fetchData = async () => {
     try {
-      const response = await getAppointment(user.patientId._id);
+      const response = await getAppointment(patientId);
       console.log(response);
       setAppointmentData(response);
     } catch (error) {
@@ -89,10 +72,10 @@ const PatientConsultations = () => {
             </Text>
             {appointmentData && appointmentData.length > 0 ? (
               appointmentData.map((item, idx) => (
-                <View className="my-1 py-1 bg-gray-50" key={idx}>
+                <View className="my-1 p-3 bg-gray-50" key={idx}>
                   <Text>
                     <Text className="font-bold">Doctor: </Text>
-                    {item.patient}
+                    {item.doctorId.name}
                   </Text>
                   <Text>
                     <Text className="font-bold">Appointment Date:</Text>{" "}
@@ -100,7 +83,7 @@ const PatientConsultations = () => {
                   </Text>
                   <Text>
                     <Text className="font-bold">Stot: </Text>
-                    {item.slot}
+                    {item.timeslot}
                   </Text>
                   <Button title="Send OTP" onPress={() => sendOTP(item)} />
                 </View>

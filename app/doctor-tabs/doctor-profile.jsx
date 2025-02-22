@@ -5,8 +5,9 @@ import {
   StyleSheet,
   Image,
   Animated,
+  Alert
 } from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { router } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
@@ -17,18 +18,20 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
 import BottomSheetModal from "../../components/BottomModal";
-import { DOCTORFIELDS, images, secondaryTabs, USERS } from "../../constants";
+import { DOCTORFIELDS, FILETYPE, images, secondaryTabs, USERS } from "../../constants";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 import useUserType from "../../context/UserProvider";
 import { logout } from "../../services/AuthenticationServices";
+import { generateURLUpload, generateURLView, uploadFileToS3 } from "../../services/awsServices";
+import { postPhoto } from "../../services/comonService";
+import useAuthListener from "../../hooks/useAuthListener";
 
 export default function DoctorProfile() {
   const { user, setUser } = useUserType();
-  const params = useLocalSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
-
   const [doctor, setDoctor] = useState(user.doctorId);
+  const { jwt, userId } = useAuthListener();
 
   const overlayOpacity = useRef(new Animated.Value(0)).current; // Initial opacity of 0
   const bottomSheetTranslateY = useRef(new Animated.Value(300)).current; // Initial translateY position offscreen
@@ -61,9 +64,20 @@ export default function DoctorProfile() {
     },
   ];
 
-  // const logout = () => {
-  //   //
-  // };
+    useEffect(() => {
+      const getter = async () => {
+        try {
+          const { url } = await generateURLView(user.profilePhoto);
+          setUser({
+            ...user,
+            profilePhotoURL: url,
+          });
+        } catch (error) {
+          console.log("error getting profile image from s3: ", error);
+        }
+      };
+      if (user && user.profilePhoto && !user.profilePhotoURL) getter();
+    }, [user.profilePhoto]);
 
   const handleEditProfile = () => {
     router.push({
@@ -107,11 +121,36 @@ export default function DoctorProfile() {
     }).start();
   };
 
-  const updateProfileImage = (url) => {
-    setUser({
-      ...user,
-      profilePhoto: url,
-    });
+  const updateProfileImage = async (imageurl) => {
+    if (!imageurl) {
+      Alert.alert("Error selecting Image", "Please Try again in some time");
+      return;
+    }
+    try {
+      const filename = userId + `_${FILETYPE.PROFILEPHOTO}`;
+      const s3key = `${userId}/${FILETYPE.PROFILEPHOTO}/${filename}`;
+
+      const { url: presignedurl } = await generateURLUpload(jwt, s3key);
+      if (presignedurl) {
+        try {
+          await uploadFileToS3(imageurl, presignedurl);
+          await postPhoto(userId, { s3key });
+          setUser({
+            ...user,
+            profilePhotoURL: imageurl,
+          });
+        } catch (error) {
+          Alert.alert("Error", "Please try again in some time");
+          console.log("unable to upload!", error);
+        }
+      } else {
+        Alert.alert("Error", "Please try again in some time");
+        console.log("unable to create presigned url!");
+      }
+    } catch (error) {
+      Alert.alert("Error", "Please try again in some time");
+      console.log("error: ", error);
+    }
   };
 
   return (
@@ -121,9 +160,11 @@ export default function DoctorProfile() {
           <View className="mt-2" style={styles.container}>
             {/* Left - Doctor Image */}
             <TouchableOpacity onPress={openModal}>
-              {user.profilePhoto && user.profilePhoto.length ? (
+              {user.profilePhoto &&
+               user.profilePhotoURL &&
+               user.profilePhotoURL.length ? (
                 <Image
-                  source={{ uri: user.profilePhoto }}
+                  source={{ uri: user.profilePhotoURL }}
                   style={styles.profilePhoto}
                 />
               ) : (

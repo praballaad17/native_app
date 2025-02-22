@@ -31,3 +31,14 @@ export const postPhoto = async (patientId, formdata) => {
     throw new Error(err.response.data.error);
   }
 };
+
+export const postMessage = async (formdata) => {
+  try {
+    const response = await axios.post(`${apiEndpoint}/post-message`, 
+      formdata
+    );
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+}

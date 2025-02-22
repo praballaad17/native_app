@@ -14,6 +14,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useEffect } from "react";
 import { getAppointments } from "../../services/doctorServices";
 import useUserType from "../../context/UserProvider";
+import useDoctor from "../../context/DoctorProvider";
 
 const Appointments = () => {
   const { user } = useUserType();
@@ -21,41 +22,24 @@ const Appointments = () => {
   const [otp, setOtp] = useState(0);
   const [selectedPatient, setSelectedPatient] = useState();
   const [error, setError] = useState("");
-
+  const { doctorId } = useDoctor();
+  const [appointments, setAppointments] = useState([]);
   useEffect(() => {
     try {
-      getAppointments();
+      fetchData();
     } catch (error) {}
   }, []);
 
   const fetchData = async () => {
     try {
-      const response = await getAppointments(user.patientId._id);
-      const json = await response.json();
-      console.log(json);
+      const response = await getAppointments(doctorId);
+      console.log(response);
+      setAppointments(response);
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Unable To fetch Appointments");
     }
   };
-
-  const appointmentData = [
-    {
-      patient: "John king",
-      date: "24-08-2024",
-      slot: "15:00",
-    },
-    {
-      patient: "Jack King",
-      date: "24-08-2024",
-      slot: "12:00",
-    },
-    {
-      patient: "Jill King",
-      date: "24-08-2024",
-      slot: "13:00",
-    },
-  ];
 
   const handlePress = () => {
     router.push({
@@ -86,11 +70,11 @@ const Appointments = () => {
         <ScrollView>
           <View className="w-full justify-center h-100 px-4 my-6 ">
             <Text className="text-xl font-psemibold py-2">Appointments</Text>
-            {appointmentData.map((item, idx) => (
+            {appointments.length ? appointments.map((item, idx) => (
               <View className="my-1 py-1 bg-gray-50" key={idx}>
                 <Text>
                   <Text className="font-bold">Paitent Name: </Text>
-                  {item.patient}
+                  {item.patientId.name}
                 </Text>
                 <Text>
                   <Text className="font-bold">Appointment Date:</Text>{" "}
@@ -98,11 +82,12 @@ const Appointments = () => {
                 </Text>
                 <Text>
                   <Text className="font-bold">Stot: </Text>
-                  {item.slot}
+                  {item.timeslot}
                 </Text>
                 <Button title="Send OTP" onPress={() => sendOTP(item)} />
               </View>
-            ))}
+            )) : 
+            <Text className="text-center text-2xl">No Appointments</Text>}
           </View>
 
           <Modal

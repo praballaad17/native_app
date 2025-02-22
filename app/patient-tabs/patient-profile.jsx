@@ -12,6 +12,7 @@ import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useNavigation } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
@@ -66,11 +67,11 @@ export default function PatientProfile() {
       icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
       url: "/appointments",
     },
-    {
-      name: "Pill Reminder",
-      icon: <FontAwesome5 name="pills" size={24} color="black" />,
-      url: "/pill-reminder",
-    },
+    // {
+    //   name: "Pill Reminder",
+    //   icon: <FontAwesome5 name="pills" size={24} color="black" />,
+    //   url: "/pill-reminder",
+    // },
     {
       name: "Refer and earn",
       icon: <FontAwesome name="share" size={24} color="black" />,
@@ -227,7 +228,7 @@ export default function PatientProfile() {
           <View className="w-full justify-center h-100 px-4 my-1 bg-gray-50">
             {secondaryTabs.map((item, idx) => (
               <TouchableOpacity
-                onPress={() => router.push(item.url)}
+                onPress={() =>  router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
                 key={idx}
               >

@@ -7,6 +7,9 @@ import { FileProvider } from "../context/FileProvider";
 import useAuthListener from "../hooks/useAuthListener";
 import { getToken } from "../services/AuthenticationServices";
 import { LoaderProvider } from "../hooks/useLoader";
+import { ExecutiveProvider }  from "../context/ExecutiveProvider.js";
+import { PatientProvider } from "../context/PatientProvider.js";
+import { DoctorProvider } from "../context/DoctorProvider.js";
 
 export default function RootLayout() {
   SplashScreen.preventAutoHideAsync();
@@ -55,6 +58,9 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <FileProvider>
+      <ExecutiveProvider>
+        <PatientProvider>
+          <DoctorProvider>
         <LoaderProvider>
           <Stack>
             <Stack.Screen
@@ -102,6 +108,9 @@ export default function RootLayout() {
             <StatusBar backgroundColor="#161622" style="light" />
           </Stack>
         </LoaderProvider>
+        </DoctorProvider>
+        </PatientProvider>
+        </ExecutiveProvider>
       </FileProvider>
     </UserProvider>
   );

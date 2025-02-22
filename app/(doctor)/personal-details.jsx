@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,13 +18,12 @@ import DateTimePicker from "@react-native-community/datetimepicker"; // Import t
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { DATEOPTIONS, USERS } from "../../constants";
-import { doctorRegister } from "../../services/doctorServices";
+import { doctorRegister, addDoctorProfile } from "../../services/doctorServices";
 import useUserType from "../../context/UserProvider";
-import { useEffect } from "react";
 import useFile from "../../context/FileProvider";
 
 const PersonalDetails = () => {
-  const { setUser } = useUserType();
+  const { user, setUser, userId } = useUserType();
   const { readData } = useFile();
   const [form, setForm] = useState({
     name: "",
@@ -44,21 +43,70 @@ const PersonalDetails = () => {
     till: false,
   });
 
-  const submit = async () => {
+  // useEffect(() => {
+  //   if (user) {
+  //     setForm({
+  //       ...form,
+  //       name: user.name,
+  //       address: user.address,
+  //     });
+  //   }
+  // }, [user]);
+
+  console.log("form: ", form);
+
+  const registerDoctorProfile = async () => {
     console.log(form);
     try {
       const registrationRes = await readData("doctor-registration-from");
       console.log(registrationRes);
       const res = await doctorRegister({ ...form, ...registrationRes });
+      if (res.status === 201) {
+        Alert.alert(
+          "Form Submitted",
+          "Your resume details have been submitted!"
+        );
+      }
       console.log(res);
-      setUser({ ...res, type: USERS.DOCTOR });
-      router.push("/photo-upload");
+      setUser({ ...res.data, type: USERS.DOCTOR });
+      router.push("/");
     } catch (error) {
       Alert.alert(
         "Form Failed",
         "Your details were unable to save! Please retry later"
       );
       console.log(error);
+    }
+  };
+
+  const submitDoctorProfile = async () => {
+    console.log(form);
+    try {
+      const registrationRes = await readData("doctor-registration-from");
+      const res = await addDoctorProfile({ ...form, ...registrationRes }, userId);
+       if (res.status === 200) {
+          Alert.alert(
+            "Form Submitted",
+            "Your resume details have been submitted!"
+          );
+          setUser(res);
+        } else {
+          Alert.alert( "Form Failed", "Your details were unable to save! Please retry later");
+        }
+      router.push("/");
+    } catch (error) {
+      Alert.alert(
+        "Form Failed",
+        "Your details were unable to save! Please retry later"
+      );
+      console.log(error);
+    }
+  };
+  const handleSubmit = async () => {
+    if (userId) {
+      submitDoctorProfile();
+    } else {
+      registerDoctorProfile();
     }
   };
 
@@ -124,6 +172,7 @@ const PersonalDetails = () => {
               placeholder={"Enter Experiance in Number Of Years"}
               handleChangeText={(e) => setForm({ ...form, experience: e })}
               otherStyle="mt-7"
+              numeric={true}
             />
 
             {/* Education */}
@@ -220,7 +269,7 @@ const PersonalDetails = () => {
 
             <CustomButton
               title={"Proceed"}
-              handlePress={submit}
+              handlePress={handleSubmit}
               containerStyles="mt-7"
               isLoading={isSubmitting}
             />

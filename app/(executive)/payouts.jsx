@@ -10,14 +10,11 @@ import {
   Alert,
 } from "react-native";
 import { addWithdraw, getWithdraw } from "../../services/executiveServices";
+import BalanceComponent  from "../../components/executive/BalanceComponent";
+import useExecutive from "../../context/ExecutiveProvider";
 
 const PayoutComponent = () => {
-  const [payoutBalance, setPayoutBalance] = useState(1500.0); // Current balance
-  const [withdrawalRequests, setWithdrawalRequests] = useState([
-    { id: 1, amount: 300, status: "Pending", date: "2024-08-01" },
-    { id: 2, amount: 500, status: "Approved", date: "2024-07-15" },
-  ]); // Withdrawal history
-
+  const {payoutBalance, withdrawalRequests } = useExecutive();
   useEffect(() => {
     const getter = async () => {
       try {
@@ -32,46 +29,11 @@ const PayoutComponent = () => {
     getter();
   }, []);
 
-  const handleWithdraw = async () => {
-    // Here you'd implement the request to withdraw logic
-    alert(
-      "Your withdrawal request has been submitted and is awaiting approval."
-    );
-    // Simulate a new request
-    const newRequest = {
-      id: 3,
-      amount: payoutBalance,
-      status: "Pending",
-      date: new Date().toISOString().split("T")[0],
-    };
-    try {
-      const res = await addWithdraw(newRequest);
-    } catch (error) {
-      Alert.alert("Unable to create Withdraw request, Please Try Later!");
-    }
-    setWithdrawalRequests([...withdrawalRequests, newRequest]);
-    setPayoutBalance(0); // Reset the payout balance
-  };
+  console.log("withdrawalRequests", payoutBalance, withdrawalRequests);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Payout Balance Section */}
-      <View style={styles.payoutSection}>
-        <Text style={styles.label}>Payout Balance:</Text>
-        <Text style={styles.balance}>₹{payoutBalance.toFixed(2)}</Text>
-        {payoutBalance > 0 ? (
-          <TouchableOpacity
-            style={styles.withdrawButton}
-            onPress={handleWithdraw}
-          >
-            <Text style={styles.buttonText}>Withdraw</Text>
-          </TouchableOpacity>
-        ) : (
-          <Text style={styles.infoText}>
-            No balance available for withdrawal.
-          </Text>
-        )}
-      </View>
+      <BalanceComponent />
 
       {/* Current Withdrawal Requests */}
       <View style={styles.requestsSection}>
@@ -115,7 +77,7 @@ const PayoutComponent = () => {
 
 export default PayoutComponent;
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,

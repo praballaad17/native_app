@@ -64,14 +64,14 @@ const CommonLayout = () => {
         <Stack.Screen
           name="about-us"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
 
         <Stack.Screen
           name="need-help"
           options={{
-            headerShown: false,
+            // headerShown: false,
           }}
         />
       </Stack>

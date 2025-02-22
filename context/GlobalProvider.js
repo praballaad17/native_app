@@ -37,6 +37,8 @@ const GlobalProvider = ({ children }) => {
         user,
         setUser,
         loading,
+        executive,
+        setExecutive
       }}
     >
       {children}

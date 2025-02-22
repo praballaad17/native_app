@@ -1,30 +1,46 @@
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import TimeSlot from "../../components/TimeSlot";
 import Calender from "../../components/Calender";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomButton from "../../components/CustomButton";
+import { postAppointment } from "../../services/patientServices";
+import usePatient from "../../context/PatientProvider";
 
 const Appointment = () => {
   const params = useLocalSearchParams();
+  const { patientId } = usePatient();
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedSlot, setSelectedSlot] = useState(null);
-  const [availableSlots, setAvailableSlots] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  console.log("test", params.doctorId);
 
-  useEffect(() => {
-    // Example data fetched from the server
-    const fetchedSlots = ["08:00", "09:00", "10:30", "13:00", "15:00", "15:30"];
-    setAvailableSlots(fetchedSlots);
-  }, []);
+  const clearDate = () => {
+    setSelectedDate("");
+    setSelectedSlot(null);
+  }
 
-  const submit = () => {
-    //
+
+  const bookAppointment = () => {
+    if (selectedDate && selectedSlot) {
+      setIsSubmitting(true);
+      // Perform the booking operation here
+      let formdata = {
+        date: selectedDate,
+        timeslot: selectedSlot,
+        doctorId: params.doctorId,
+        patientId: patientId
+      };
+      postAppointment(formdata);
+      Alert.alert("Booking Successful",`Appointment for ${selectedSlot} booked successfully!`,[
+        {text: 'OK', onPress: () => router.push('/')},
+      ]);
+    } else {
+      alert("Please select a date and time slot!");
+    }
   };
 
   return (
@@ -32,20 +48,23 @@ const Appointment = () => {
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="w-full justify-center h-100 px-4 my-6">
-            <Calender
+            {!selectedDate ? <Calender
               doctorId={params.doctorId}
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
-            />
+            /> :
             <TimeSlot
               selectedSlot={selectedSlot}
+              selectedDate={selectedDate}
               setSelectedSlot={setSelectedSlot}
-              availableSlots={availableSlots}
+              clearDate={clearDate}
+              doctorId={params.doctorId}
             />
+            }
 
             <CustomButton
               title={"Book The appointment"}
-              handlePress={submit}
+              handlePress={bookAppointment}
               containerStyles="mt-7"
               isLoading={isSubmitting}
             />

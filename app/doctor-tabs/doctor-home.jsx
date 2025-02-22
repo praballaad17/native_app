@@ -5,6 +5,7 @@ import NavigationHeader from "../../components/NavigationHeader";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import Appointments from "../(doctor)/appointments";
 
 const DoctorHome = () => {
   return (
@@ -14,6 +15,7 @@ const DoctorHome = () => {
           <View className="w-full justify-center h-100 px-4 my-6">
             <NavigationHeader />
             <GetVarifiedNotification />
+            <Appointments />
           </View>
         </ScrollView>
       </SafeAreaView>

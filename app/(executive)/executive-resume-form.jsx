@@ -21,6 +21,7 @@ import {
 import { router } from "expo-router";
 import useUserType from "../../context/UserProvider";
 import useFile from "../../context/FileProvider";
+import { use } from "react";
 
 const ResumeForm = () => {
   const { user, setUser } = useUserType();
@@ -184,9 +185,11 @@ const ResumeForm = () => {
           "Form Submitted",
           "Your resume details have been submitted!"
         );
+        console.log(res);
+        setUser(res);
+      } else {
+        Alert.alert( "Form Failed", "Your details were unable to save! Please retry later");
       }
-      console.log(res);
-      setUser(res);
       router.push("/");
     } catch (error) {
       console.log("error", error);

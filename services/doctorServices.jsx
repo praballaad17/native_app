@@ -24,6 +24,19 @@ export const doctorRegister = async (formData) => {
   }
 };
 
+export const addDoctorProfile = async (formData, userId) => {
+  try {
+    const response = await axios.post(
+      `${apiEndpoint}/add-doctor-profile/${userId}`,
+      formData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error creating doctor:", error);
+    throw new Error(err.response);
+  }
+};
+
 export const verifyDoctor = async (usernameOrEmail, password, authToken) => {
   try {
     const request =
@@ -72,10 +85,9 @@ export const submitDoctorDetails = async (details) => {
   }
 };
 
-export const getAppointments = async () => {
-  console.log("getAppointments");
+export const getAppointments = async (doctorId) => {
   try {
-    const response = await axios(`${apiEndpoint}/get-appoitments`, {
+    const response = await axios(`${apiEndpoint}/get-appointments/${doctorId}`, {
       method: "GET",
     });
 

@@ -52,7 +52,7 @@ export const UserProvider = ({ children }) => {
   //   }
   // }, [userType]);
 
-  // console.log(user, userType);
+  console.log(user, userType);
 
   const value = {
     user,

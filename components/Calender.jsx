@@ -54,9 +54,7 @@ const Calender = ({ selectedDate, setSelectedDate }) => {
         // }}
         markedDates={markedDates}
       />
-      {selectedDate ? (
-        <Text style={styles.selectedDate}>Selected Date: {selectedDate}</Text>
-      ) : null}
+      
     </View>
   );
 };
@@ -72,11 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
   },
-  selectedDate: {
-    marginTop: 20,
-    fontSize: 18,
-    color: "blue",
-  },
+ 
 });
 
 export default Calender;

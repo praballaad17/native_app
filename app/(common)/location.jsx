@@ -18,60 +18,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import useUserType from "../../context/UserProvider";
-
-const majorCitiesInIndia = [
-  "Mumbai",
-  "Delhi",
-  "Bangalore",
-  "Hyderabad",
-  "Ahmedabad",
-  "Chennai",
-  "Kolkata",
-  "Surat",
-  "Pune",
-  "Jaipur",
-  "Lucknow",
-  "Kanpur",
-  "Nagpur",
-  "Visakhapatnam",
-  "Indore",
-  "Thane",
-  "Bhopal",
-  "Patna",
-  "Vadodara",
-  "Ghaziabad",
-];
-
-// Map city names to icons
-const cityIcons = {
-  Mumbai: { name: "building", library: FontAwesome },
-  Delhi: { name: "landmark", library: FontAwesome },
-  Bangalore: { name: "laptop", library: Entypo }, // Represents IT hub
-  Hyderabad: { name: "city", library: MaterialIcons }, // Can represent any city
-  Ahmedabad: { name: "industry", library: FontAwesome }, // Represents industrial city
-  Chennai: { name: "beach", library: FontAwesome }, // Known for Marina Beach
-  Kolkata: { name: "book", library: FontAwesome }, // Represents intellectual hub
-  Surat: { name: "diamond", library: FontAwesome }, // Diamond city
-  Pune: { name: "university", library: FontAwesome }, // Educational hub
-  Jaipur: { name: "fort-awesome", library: FontAwesome }, // Pink City with forts
-  Lucknow: { name: "landmark", library: FontAwesome },
-  Kanpur: { name: "industry", library: FontAwesome },
-  Nagpur: { name: "city", library: MaterialIcons },
-  Visakhapatnam: { name: "ship", library: FontAwesome }, // Port city
-  Indore: { name: "city", library: MaterialIcons },
-  Thane: { name: "home", library: FontAwesome }, // Residential city
-  Bhopal: { name: "tree", library: FontAwesome }, // Known for greenery
-  Patna: { name: "landmark", library: FontAwesome },
-  Vadodara: { name: "city", library: MaterialIcons },
-  Ghaziabad: { name: "city", library: MaterialIcons },
-};
+import { router } from "expo-router";
+import { majorCitiesInIndia } from "../../constants/payload";
 
 const LocationSelector = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredCities, setFilteredCities] = useState(majorCitiesInIndia);
   const [loading, setLoading] = useState(false);
   const { location, setLocation } = useUserType();
-
+ 
   useEffect(() => {
     // Filter cities based on search text
     if (searchText === "") {
@@ -108,10 +63,10 @@ const LocationSelector = () => {
     });
     if (reverseGeocode.length > 0) {
       setLocation(reverseGeocode[0].city || "Unknown City");
-      // Alert.alert(
-      //   "Location Detected",
-      //   `Detected City: ${reverseGeocode[0].city}`
-      // );
+      Alert.alert(
+        "Location Detected",
+        `Detected City: ${reverseGeocode[0].city}`
+      );
       setLoading(false);
     } else {
       Alert.alert("Error", "Could not detect city from location");
@@ -122,21 +77,12 @@ const LocationSelector = () => {
   const selectCity = (city) => {
     console.log(city);
     setLocation(city);
+    router.push("/");
   }
 
   const renderCityItem = ({ item }) => {
-    const { name, library: IconLibrary } = cityIcons[item] || defaultCityIcon;
-
     return (
       <TouchableOpacity  onPress={() => selectCity(item)} style={styles.cityItem}>
-        {/* City Icon */}
-        {/* <IconLibrary
-          name={name}
-          size={24}
-          color="gray"
-          style={styles.cityIcon}
-        /> */}
-
         {/* City Name */}
         <Text style={styles.cityText}>{item}</Text>
 
