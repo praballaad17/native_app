@@ -39,6 +39,7 @@ const MedicalDataForm = () => {
   ];
 
   const handleFormSubmit = async (formData) => {
+    console.log(formData);
     setIsLoading(true);
     try {
       formData.reportType = FILETYPE.MEDICALRECORD;
@@ -47,6 +48,7 @@ const MedicalDataForm = () => {
       const s3key = `${userId}/${FILETYPE.MEDICALRECORD}/${filename}`;
 
       const { url } = await generateURLUpload(jwt, s3key);
+      console.log(url);
       formData.key = s3key;
       formData.userType = userType;
       formData.patientId = userId;
@@ -65,7 +67,7 @@ const MedicalDataForm = () => {
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="w-full justify-center h-100 px-4 my-6">
-            <Text className="text-2xl font-pbold my-4">Medical Data Form</Text>
+            <Text className="text-2xl font-pbold my-4">Medical Data Formm</Text>
             <CustomForm fields={fields} onSubmit={handleFormSubmit} />
           </View>
         </ScrollView>

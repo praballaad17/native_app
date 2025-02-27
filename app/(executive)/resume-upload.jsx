@@ -56,7 +56,8 @@ const ResumeUpload = () => {
       console.log(url);
       await uploadFileToS3(formData.imageOrPdf, url);
     } catch (error) {
-      console.log("error uploading prescription", error);
+      Alert.alert("Error", "Failed to upload the PDF.");
+      console.log("error uploading resume", error);
     }
   };
 

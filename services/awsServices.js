@@ -36,8 +36,11 @@ export const generateURLView = async (key) => {
 };
 
 export const uploadFileToS3 = async (image, presignedUrl) => {
+  console.log("Uploading start");
   const response = await fetch(image);
+  console.log("Fetching image", response);
   const blob = await response.blob();
+  console.log("Uploading to S3");
 
   const uploadResponse = await fetch(presignedUrl, {
     method: "PUT",
