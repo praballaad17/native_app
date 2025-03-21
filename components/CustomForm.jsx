@@ -20,6 +20,7 @@ import { router } from "expo-router";
 import ToggleSwitch from "./ToggleSwitch";
 import CustomDropdownSelect from "./CustomDropDownSelect";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import { PDFGeneratorFromImages } from "../utils/utils";
 
 // CustomForm Component
 const CustomForm = ({ fields, onSubmit, data }) => {
@@ -114,7 +115,9 @@ const CustomForm = ({ fields, onSubmit, data }) => {
         images.push(item.uri);
       });
 
-      handleInputChange(fieldKey, images); // Store the image URI
+      const pdfURL = PDFGeneratorFromImages(images);
+
+      handleInputChange(fieldKey, pdfURL); // Store the image URI
     }
   };
 
@@ -216,6 +219,7 @@ const CustomForm = ({ fields, onSubmit, data }) => {
                         })
                       }
                     />
+                    {/* <PDFViewer pdfUri={formData[key]} /> */}
                   </View>
                 ) : null}
               </>

@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, ActivityIndicator, Image } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+  Modal,
+} from "react-native";
 import React, { useState, useEffect } from "react";
 import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
@@ -10,12 +17,15 @@ import {
 } from "../../services/patientServices";
 import { CONSULTAREAS, URLS } from "../../constants/index";
 import { images } from "../../constants";
+import CustomButton from "../../components/CustomButton";
+import CustomButtonFlex from "../../components/CustomButtonFlex";
 
 const Consult = () => {
   const [doctorList, setDoctorList] = useState([]);
   const [page, setPage] = useState(1); // Start from page 1
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [isvisible, setIsVisible] = useState(false);
 
   // Fetch all doctors when component loads or page changes
   useEffect(() => {
@@ -81,15 +91,11 @@ const Consult = () => {
               <Text className="text-lg font-pbold">
                 Select The Specilist You want to see
               </Text>
-              {CONSULTAREAS.map((item, idx) => (
-                <TouchableOpacity
-                  key={idx}
-                  onPress={() => getDoctorListBySpeciality(item.key)}
-                  className="border border-gray-400 rounded-xl p-1 m-1"
-                >
-                  <Text className="text-primary">{item.value}</Text>
-                </TouchableOpacity>
-              ))}
+              <CustomButton
+                title="Select By Speciality"
+                handlePress={() => setIsVisible(true)}
+                containerStyles="w-full mt-7"
+              />
             </View>
             <View className="flex ">
               {doctorList.map((doctor, idx) => (
@@ -126,6 +132,47 @@ const Consult = () => {
               )}
             </View>
           </View>
+          <Modal
+            className="bg-gray-100"
+            animationType="slide"
+            transparent={true}
+            visible={isvisible}
+            onRequestClose={() => {
+              setIsVisible(false);
+            }}
+          >
+            <View
+              className="bg-gray-200"
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Text className="text-lg font-pbold">
+                Select The Specilist You want to see
+              </Text>
+              {CONSULTAREAS.map((item, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  onPress={() => getDoctorListBySpeciality(item.key)}
+                  className="border border-gray-400 rounded-xl p-1 m-1"
+                >
+                  <Text className="text-primary">{item.value}</Text>
+                </TouchableOpacity>
+              ))}
+              <View className="flex-row justify-around">
+                <CustomButtonFlex
+                  title="Close"
+                  handlePress={() => setIsVisible(false)}
+                />
+                <CustomButtonFlex
+                  title="Close"
+                  handlePress={() => setIsVisible(false)}
+                />
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
       </SafeAreaView>
     </GestureHandlerRootView>

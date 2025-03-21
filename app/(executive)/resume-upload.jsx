@@ -26,50 +26,26 @@ const ResumeUpload = () => {
 
       if (result.canceled === false) {
         setPdfUri(result.assets[0].uri);
-        Alert.alert(
-          "Success",
-          "Resume Uploaded Successfully!",
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel",
-            },
-            { text: "OK", onPress: handleSubmit },
-          ],
-          { cancelable: false }
-        );
+        handleUpload();
       } else {
-        Alert.alert("Cancelled", "File selection was cancelled.");
+        
       }
     } catch (error) {
+      Alert.alert("Cancelled", "Error picking document");
       console.error("Error picking document:", error);
     }
   };
 
-  const handleSubmit = async () => {
-    // storage.set("resumeUrl", url);
+  const handleUpload = async () => {
     try {
       const filename = new Date() + `_${FILETYPE.EXECUTIVERESUME}`;
       const s3key = `${userId}/${FILETYPE.EXECUTIVERESUME}/${filename}`;
       const { url } = await generateURLUpload(jwt, s3key);
-      console.log(url);
-      await uploadFileToS3(formData.imageOrPdf, url);
+      await uploadFileToS3(pdfUri, url);
     } catch (error) {
       Alert.alert("Error", "Failed to upload the PDF.");
       console.log("error uploading resume", error);
     }
-  };
-
-  const uploadPdfToServer = async (pdfUri) => {
-    const formData = new FormData();
-
-    // Create a FormData object and append the PDF file
-    formData.append("pdf", {
-      uri: pdfUri, // File path from the document picker
-      type: "application/pdf", // MIME type
-      name: "resume.pdf", // Custom name for the file
-    });
   };
 
   return (

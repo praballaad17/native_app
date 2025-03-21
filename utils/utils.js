@@ -1,3 +1,5 @@
+const RNImageToPdf = require('react-native-image-to-pdf');
+
 export const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
@@ -27,4 +29,25 @@ export  const generateTimeSlots = () => {
     }
 
     return slots;
-  };
+  }; 
+
+export const PDFGeneratorFromImages = async (imagePaths) => {
+  try {
+      const options = {
+          imagePaths: imagePaths,
+          name: new Date(),
+          maxSize: { // optional maximum image dimension - larger images will be resized
+              width: 900,
+              height: Math.round(deviceHeight() / deviceWidth() * 900),
+          },
+          quality: .7, // optional compression paramter
+      };
+      const pdf = await RNImageToPdf.createPDFbyImages(options);
+      
+      console.log(pdf.filePath);
+      return pdf.filePath;
+  } catch(e) {
+      console.log(e);
+      return null;
+  }
+}

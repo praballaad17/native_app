@@ -67,7 +67,7 @@ const MedicalDataForm = () => {
       <SafeAreaView className="h-full">
         <ScrollView>
           <View className="w-full justify-center h-100 px-4 my-6">
-            <Text className="text-2xl font-pbold my-4">Medical Data Formm</Text>
+            <Text className="text-2xl font-pbold my-4">Medical Data Form</Text>
             <CustomForm fields={fields} onSubmit={handleFormSubmit} />
           </View>
         </ScrollView>

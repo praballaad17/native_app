@@ -27,7 +27,6 @@ const ResumeForm = () => {
   const { user, setUser } = useUserType();
   const { readData } = useFile();
 
-  console.log(user);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -172,6 +171,7 @@ const ResumeForm = () => {
   };
 
   const submitExecutiveProfile = async () => {
+
     try {
       const newFormData = {
         ...formData,
