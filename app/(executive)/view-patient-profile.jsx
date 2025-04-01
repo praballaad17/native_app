@@ -10,35 +10,58 @@ import {
   Button,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { getPatientProfile } from "../../services/comonService";
+import { calculateAge } from "../../utils/utils";
+import { FILETYPE, images } from "../../constants";
+import { generateURLView } from "../../services/awsServices";
 
 const ViewPatientProfile = ({ patientId }) => {
   const params = useLocalSearchParams();
   const [profile, setProfile] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [prescriptions, setPrescriptions] = useState([]);
+  const [medicalRecords, setMedicalRecords] = useState([]);
+
+  const sepratePrescriptionAndMedicalRecords = (filelist) => {
+    filelist.map((file) => {
+      if (file.reportType === FILETYPE.PRESCRIPTION) {
+        setPrescriptions((prev) => [...prev, file]);
+      } else if (file.reportType === FILETYPE.MEDICALRECORD) {
+        setMedicalRecords((prev) => [...prev, file]);
+      }
+    });
+  };
+  console.log("Patient ID: ", params);
+  const fetchPatientProfile = async () => {
+    try {
+      const profile = await getPatientProfile(patientId);
+      console.log("Profile: ", profile);
+      setProfile(profile.patient);
+      sepratePrescriptionAndMedicalRecords(profile.fileList);
+      fetchPatientProfilePhoto(profile.patient.profilePhoto);
+    } catch (err) {
+      console.error("Error fetching patient profile:", err);
+    }
+  };
+
+  const fetchPatientProfilePhoto = async (profilePhoto) => {
+    try {
+      const { url } = await generateURLView(profilePhoto);
+      setProfilePhoto(url);
+    } catch (error) {
+      console.log("error getting profile image from s3: ", error);
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
-    setProfile({
-      name: "John Doe",
-      age: 35,
-      gender: "Male",
-      contact: "+1 234 567 8901",
-      address: "123, Baker Street, London asdfa sdfasdf",
-      photo: "https://via.placeholder.com/100",
-    });
+    patientId = params?.patientId || patientId;
+
+    fetchPatientProfile();
     setLoading(false);
   }, []);
-
-  // Example data
-  const prescriptions = [
-    { id: "1", name: "Prescription 1", date: "2024-09-13" },
-    { id: "2", name: "Prescription 2", date: "2024-08-10" },
-  ];
-
-  const medicalRecords = [
-    { id: "1", record: "Blood Test Report - 2024-09-01" },
-    { id: "2", record: "X-ray Report - 2024-08-15" },
-  ];
 
   const handleEditProfile = () => {
     // Navigate to profile edit screen
@@ -59,19 +82,29 @@ const ViewPatientProfile = ({ patientId }) => {
     );
   }
 
-  console.log(params);
+  console.log("Profile: ", profile);
 
   return (
     <View style={styles.container}>
       {/* Profile Section */}
       <View style={styles.profileContainer}>
-        <Image source={{ uri: profile?.photo }} style={styles.profileImage} />
+        {profilePhoto && profilePhoto.length ? (
+          <Image source={{ uri: profilePhoto }} style={styles.profileImage} />
+        ) : (
+          <Image source={images.profile} style={styles.profileImage} />
+        )}
         <View style={styles.profileDetails}>
           <Text style={styles.profileName}>{profile?.name}</Text>
-          <Text style={styles.profileInfo}>Age: {profile?.age}</Text>
+          <Text style={styles.profileInfo}>
+            Age: {calculateAge(profile?.dob)}
+          </Text>
           <Text style={styles.profileInfo}>Gender: {profile?.gender}</Text>
-          <Text style={styles.profileInfo}>Contact: {profile?.contact}</Text>
-          <Text style={styles.profileInfo}>Contact: {profile?.address}</Text>
+          <Text style={styles.profileInfo}>Height: {profile?.height} cm</Text>
+          <Text style={styles.profileInfo}>Weight: {profile?.weight} kg</Text>
+          <Text style={styles.profileInfo}>
+            Blood Group: {profile?.bloodGrp}
+          </Text>
+          <Text style={styles.profileInfo}>Address: {profile?.address}</Text>
           <Button title="Edit Profile" style={styles.editProfileButton} />
         </View>
       </View>
@@ -87,6 +120,7 @@ const ViewPatientProfile = ({ patientId }) => {
               <Text>{item.record}</Text>
             </View>
           )}
+          ListEmptyComponent={<Text>No medical records available.</Text>}
         />
       </View>
 
@@ -118,6 +152,7 @@ const ViewPatientProfile = ({ patientId }) => {
               </View>
             </View>
           )}
+          ListEmptyComponent={<Text>No prescriptions available.</Text>}
         />
       </View>
     </View>

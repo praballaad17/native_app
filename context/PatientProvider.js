@@ -8,19 +8,23 @@ function usePatient() {
 }
 
 export const PatientProvider = ({ children }) => {
-    const { user } = useUserType();
-    const [patientId, setPatientId] = useState();
+  const { user } = useUserType();
+  const [patientId, setPatientId] = useState();
+  const [profile, setProfile] = useState({}); // patient profile
 
-    useEffect(() => {
-        if (user && user.patientId) {
-            setPatientId(user.patientId._id);
-        }
-    }, [user && user.patientId]);
+  useEffect(() => {
+    if (user && user.patientId) {
+      setPatientId(user.patientId._id);
+      setProfile(user.patientId);
+    }
+  }, [user && user.patientId]);
 
- return (
+  return (
     <PatientContext.Provider
       value={{
         patientId,
+        profile,
+        setProfile,
       }}
     >
       {children}

@@ -2,28 +2,42 @@ import React, { useState } from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import { GENDEROPTIONS, USERS } from "../../constants";
 import CustomForm from "../../components/CustomForm";
 import { editPatientDetails } from "../../services/patientServices";
 import { editDoctorDetails } from "../../services/doctorServices";
+import { editExecutiveDetails } from "../../services/executiveServices";
+import usePatient from "../../context/PatientProvider";
+import useDoctor from "../../context/DoctorProvider";
+import useExecutive from "../../context/ExecutiveProvider";
 
 const ProfileEdit = () => {
-  const { Profile, Fields, user } = useLocalSearchParams();
+  const { Profile, Fields, userType } = useLocalSearchParams();
+  const { setProfile: setPatient } = usePatient();
+  const { setProfile: setDoctor } = useDoctor();
+  const { setProfile: setExecutive } = useExecutive();
 
   const profile = JSON.parse(Profile);
   const fields = JSON.parse(Fields);
 
-  const handleFormSubmit = (formData) => {
+  const handleFormSubmit = async (formData) => {
     let res;
-    if (user === USERS.EXECUTIVE) {
-      res = editExecutiveDetails(formData, profile._id);
-    } else if (user === USERS.DOCTOR) {
-      res = editDoctorDetails(formData, profile._id);
-    } else if (user === USERS.PATIENT) {
-      res = editPatientDetails(formData, profile._id);
+    if (userType === USERS.EXECUTIVE) {
+      res = await editExecutiveDetails(formData, profile._id);
+      setExecutive(res);
+      router.back();
+    } else if (userType === USERS.DOCTOR) {
+      res = await editDoctorDetails(formData, profile._id);
+      setDoctor(res);
+      router.back();
+    } else if (userType === USERS.PATIENT) {
+      res = await editPatientDetails(formData, profile._id);
+      setPatient(res);
+      // router.replace("/patient-tabs/patient-profile");
+      router.back();
     }
-    console.log("Form Submitted", formData);
+    console.log("Edit Profile Response: ", res);
   };
 
   return (
@@ -32,7 +46,7 @@ const ProfileEdit = () => {
         <ScrollView contentContainerStyle={styles.container}>
           <View className="border-b py-4 mb-4 border-black-100">
             <Text className="text-2xl font-psemibold">
-              Hi {user === USERS.DOCTOR ? "Dr." : ""}{" "}
+              Hi {userType === USERS.DOCTOR ? "Dr." : ""}{" "}
               {profile.name.length ? profile.name : "there"}!
             </Text>
             <Text className="text-lg text-gray-600">Joined us Aug, 2024</Text>

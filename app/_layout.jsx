@@ -7,7 +7,7 @@ import { FileProvider } from "../context/FileProvider";
 import useAuthListener from "../hooks/useAuthListener";
 import { getToken } from "../services/AuthenticationServices";
 import { LoaderProvider } from "../hooks/useLoader";
-import { ExecutiveProvider }  from "../context/ExecutiveProvider.js";
+import { ExecutiveProvider } from "../context/ExecutiveProvider.js";
 import { PatientProvider } from "../context/PatientProvider.js";
 import { DoctorProvider } from "../context/DoctorProvider.js";
 
@@ -58,58 +58,58 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <FileProvider>
-      <ExecutiveProvider>
-        <PatientProvider>
-          <DoctorProvider>
-        <LoaderProvider>
-          <Stack>
-            <Stack.Screen
-              name="index"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="(auth)"
-              options={{
-                headerShown: false,
-              }}
-            />
+        <ExecutiveProvider>
+          <PatientProvider>
+            <DoctorProvider>
+              <LoaderProvider>
+                <Stack>
+                  <Stack.Screen
+                    name="index"
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="(auth)"
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
 
-            <Stack.Screen
-              name="(executive)"
-              options={{
-                headerShown: false,
-              }}
-            />
+                  <Stack.Screen
+                    name="(executive)"
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
 
-            <Stack.Screen
-              name="(doctor)"
-              options={{
-                headerShown: false,
-              }}
-            />
+                  <Stack.Screen
+                    name="(doctor)"
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
 
-            <Stack.Screen
-              name="(patient)"
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name="(common)"
-              options={{
-                headerShown: false,
-              }}
-            />
-            {/* <Stack.Screen name="/search/[query]" options={{
+                  <Stack.Screen
+                    name="(patient)"
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  <Stack.Screen
+                    name="(common)"
+                    options={{
+                      headerShown: false,
+                    }}
+                  />
+                  {/* <Stack.Screen name="/search/[query]" options={{
         headerShown: false,
       }} /> */}
-            <StatusBar backgroundColor="#161622" style="light" />
-          </Stack>
-        </LoaderProvider>
-        </DoctorProvider>
-        </PatientProvider>
+                  <StatusBar backgroundColor="#161622" style="light" />
+                </Stack>
+              </LoaderProvider>
+            </DoctorProvider>
+          </PatientProvider>
         </ExecutiveProvider>
       </FileProvider>
     </UserProvider>

@@ -26,16 +26,21 @@ import {
 import BottomSheetModal from "../../components/BottomModal";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 import useUserType from "../../context/UserProvider";
-import { generateURLUpload, generateURLView, uploadFileToS3 } from "../../services/awsServices";
+import {
+  generateURLUpload,
+  generateURLView,
+  uploadFileToS3,
+} from "../../services/awsServices";
 import { logout } from "../../services/AuthenticationServices";
 import { postPhoto } from "../../services/comonService";
 import useAuthListener from "../../hooks/useAuthListener";
+import useExecutive from "../../context/ExecutiveProvider";
 
 export default function ExecutiveProfile() {
   const { user, setUser } = useUserType();
+  const { profile, exeutiveId } = useExecutive();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [executive, setExecutive] = useState(user.executiveId);
   const { jwt, userId } = useAuthListener();
 
   const overlayOpacity = useRef(new Animated.Value(0)).current; // Initial opacity of 0
@@ -64,12 +69,14 @@ export default function ExecutiveProfile() {
     },
   ];
 
+  console.log("Profile: ", profile);
+
   const handleEditProfile = () => {
     router.push({
       pathname: "/edit-profile",
       params: {
-        user: USERS.EXECUTIVE,
-        Profile: JSON.stringify(executive),
+        userType: USERS.EXECUTIVE,
+        Profile: JSON.stringify(profile),
         Fields: JSON.stringify(EXECUTIVEFIELDS),
       },
     });
@@ -153,6 +160,8 @@ export default function ExecutiveProfile() {
     if (user && user.profilePhoto && !user.profilePhotoURL) getter();
   }, [user.profilePhoto]);
 
+  console.log("executive Profile: ", profile);
+
   return (
     <GestureHandlerRootView>
       <SafeAreaView className="h-full">
@@ -174,15 +183,11 @@ export default function ExecutiveProfile() {
 
             {/* Right - Profile Information */}
             <View style={styles.infoContainer}>
-              <Text style={styles.nameText}>{executive.name}</Text>
-              <Text style={styles.detailText}>Age: {executive.age}</Text>
-              <Text style={styles.detailText}>Gender: {executive.gender}</Text>
-              <Text style={styles.detailText}>
-                Contact: {executive.contact}
-              </Text>
-              <Text style={styles.detailText}>
-                Address: {executive.address}
-              </Text>
+              <Text style={styles.nameText}>{profile.name}</Text>
+              <Text style={styles.detailText}>Age: {profile.age}</Text>
+              <Text style={styles.detailText}>Gender: {profile.gender}</Text>
+              <Text style={styles.detailText}>Contact: {profile.contact}</Text>
+              <Text style={styles.detailText}>Address: {profile.address}</Text>
 
               {/* Edit Profile Button */}
               <TouchableOpacity

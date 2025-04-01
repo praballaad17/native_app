@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { addWithdraw } from "../services/executiveServices";
+import useUserType from "./UserProvider";
 
 export const ExecutiveContext = createContext();
 
@@ -8,11 +9,21 @@ function useExecutive() {
 }
 
 export const ExecutiveProvider = ({ children }) => {
+  const { user } = useUserType();
+  const [executiveId, setExectiveId] = useState();
+  const [profile, setProfile] = useState({}); // Executive profile
   const [payoutBalance, setPayoutBalance] = useState(1500.0); // Current balance
-   const [withdrawalRequests, setWithdrawalRequests] = useState([
-      { id: 1, amount: 300, status: "Pending", date: "2024-08-01" },
-      { id: 2, amount: 500, status: "Approved", date: "2024-07-15" },
-    ]); // Withdrawal history
+  const [withdrawalRequests, setWithdrawalRequests] = useState([
+    { id: 1, amount: 300, status: "Pending", date: "2024-08-01" },
+    { id: 2, amount: 500, status: "Approved", date: "2024-07-15" },
+  ]); // Withdrawal history
+
+  useEffect(() => {
+    if (user && user.doctorId) {
+      setExectiveId(user.executiveId._id);
+      setProfile(user.executiveId);
+    }
+  }, [user && user.doctorId]);
 
   const handleWithdraw = async () => {
     // Here you'd implement the request to withdraw logic
@@ -35,13 +46,16 @@ export const ExecutiveProvider = ({ children }) => {
     setPayoutBalance(0); // Reset the payout balance
   };
 
-    return (
+  return (
     <ExecutiveContext.Provider
       value={{
+        executiveId,
+        profile,
         setPayoutBalance,
         payoutBalance,
         handleWithdraw,
-        withdrawalRequests
+        withdrawalRequests,
+        setProfile,
       }}
     >
       {children}

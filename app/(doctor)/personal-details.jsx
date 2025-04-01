@@ -18,7 +18,10 @@ import DateTimePicker from "@react-native-community/datetimepicker"; // Import t
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
 import { DATEOPTIONS, USERS } from "../../constants";
-import { doctorRegister, addDoctorProfile } from "../../services/doctorServices";
+import {
+  doctorRegister,
+  addDoctorProfile,
+} from "../../services/doctorServices";
 import useUserType from "../../context/UserProvider";
 import useFile from "../../context/FileProvider";
 
@@ -53,8 +56,6 @@ const PersonalDetails = () => {
   //   }
   // }, [user]);
 
-  console.log("form: ", form);
-
   const registerDoctorProfile = async () => {
     console.log(form);
     try {
@@ -83,16 +84,22 @@ const PersonalDetails = () => {
     console.log(form);
     try {
       const registrationRes = await readData("doctor-registration-from");
-      const res = await addDoctorProfile({ ...form, ...registrationRes }, userId);
-       if (res.status === 200) {
-          Alert.alert(
-            "Form Submitted",
-            "Your resume details have been submitted!"
-          );
-          setUser(res);
-        } else {
-          Alert.alert( "Form Failed", "Your details were unable to save! Please retry later");
-        }
+      const res = await addDoctorProfile(
+        { ...form, ...registrationRes },
+        userId
+      );
+      if (res.status === 200) {
+        Alert.alert(
+          "Form Submitted",
+          "Your resume details have been submitted!"
+        );
+        setUser(res);
+      } else {
+        Alert.alert(
+          "Form Failed",
+          "Your details were unable to save! Please retry later"
+        );
+      }
       router.push("/");
     } catch (error) {
       Alert.alert(

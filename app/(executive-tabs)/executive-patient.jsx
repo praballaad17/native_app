@@ -11,19 +11,40 @@ import {
 } from "react-native";
 import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
+import useExecutive from "../../context/ExecutiveProvider";
+import {
+  getActivePatients,
+  getInActivePatients,
+} from "../../services/executiveServices";
+import { useLoader } from "../../hooks/useLoader";
 
 const ExecutivePatientTab = () => {
-  const [patients, setPatients] = useState(null);
+  const { executiveId } = useExecutive();
+  const [activePatients, setActivePatients] = useState([]);
+  const [inactivePatients, setInactivePatients] = useState([]);
   const [isActiveTab, setIsActiveTab] = useState(true);
   const [isvisible, setIsVisible] = useState(false);
   const [otp, setOtp] = useState(0);
   const [error, setError] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const { setIsLoading } = useLoader();
+
+  const fetchPatients = async () => {
+    setIsLoading(true);
+    try {
+      const activeResponse = await getActivePatients(executiveId);
+      const inactiveResponse = await getInActivePatients(executiveId);
+      setInactivePatients(inactiveResponse);
+      setActivePatients(activeResponse);
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error fetching active patients:", err);
+    }
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    setPatients([
-      { name: "John Doe", age: 32, contact: "123456789", isActive: true },
-      { name: "Jane Smith", age: 45, contact: "987654321", isActive: false },
-    ]);
+    fetchPatients();
   }, []);
 
   const addPatient = () => {
@@ -31,25 +52,25 @@ const ExecutivePatientTab = () => {
     // setPatients([...patients, patientData]);
   };
 
-  const activePatients = [
-    { id: 1, name: "John Doe" },
-    { id: 2, name: "Jane Smith" },
-    { id: 3, name: "Sam Williams" },
-    { id: 4, name: "John Doe" },
-    { id: 5, name: "Jane Smith" },
-    { id: 6, name: "Sam Williams" },
-    { id: 7, name: "John Doe" },
-    { id: 8, name: "Jane Smith" },
-    { id: 9, name: "Sam Williams" },
-    { id: 10, name: "John Doe" },
-    { id: 12, name: "Jane Smith" },
-    { id: 13, name: "Sam Williams" },
-  ];
+  // const activePatients = [
+  //   { id: 1, name: "John Doe" },
+  //   { id: 2, name: "Jane Smith" },
+  //   { id: 3, name: "Sam Williams" },
+  //   { id: 4, name: "John Doe" },
+  //   { id: 5, name: "Jane Smith" },
+  //   { id: 6, name: "Sam Williams" },
+  //   { id: 7, name: "John Doe" },
+  //   { id: 8, name: "Jane Smith" },
+  //   { id: 9, name: "Sam Williams" },
+  //   { id: 10, name: "John Doe" },
+  //   { id: 12, name: "Jane Smith" },
+  //   { id: 13, name: "Sam Williams" },
+  // ];
 
-  const inactivePatients = [
-    { id: 14, name: "Emily Brown" },
-    { id: 15, name: "Michael Davis" },
-  ];
+  // const inactivePatients = [
+  //   { id: 14, name: "Emily Brown" },
+  //   { id: 15, name: "Michael Davis" },
+  // ];
 
   const toggleTab = (tab) => {
     setIsActiveTab(tab === "active");
@@ -62,23 +83,23 @@ const ExecutivePatientTab = () => {
         router.push({
           pathname: "/view-patient-profile",
           params: {
-            patientId: item.id,
+            patientId: item.patientId._id,
           },
         })
       }
       style={styles.patientItem}
     >
-      <Text style={styles.patientName}>{item?.name}</Text>
+      <Text style={styles.patientName}>{item?.patientId.name}</Text>
     </TouchableOpacity>
   );
 
   // Function to render each patient in the list
   const renderInactivePatientItem = ({ item }) => (
     <TouchableOpacity
-      onPress={() => sendOTP(item?.id)}
+      onPress={() => sendOTP(item?.patientId._id)}
       style={styles.patientItem}
     >
-      <Text style={styles.patientName}>{item?.name}</Text>
+      <Text style={styles.patientName}>{item?.patientId.name}</Text>
     </TouchableOpacity>
   );
 

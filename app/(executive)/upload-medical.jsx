@@ -8,10 +8,16 @@ import { router } from "expo-router";
 import useUserType from "../../context/UserProvider";
 import { FILETYPE } from "../../constants";
 import { TouchableOpacity } from "react-native";
+import FileReaderModal from "../../components/FileReaderModal";
+import { getDocumentList } from "../../services/executiveServices";
+import useExecutive from "../../context/ExecutiveProvider";
 
 const UploadMedical = () => {
-  const { userId } = useUserType();
+  const { executiveId } = useExecutive();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [recordList, setRecordList] = useState([]);
+  const [selectedRecord, setSelectedRecord] = useState();
   const records = [
     {
       name: "report 1",
@@ -32,15 +38,24 @@ const UploadMedical = () => {
   useEffect(() => {
     const getter = async () => {
       try {
-        const resList = await getDocumentList(userId, FILETYPE.MEDICALRECORD);
+        const resList = await getDocumentList(
+          executiveId,
+          FILETYPE.MEDICALRECORD
+        );
 
         console.log(resList);
+        setRecordList(resList.filesList);
       } catch (error) {
         console.log(error);
       }
     };
     getter();
   }, []);
+
+  const openReport = (report) => {
+    setModalVisible(true);
+    setSelectedRecord(report);
+  };
 
   return (
     <GestureHandlerRootView>
@@ -58,16 +73,24 @@ const UploadMedical = () => {
               isLoading={isSubmitting}
             />
             <View>
-              {records.map((item, index) => (
-                <TouchableOpacity onPress={() => openReport(item)}>
-                  <View className="bg-white p-3 my-2" key={index}>
-                    <Text>{item.patient}</Text>
-                    <Text>{item.name}</Text>
-                    <Text>{item.date}</Text>
-                    <Text>{item.uploadedBy}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
+              {recordList && recordList.length > 0 ? (
+                recordList.map((item, index) => (
+                  <TouchableOpacity onPress={() => openReport(item)}>
+                    <View className="bg-white p-3 my-2" key={index}>
+                      <Text>{item.patient}</Text>
+                      <Text>{item.name}</Text>
+                      <Text>{item.date}</Text>
+                      <Text>{item.uploadedBy}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))
+              ) : (
+                <View className="flex-1 justify-center items-center h-full">
+                  <Text className="text-center text-gray-500">
+                    No records found
+                  </Text>
+                </View>
+              )}
             </View>
             {setModalVisible && selectedRecord && (
               <FileReaderModal

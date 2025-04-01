@@ -9,13 +9,13 @@ const CommonLayout = () => {
         <Stack.Screen
           name="location"
           options={{
-            headerShown: false,
+            headerTitle: "Location",
           }}
         />
         <Stack.Screen
           name="notification"
           options={{
-            headerShown: false,
+            headerTitle: "Notifications",
           }}
         />
         <Stack.Screen
@@ -27,51 +27,44 @@ const CommonLayout = () => {
         <Stack.Screen
           name="select-membership"
           options={{
+            headerTitle: "Select Membership",
             headerShown: false,
           }}
         />
-
         <Stack.Screen
           name="edit-profile"
-          options={
-            {
-              // headerShown: false,
-            }
-          }
+          options={{
+            headerTitle: "Edit Profile",
+          }}
         />
-
         <Stack.Screen
           name="refer-earn"
           options={{
-            headerShown: false,
+            headerTitle: "Refer & Earn",
           }}
         />
-
         <Stack.Screen
           name="pill-reminder"
           options={{
-            headerShown: false,
+            headerTitle: "Pill Reminder",
           }}
         />
-
         <Stack.Screen
           name="settings"
           options={{
-            headerShown: false,
+            headerTitle: "Settings",
           }}
         />
-
         <Stack.Screen
           name="about-us"
           options={{
-            // headerShown: false,
+            headerTitle: "About Us",
           }}
         />
-
         <Stack.Screen
           name="need-help"
           options={{
-            // headerShown: false,
+            headerTitle: "Need Help",
           }}
         />
       </Stack>

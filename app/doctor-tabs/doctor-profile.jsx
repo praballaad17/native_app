@@ -5,7 +5,7 @@ import {
   StyleSheet,
   Image,
   Animated,
-  Alert
+  Alert,
 } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { router } from "expo-router";
@@ -18,19 +18,30 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
 import CustomButton from "../../components/CustomButton";
 import BottomSheetModal from "../../components/BottomModal";
-import { DOCTORFIELDS, FILETYPE, images, secondaryTabs, USERS } from "../../constants";
+import {
+  DOCTORFIELDS,
+  FILETYPE,
+  images,
+  secondaryTabs,
+  USERS,
+} from "../../constants";
 import UserToggleSwitch from "../../components/UserToggleSwich";
 import useUserType from "../../context/UserProvider";
 import { logout } from "../../services/AuthenticationServices";
-import { generateURLUpload, generateURLView, uploadFileToS3 } from "../../services/awsServices";
+import {
+  generateURLUpload,
+  generateURLView,
+  uploadFileToS3,
+} from "../../services/awsServices";
 import { postPhoto } from "../../services/comonService";
 import useAuthListener from "../../hooks/useAuthListener";
+import useDoctor from "../../context/DoctorProvider";
 
 export default function DoctorProfile() {
   const { user, setUser } = useUserType();
+  const { doctorId, profile } = useDoctor();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [doctor, setDoctor] = useState(user.doctorId);
   const { jwt, userId } = useAuthListener();
 
   const overlayOpacity = useRef(new Animated.Value(0)).current; // Initial opacity of 0
@@ -64,27 +75,27 @@ export default function DoctorProfile() {
     },
   ];
 
-    useEffect(() => {
-      const getter = async () => {
-        try {
-          const { url } = await generateURLView(user.profilePhoto);
-          setUser({
-            ...user,
-            profilePhotoURL: url,
-          });
-        } catch (error) {
-          console.log("error getting profile image from s3: ", error);
-        }
-      };
-      if (user && user.profilePhoto && !user.profilePhotoURL) getter();
-    }, [user.profilePhoto]);
+  useEffect(() => {
+    const getter = async () => {
+      try {
+        const { url } = await generateURLView(user.profilePhoto);
+        setUser({
+          ...user,
+          profilePhotoURL: url,
+        });
+      } catch (error) {
+        console.log("error getting profile image from s3: ", error);
+      }
+    };
+    if (user && user.profilePhoto && !user.profilePhotoURL) getter();
+  }, [user.profilePhoto]);
 
   const handleEditProfile = () => {
     router.push({
       pathname: "/edit-profile",
       params: {
-        user: USERS.DOCTOR,
-        Profile: JSON.stringify(doctor),
+        userType: USERS.DOCTOR,
+        Profile: JSON.stringify(profile),
         Fields: JSON.stringify(DOCTORFIELDS),
       },
     });
@@ -161,8 +172,8 @@ export default function DoctorProfile() {
             {/* Left - Doctor Image */}
             <TouchableOpacity onPress={openModal}>
               {user.profilePhoto &&
-               user.profilePhotoURL &&
-               user.profilePhotoURL.length ? (
+              user.profilePhotoURL &&
+              user.profilePhotoURL.length ? (
                 <Image
                   source={{ uri: user.profilePhotoURL }}
                   style={styles.profilePhoto}
@@ -174,11 +185,12 @@ export default function DoctorProfile() {
 
             {/* Right - Profile Information */}
             <View style={styles.infoContainer}>
-              <Text style={styles.nameText}>Dr. {doctor.name}</Text>
-              <Text style={styles.detailText}>Age: {doctor.age}</Text>
-              <Text style={styles.detailText}>Gender: {doctor.gender}</Text>
-              <Text style={styles.detailText}>Contact: {doctor.contact}</Text>
-              <Text style={styles.detailText}>Address: {doctor.address}</Text>
+              <Text style={styles.nameText}>Dr. {profile.name}</Text>
+              <Text style={styles.detailText}>License: {profile.license}</Text>
+              <Text style={styles.detailText}>
+                Education: {profile.contact}
+              </Text>
+              <Text style={styles.detailText}>Address: {profile.address}</Text>
 
               {/* Edit Profile Button */}
               <TouchableOpacity

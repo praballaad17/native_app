@@ -115,3 +115,78 @@ export const getWithdraw = async (executiveId) => {
     throw new Error(err.response.data.error);
   }
 };
+
+export const getDocumentList = async (executiveId, fileType) => {
+  try {
+    const response = await axios.get(
+      `${apiEndpoint}/get-documents/${executiveId}/${fileType}`
+    );
+    return response.data;
+  } catch (err) {
+    console.error("Error fetching data:", err);
+    throw new Error(
+      `Error: ${err.response?.status} - ${err.response?.data?.error}`
+    );
+  }
+};
+
+export const getActivePatients = async (executiveId) => {
+  try {
+    const response = await axios(
+      `${apiEndpoint}/get-patient-active/${executiveId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const getInActivePatients = async (executiveId) => {
+  try {
+    const response = await axios(
+      `${apiEndpoint}/get-patient-inactive/${executiveId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const convertActivePatientToInactive = async (relationId) => {
+  console.log("Relation ID: ", relationId);
+  try {
+    const response = await axios(
+      `${apiEndpoint}/convert-active-patient-to-inactive/${relationId}`,
+      {
+        method: "PUT",
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+export const convertInactivePatientToActive = async (relationId) => {
+  console.log("Relation ID: ", relationId);
+  try {
+    const response = await axios(
+      `${apiEndpoint}/convert-inactive-patient-to-active/${relationId}`,
+      {
+        method: "PUT",
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};

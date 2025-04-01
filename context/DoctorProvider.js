@@ -8,21 +8,25 @@ function useDoctor() {
 }
 
 export const DoctorProvider = ({ children }) => {
-    const { user } = useUserType();
-    const [doctorId, setDoctorId] = useState();
+  const { user } = useUserType();
+  const [doctorId, setDoctorId] = useState();
+  const [profile, setProfile] = useState({});
 
-    useEffect(() => {
-        if (user && user.doctorId) {
-            setDoctorId(user.doctorId._id);
-        }
-    }, [user && user.doctorId]);
+  useEffect(() => {
+    if (user && user.doctorId) {
+      setDoctorId(user.doctorId._id);
+      setProfile(user.doctorId);
+    }
+  }, [user && user.doctorId]);
 
-    console.log("DoctorId: ", doctorId);
+  console.log("DoctorId: ", profile);
 
- return (
+  return (
     <DoctorContext.Provider
       value={{
         doctorId,
+        profile,
+        setProfile,
       }}
     >
       {children}

@@ -171,7 +171,6 @@ const ResumeForm = () => {
   };
 
   const submitExecutiveProfile = async () => {
-
     try {
       const newFormData = {
         ...formData,
@@ -188,7 +187,10 @@ const ResumeForm = () => {
         console.log(res);
         setUser(res);
       } else {
-        Alert.alert( "Form Failed", "Your details were unable to save! Please retry later");
+        Alert.alert(
+          "Form Failed",
+          "Your details were unable to save! Please retry later"
+        );
       }
       router.push("/");
     } catch (error) {

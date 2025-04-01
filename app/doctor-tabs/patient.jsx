@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -13,26 +13,58 @@ import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { useLoader } from "../../hooks/useLoader";
+import {
+  convertInactivePatientToActive,
+  getActivePatients,
+  getInActivePatients,
+} from "../../services/doctorServices";
+import useDoctor from "../../context/DoctorProvider";
 
-// Sample data for Active and Inactive patients
-const activePatients = [
-  { id: 1, name: "John Doe" },
-  { id: 2, name: "Jane Smith" },
-  { id: 3, name: "Sam Williams" },
-];
+// // Sample data for Active and Inactive patients
+// const activePatients = [
+//   { id: 1, name: "John Doe" },
+//   { id: 2, name: "Jane Smith" },
+//   { id: 3, name: "Sam Williams" },
+// ];
 
-const inactivePatients = [
-  { id: 4, name: "Emily Brown" },
-  { id: 5, name: "Michael Davis" },
-];
+// const inactivePatients = [
+//   { id: 4, name: "Emily Brown" },
+//   { id: 5, name: "Michael Davis" },
+// ];
 
 const PatientTabs = () => {
   // State to track which tab is selected
+  const [activePatients, setActivePatients] = useState([]);
+  const [inactivePatients, setInactivePatients] = useState([]);
   const [isActiveTab, setIsActiveTab] = useState(true);
   const [isvisible, setIsVisible] = useState(false);
   const [otp, setOtp] = useState(0);
   const [error, setError] = useState("");
   const [selectedPatient, setSelectedPatient] = useState(null);
+  const { setIsLoading } = useLoader();
+  const { doctorId } = useDoctor();
+
+  console.log("Doctor ID:", doctorId);
+
+  const fetchPatients = async () => {
+    setIsLoading(true);
+    try {
+      const activeResponse = await getActivePatients(doctorId);
+      const inactiveResponse = await getInActivePatients(doctorId);
+      setInactivePatients(inactiveResponse);
+      setActivePatients(activeResponse);
+      setIsLoading(false);
+    } catch (err) {
+      console.error("Error fetching active patients:", err);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchPatients();
+  }, []);
+
   // Function to toggle between Active and Inactive Patients tabs
   const toggleTab = (tab) => {
     setIsActiveTab(tab === "active");
@@ -45,25 +77,36 @@ const PatientTabs = () => {
         router.push({
           pathname: "/view-patient-profile",
           params: {
-            patientId: item.id,
+            patientId: item.patientId._id,
           },
         })
       }
       style={styles.patientItem}
     >
-      <Text style={styles.patientName}>{item?.name}</Text>
+      <Text style={styles.patientName}>{item?.patientId?.name}</Text>
     </TouchableOpacity>
   );
 
   // Function to render each patient in the list
   const renderInactivePatientItem = ({ item }) => (
     <TouchableOpacity
-      onPress={() => sendOTP(item?.id)}
+      onPress={convertInactivePatients.bind(this, item._id)}
       style={styles.patientItem}
     >
-      <Text style={styles.patientName}>{item?.name}</Text>
+      <Text style={styles.patientName}>{item?.patientId?.name}</Text>
     </TouchableOpacity>
   );
+
+  const convertInactivePatients = async (relationId) => {
+    console.log("Relation iID: ", relationId);
+    //send otp to patient number & verify
+    try {
+      await convertInactivePatientToActive(relationId);
+      await fetchPatients();
+    } catch (error) {
+      console.error("Error converting inactive patient to active:", error);
+    }
+  };
 
   const sendOTP = (patientId) => {
     setIsVisible(true);
@@ -128,9 +171,14 @@ const PatientTabs = () => {
       {/* Patient List */}
       <FlatList
         data={isActiveTab ? activePatients : inactivePatients}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item._id.toString()}
         renderItem={
           isActiveTab ? renderActivePatientItem : renderInactivePatientItem
+        }
+        ListEmptyComponent={
+          <View className="flex-row justify-center">
+            <Text className="font-bold">No Patient available.</Text>
+          </View>
         }
         style={styles.list}
       />

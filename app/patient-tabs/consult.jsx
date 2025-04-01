@@ -35,7 +35,6 @@ const Consult = () => {
       setLoading(true);
       try {
         const res = await FetchAllDoctorList(page); // Pass the page
-        console.log("response: ", res);
         if (res.doctors.length > 0) {
           setDoctorList((prev) => [...prev, ...res.doctors]); // Append new doctors to the list
           if (res.currentPage == res.totalPages) {
@@ -67,7 +66,11 @@ const Consult = () => {
     console.log(speciality);
     try {
       const res = await ConsultDoctorList(speciality);
-      setDoctorList(res);
+      console.log("doctor list", res);
+      if (res.length > 0) {
+        setDoctorList(res); // Set the doctor list based on speciality
+      }
+      setIsVisible(false); // Close the modal after selection
     } catch (error) {
       console.log(error);
     }
@@ -79,8 +82,6 @@ const Consult = () => {
       setPage((prevPage) => prevPage + 1); // Increment page number to fetch more data
     }
   };
-
-  console.log(doctorList);
 
   return (
     <GestureHandlerRootView>
@@ -128,7 +129,7 @@ const Consult = () => {
                   <Text className="text-primary">Load More</Text>
                 </TouchableOpacity>
               ) : (
-                <Text>No more doctors to load</Text>
+                <Text className="font-bold text-center">End Of List</Text>
               )}
             </View>
           </View>
@@ -166,10 +167,10 @@ const Consult = () => {
                   title="Close"
                   handlePress={() => setIsVisible(false)}
                 />
-                <CustomButtonFlex
+                {/* <CustomButtonFlex
                   title="Close"
                   handlePress={() => setIsVisible(false)}
-                />
+                /> */}
               </View>
             </View>
           </Modal>

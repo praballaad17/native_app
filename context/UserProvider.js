@@ -16,10 +16,9 @@ export const UserProvider = ({ children }) => {
   // const [userType, setUserType] = useState(USERS.EXECUTIVE);
 
   useEffect(() => {
-    console.log("useEffect called with userId: ", userId);
     if (userId) {
       const fetchUser = async () => {
-        const res = await getUser(userId, "adfdf");
+        const res = await getUser(userId);
         console.log("user is: ", res);
         setUser(res.user);
       };
@@ -61,7 +60,7 @@ export const UserProvider = ({ children }) => {
     setUserType,
     userId,
     location,
-    setLocation
+    setLocation,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

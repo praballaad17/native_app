@@ -6,10 +6,11 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomForm from "../../components/CustomForm";
 import { generateURLUpload, uploadFileToS3 } from "../../services/awsServices";
 import { useLoader } from "../../hooks/useLoader";
-import { FILETYPE } from "../../constants";
+import { FILETYPE, URLS } from "../../constants";
 import useAuthListener from "../../hooks/useAuthListener";
 import useUserType from "../../context/UserProvider";
 import { createFileMetaData } from "../../services/utilityServices";
+import { router } from "expo-router";
 
 const PrescriptionForm = () => {
   const { setIsLoading } = useLoader();
@@ -30,6 +31,7 @@ const PrescriptionForm = () => {
     },
     {
       label: "Select Prescription",
+      placeholder: "Select Prescription",
       key: "imageOrPdf",
       type: "imageOrPdf",
     },
@@ -43,17 +45,19 @@ const PrescriptionForm = () => {
       const filename = new Date() + `_${FILETYPE.PRESCRIPTION}`;
       const s3key = `${userId}/${FILETYPE.PRESCRIPTION}/${filename}`;
 
-      const { url } = await generateURLUpload(jwt, s3key);
-      console.log(url);
+      const { url } = await generateURLUpload(jwt, s3key, formData.isPdf);
       formData.key = s3key;
       formData.userType = userType;
       formData.patientId = userId;
       if (formData.isPdf) {
         await uploadFileToS3(formData.imageOrPdf, url);
       } else {
-        await uploadFileToS3(formData.imageOrPdf[0], url);
+        await uploadFileToS3(formData.imageOrPdf, url); //send the first image for now.
       }
       await createFileMetaData(formData, jwt);
+
+      // router.push(URLS.PATIENTPRESCRIPTIONLIST);
+      router.back();
     } catch (error) {
       console.log("error uploading prescription", error);
     }

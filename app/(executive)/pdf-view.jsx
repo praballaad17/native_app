@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import React, { useState, useEffect } from "react";
 import { useLocalSearchParams } from "expo-router";
-import PDFViewer from "../../components/PDFViewer";
 import * as FileSystem from "expo-file-system";
 import { WebView } from "react-native-webview";
 

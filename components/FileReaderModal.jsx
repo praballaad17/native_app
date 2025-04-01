@@ -13,11 +13,15 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import { generateURLView } from "../services/awsServices";
 import { useLoader } from "../hooks/useLoader";
 import { formateDate } from "../utils/utils";
+import CustomButton from "./CustomButton";
+import CustomButtonFlex from "./CustomButtonFlex";
 
 const FileReaderModal = ({ modalVisible, setModalVisible, report }) => {
   const { fileName, date, s3Key } = report;
   const [url, setUrl] = useState();
   const { setIsLoading } = useLoader();
+
+  console.log("report", report);
 
   useEffect(() => {
     const getter = async () => {
@@ -29,6 +33,10 @@ const FileReaderModal = ({ modalVisible, setModalVisible, report }) => {
     };
     getter();
   }, [report]);
+
+  const downloadPdf = () => {
+    //download pdf logic
+  };
 
   return (
     <Modal
@@ -45,13 +53,22 @@ const FileReaderModal = ({ modalVisible, setModalVisible, report }) => {
         <View style={styles.modalView}>
           <Text style={styles.reportName}>{fileName}</Text>
           <Text style={styles.reportDate}>Date: {formateDate(date)}</Text>
-          <View style={styles.imageContainer}>
-            <Image
-              source={{ uri: url }}
-              style={styles.reportImage}
-              resizeMode="contain"
-            />
-          </View>
+          {!report.isPdf ? (
+            <View style={styles.imageContainer}>
+              <Image
+                source={{ uri: url }}
+                style={styles.reportImage}
+                resizeMode="contain"
+              />
+            </View>
+          ) : (
+            <View className="w-full h-100 margin-4">
+              <CustomButtonFlex
+                title={"Download Pdf"}
+                handlePress={downloadPdf}
+              />
+            </View>
+          )}
           <Pressable
             style={[styles.button, styles.buttonClose]}
             onPress={() => setModalVisible(false)}

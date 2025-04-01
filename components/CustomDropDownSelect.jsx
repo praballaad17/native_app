@@ -3,7 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
-  FlatList,
+  Dimensions,
   Modal,
   StyleSheet,
 } from "react-native";
@@ -21,8 +21,6 @@ const CustomDropdownSelect = ({
   const [isVisible, setIsVisible] = useState(false);
   const [dropdownPosition, setDropdownPosition] = React.useState(null);
 
-  console.log(options);
-
   // Toggle the visibility of the dropdown
   const toggleDropdown = () => {
     setIsVisible(!isVisible);
@@ -30,21 +28,30 @@ const CustomDropdownSelect = ({
 
   // Handle selecting an option from the dropdown
   const handleSelect = (option) => {
-    console.log(option.value);
-    // setSelectedValue(option);
     setIsVisible(false);
     onSelect(option.value); // Pass the selected option to parent via onSelect prop
   };
 
   const handleLayout = (event) => {
     const { x, y, height } = event.nativeEvent.layout;
-    setDropdownPosition({ x, y: y + height });
+    const screenHeight = Dimensions.get("window").height;
+    const screenWidth = Dimensions.get("window").width; // Get screen width
+    const optionHeight = 50;
+    const dropdownHeight = Math.min(options.length * optionHeight, 200); // Adjust this value based on your dropdown height
+    const dropdownY = screenHeight - dropdownHeight - 20; // 20px padding from the bottom
+
+    setDropdownPosition({
+      x: 0,
+      y: dropdownY,
+      height: dropdownHeight,
+      width: screenWidth,
+    }); // Set width to screen width
   };
 
   return (
-    <View>
+    <View style={styles.dropdownButton}>
       <TouchableOpacity
-        style={styles.dropdownButton}
+        // style={styles.dropdownButton}
         onPress={toggleDropdown}
         onLayout={handleLayout}
       >
@@ -60,17 +67,18 @@ const CustomDropdownSelect = ({
           <View
             style={[
               styles.dropdownList,
-              { top: dropdownPosition.y, left: dropdownPosition.x },
+              {
+                top: dropdownPosition.y,
+                left: dropdownPosition.x,
+                width: dropdownPosition.width,
+              }, // Set width
             ]}
           >
             {options.map((option, index) => (
               <TouchableOpacity
                 key={index}
                 style={styles.dropdownItem}
-                onPress={() => {
-                  onSelect(option.key);
-                  setIsVisible(false);
-                }}
+                onPress={() => handleSelect(option)}
               >
                 <Text>{option.value}</Text>
               </TouchableOpacity>
@@ -89,6 +97,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
+    width: "100%",
   },
   modalBackdrop: {
     flex: 1,

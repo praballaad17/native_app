@@ -2,13 +2,14 @@ import axios from "axios";
 
 const apiEndpoint = process.env.EXPO_PUBLIC_API_URL + "/aws";
 
-export const generateURLUpload = async (token, s3key) => {
+export const generateURLUpload = async (token, s3key, isPdf) => {
   console.log("generateURLUpload: ", s3key);
   try {
     const response = await axios(`${apiEndpoint}/generate-aws-url-upload`, {
       method: "GET",
       params: {
         s3key,
+        isPdf,
       },
       headers: {
         Authorization: `Bearer ${token}`,

@@ -99,12 +99,6 @@ const EXECUTIVEFIELDS = [
     type: "text",
   },
   {
-    label: "Age",
-    key: "age",
-    placeholder: "Enter Age",
-    type: "text",
-  },
-  {
     label: "Gender",
     key: "gender",
     placeholder: "Select the gender",
@@ -123,6 +117,31 @@ const EXECUTIVEFIELDS = [
     placeholder: "Enter Address",
     type: "text",
   },
+  {
+    label: "Email",
+    key: "email",
+    placeholder: "Enter Email",
+    type: "text",
+  },
+  //add date of birth
+  {
+    label: "Date Of Birth",
+    key: "dob",
+    placeholder: "Select the date of Birth",
+    type: "date",
+  }, //education
+  {
+    label: "Education",
+    key: "education",
+    placeholder: "Education details",
+    type: "education",
+  }, //skills
+  {
+    label: "Skills",
+    key: "skills",
+    placeholder: "Skills",
+    type: "text",
+  },
 ];
 
 const DOCTORFIELDS = [
@@ -133,17 +152,16 @@ const DOCTORFIELDS = [
     type: "text",
   },
   {
-    label: "Age",
-    key: "age",
-    placeholder: "Enter Age",
+    label: "License",
+    key: "license",
+    placeholder: "Enter License number",
     type: "text",
   },
   {
-    label: "Gender",
-    key: "gender",
-    placeholder: "Select the gender",
-    type: "dropdown",
-    options: GENDEROPTIONS,
+    label: "Education",
+    key: "education",
+    placeholder: "Education details",
+    type: "education",
   },
   {
     label: "Contact",
@@ -163,13 +181,25 @@ const PATIENTFIELDS = [
   {
     label: "Name",
     key: "name",
-    placeholder: "Enter name",
+    placeholder: "Enter Patient name",
     type: "text",
   },
   {
-    label: "Age",
-    key: "age",
-    placeholder: "Enter Age",
+    label: "Height",
+    key: "height",
+    placeholder: "Enter Height",
+    type: "number",
+  },
+  {
+    label: "Weight",
+    key: "weight",
+    placeholder: "Enter Weight",
+    type: "number",
+  },
+  {
+    label: "Blood Group",
+    key: "bloodGrp",
+    placeholder: "Enter Blood Group",
     type: "text",
   },
   {
@@ -180,13 +210,13 @@ const PATIENTFIELDS = [
     options: GENDEROPTIONS,
   },
   {
-    label: "Contact",
-    key: "contact",
-    placeholder: "Enter Contact details",
-    type: "text",
+    label: "Date Of Birth",
+    key: "dob",
+    placeholder: "Select the date of Birth",
+    type: "date",
   },
   {
-    label: "Address",
+    label: "address",
     key: "address",
     placeholder: "Enter Address",
     type: "text",

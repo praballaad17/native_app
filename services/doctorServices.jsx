@@ -56,19 +56,14 @@ export const verifyDoctor = async (usernameOrEmail, password, authToken) => {
 
 export const editDoctorDetails = async (formData, id) => {
   try {
-    const response = await axios.post(
-      `${apiEndpoint}/edit-details/${id}`,
+    const response = await axios.put(
+      `${apiEndpoint}/edit-profile/${id}`,
       formData
     );
 
-    if (response.data.success) {
-      Alert.alert("Success", "PDF uploaded successfully!");
-    } else {
-      Alert.alert("Error", "Failed to upload the PDF.");
-    }
+    return response.data;
   } catch (error) {
-    console.error("Error uploading PDF:", error);
-    Alert.alert("Error", "An error occurred while uploading.");
+    return error;
   }
 };
 
@@ -87,9 +82,73 @@ export const submitDoctorDetails = async (details) => {
 
 export const getAppointments = async (doctorId) => {
   try {
-    const response = await axios(`${apiEndpoint}/get-appointments/${doctorId}`, {
-      method: "GET",
-    });
+    const response = await axios(
+      `${apiEndpoint}/get-appointments/${doctorId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const getActivePatients = async (doctorId) => {
+  try {
+    const response = await axios(
+      `${apiEndpoint}/get-patient-active/${doctorId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const getInActivePatients = async (doctorId) => {
+  try {
+    const response = await axios(
+      `${apiEndpoint}/get-patient-inactive/${doctorId}`,
+      {
+        method: "GET",
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+
+export const convertActivePatientToInactive = async (relationId) => {
+  console.log("Relation ID: ", relationId);
+  try {
+    const response = await axios(
+      `${apiEndpoint}/convert-active-patient-to-inactive/${relationId}`,
+      {
+        method: "PUT",
+      }
+    );
+
+    return response.data;
+  } catch (err) {
+    throw new Error(err.response.data.error);
+  }
+};
+export const convertInactivePatientToActive = async (relationId) => {
+  console.log("Relation ID: ", relationId);
+  try {
+    const response = await axios(
+      `${apiEndpoint}/convert-inactive-patient-to-active/${relationId}`,
+      {
+        method: "PUT",
+      }
+    );
 
     return response.data;
   } catch (err) {

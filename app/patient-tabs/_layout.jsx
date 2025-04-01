@@ -53,7 +53,7 @@ const PatientTabLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="profile"
+          name="patient-profile"
           options={{
             headerShown: false,
             tabBarLabel: "Profile",

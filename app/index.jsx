@@ -25,6 +25,7 @@ import { USERS } from "../constants";
 import SignIn from "./(auth)/sign-in";
 import useAuthListener from "../hooks/useAuthListener";
 import Loader from "../components/Loader";
+import StartupScreen from "../components/common/StartupScreen";
 
 const ExecutiveTab = createBottomTabNavigator();
 const PatientTab = createBottomTabNavigator();
@@ -214,7 +215,7 @@ const SwitchableNavigator = () => {
       ) : userType === USERS.EXECUTIVE ? (
         <ExecutiveTabNavigator />
       ) : (
-        <Loader />
+        <StartupScreen />
       )}
     </>
   );

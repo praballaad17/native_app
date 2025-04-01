@@ -8,7 +8,7 @@ import { postDocument } from "../../services/patientServices";
 import { generateURLUpload, uploadFileToS3 } from "../../services/awsServices";
 import { useLoader } from "../../hooks/useLoader";
 import useAuthListener from "../../hooks/useAuthListener";
-import { FILETYPE } from "../../constants";
+import { FILETYPE, URLS } from "../../constants";
 import useUserType from "../../context/UserProvider";
 import { createFileMetaData } from "../../services/utilityServices";
 import { router } from "expo-router";
@@ -47,15 +47,15 @@ const MedicalDataForm = () => {
       const filename = new Date().toISOString() + `_${FILETYPE.MEDICALRECORD}`;
       const s3key = `${userId}/${FILETYPE.MEDICALRECORD}/${filename}`;
 
-      const { url } = await generateURLUpload(jwt, s3key);
-      console.log(url);
+      const { url } = await generateURLUpload(jwt, s3key, formData.isPdf);
       formData.key = s3key;
       formData.userType = userType;
       formData.patientId = userId;
-      await uploadFileToS3(formData.imageOrPdf[0], url);
+      await uploadFileToS3(formData.imageOrPdf, url);
       await createFileMetaData(formData, jwt);
 
-      router.push(MEDICALRECORDLIST);
+      // router.push(URLS.PATIENTMEDCALDATALIST);
+      router.back();
     } catch (error) {
       console.log("error uploading medical record", error);
     }

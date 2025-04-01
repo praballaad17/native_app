@@ -12,7 +12,7 @@ import { router } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Fontisto from "@expo/vector-icons/Fontisto";
@@ -35,9 +35,12 @@ import {
   generateURLView,
   uploadFileToS3,
 } from "../../services/awsServices";
+import usePatient from "../../context/PatientProvider";
+import { calculateAge } from "../../utils/utils";
 
 export default function PatientProfile() {
   const { user, setUser } = useUserType();
+  const { patientId, profile } = usePatient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [visible, setVisible] = useState(false);
   const [patient, setPatient] = useState(user.patientId);
@@ -87,8 +90,8 @@ export default function PatientProfile() {
     router.push({
       pathname: "/edit-profile",
       params: {
-        user: USERS.PATIENT,
-        Profile: JSON.stringify(patient),
+        userType: USERS.PATIENT,
+        Profile: JSON.stringify(profile),
         Fields: JSON.stringify(PATIENTFIELDS),
       },
     });
@@ -190,12 +193,19 @@ export default function PatientProfile() {
 
             {/* Right - Profile Information */}
             <View style={styles.infoContainer}>
-              <Text style={styles.nameText}>{patient.name}</Text>
-              <Text style={styles.detailText}>Age: {patient.age}</Text>
-              <Text style={styles.detailText}>Gender: {patient.gender}</Text>
-              <Text style={styles.detailText}>Contact: {patient.contact}</Text>
-              <Text style={styles.detailText}>Address: {patient.address}</Text>
-
+              <Text style={styles.nameText}>{profile.name}</Text>
+              <Text style={styles.detailText}>
+                <Text className="font-bold text-black">Age:</Text>
+                {calculateAge(profile.dob)}
+              </Text>
+              <Text style={styles.detailText}>Gender: {profile.gender}</Text>
+              <Text style={styles.detailText}>Contact: {profile.contact}</Text>
+              <Text style={styles.detailText}>Address: {profile.address}</Text>
+              <Text style={styles.detailText}>
+                Blood Group: {profile.bloodGrp}
+              </Text>
+              <Text style={styles.detailText}>Height: {profile.height} cm</Text>
+              <Text style={styles.detailText}>Weight: {profile.weight} kg</Text>
               {/* Edit Profile Button */}
               <TouchableOpacity
                 style={styles.editButton}
@@ -228,7 +238,7 @@ export default function PatientProfile() {
           <View className="w-full justify-center h-100 px-4 my-1 bg-gray-50">
             {secondaryTabs.map((item, idx) => (
               <TouchableOpacity
-                onPress={() =>  router.push(item.url)}
+                onPress={() => router.push(item.url)}
                 className="w-full flex flex-row justify-between my-3"
                 key={idx}
               >

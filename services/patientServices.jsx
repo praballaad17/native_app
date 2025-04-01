@@ -36,10 +36,10 @@ export const addPatientProfile = async (formData, userId) => {
 
 export const editPatientDetails = async (formData, patientId) => {
   try {
-    const response = await axios(`${apiEndpoint}/edit-profile/:${patientId}`, {
-      method: "PUT",
-      ...formData,
-    });
+    const response = await axios.put(
+      `${apiEndpoint}/edit-profile/${patientId}`,
+      formData
+    );
     return response.data;
   } catch (err) {
     throw new Error(err.response.data.error);
@@ -62,7 +62,10 @@ export const fetchDoctorAvailability = async (doctorId) => {
 
 export const postAppointment = async (formData) => {
   try {
-    const response = await axios.post(`${apiEndpoint}/post-appointment`, formData);
+    const response = await axios.post(
+      `${apiEndpoint}/post-appointment`,
+      formData
+    );
     return response.data;
   } catch (err) {
     throw new Error(err.response.data.error);
@@ -95,7 +98,7 @@ export const checkAppointment = async (doctorId, date) => {
   } catch (err) {
     throw new Error(err);
   }
-}
+};
 
 export const postPhoto = async (patientId, formdata) => {
   try {
@@ -196,7 +199,7 @@ export const ConsultDoctorList = async (speciality = "") => {
     const response = await axios.get(
       `${apiEndpoint}/consult-list/${speciality}`
     );
-    return response;
+    return response.data;
   } catch (err) {
     console.error("Error fetching data:", err);
     throw new Error(

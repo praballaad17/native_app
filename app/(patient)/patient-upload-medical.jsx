@@ -25,6 +25,7 @@ const UploadMedical = () => {
   const [recordList, setRecordList] = useState([]);
   const [selectedRecord, setSelectedRecord] = useState();
   const [modalVisible, setModalVisible] = useState(false);
+
   useEffect(() => {
     const getter = async () => {
       if (loading) return;
@@ -48,12 +49,9 @@ const UploadMedical = () => {
   }, []);
 
   const openReport = (report) => {
-    console.log("openReport");
     setModalVisible(true);
     setSelectedRecord(report);
   };
-
-  console.log(recordList);
 
   return (
     <GestureHandlerRootView>
