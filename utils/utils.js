@@ -1,4 +1,3 @@
-const RNImageToPdf = require("react-native-image-to-pdf");
 import { Dimensions } from "react-native"; // Import Dimensions
 
 export const capitalizeFirstLetter = (string) => {
@@ -48,7 +47,7 @@ export const PDFGeneratorFromImages = async (imagePaths) => {
       },
       quality: 0.7, // optional compression paramter
     };
-    const pdf = await RNImageToPdf.createPDFbyImages(options);
+    const pdf 
 
     console.log(pdf.filePath);
     return pdf.filePath;
