@@ -61,7 +61,7 @@ export default function DoctorProfile() {
     {
       name: "Manage payments methods",
       icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
-      url: "/appointments",
+      url: "/payments-methods",
     },
     {
       name: "Pill Reminder",

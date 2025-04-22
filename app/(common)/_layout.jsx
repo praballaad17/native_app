@@ -28,7 +28,12 @@ const CommonLayout = () => {
           name="select-membership"
           options={{
             headerTitle: "Select Membership",
-            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="payments-methods"
+          options={{
+            headerTitle: "Payments Methods",
           }}
         />
         <Stack.Screen

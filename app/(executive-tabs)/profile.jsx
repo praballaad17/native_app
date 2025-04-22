@@ -67,6 +67,11 @@ export default function ExecutiveProfile() {
       icon: <FontAwesome name="share" size={24} color="black" />,
       url: "/appointments",
     },
+    {
+      name: "Manage payments methods",
+      icon: <FontAwesome5 name="credit-card" size={24} color="black" />,
+      url: "/payments-methods",
+    },
   ];
 
   console.log("Profile: ", profile);
