@@ -47,10 +47,10 @@ export const PDFGeneratorFromImages = async (imagePaths) => {
       },
       quality: 0.7, // optional compression paramter
     };
-    const pdf 
+    // const pdf
 
-    console.log(pdf.filePath);
-    return pdf.filePath;
+    // console.log(pdf.filePath);
+    // return pdf.filePath;
   } catch (e) {
     console.log(e);
     return null;
